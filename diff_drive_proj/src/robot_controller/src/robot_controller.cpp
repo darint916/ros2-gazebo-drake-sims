@@ -2,7 +2,8 @@
 #include <memory>
 #include <string>
 #include <functional>
-
+// #include <drake/math>
+#include <cmath>
 
 #include "rclcpp/rclcpp.hpp"
 #include "robot_msgs/msg/differential_in.hpp"
@@ -42,8 +43,12 @@ class RobotController : public rclcpp::Node
 
         std::tuple<double, double> calculate_motor_speeds(double speed, double angle)
         {
-            double left_motor_speed = 0.0;
-            double right_motor_speed = 0.0;
+            double wheel_radius = this->get_parameter("wheel_radius").as_double();
+            double wheel_distance = this->get_parameter("wheel_distance").as_double();
+            double wl = (2 * speed - wheel_distance * angle) / (2 * wheel_radius);
+            double wr = (2 * speed + wheel_distance * angle) / (2 * wheel_radius);
+            double left_motor_speed = wheel_radius / 2 * ( wl + wr) * cos(angle);
+            double right_motor_speed = wheel_radius / 2 * ( wl + wr) * sin(angle);
             return std::make_tuple(left_motor_speed, right_motor_speed);
         }
 
@@ -54,6 +59,7 @@ class RobotController : public rclcpp::Node
             //Declares parameters
             auto param_desc = rcl_interfaces::msg::ParameterDescriptor();
             param_desc.description = "The distance between the wheels of the robot, and override for speed and angle";
+            this -> declare_parameter<double>("wheel_radius", 0.0);
             this -> declare_parameter<double>("wheel_distance", 0.0);
             this -> declare_parameter<double>("speed", 0.0);
             this -> declare_parameter<double>("angle", 0.0);
@@ -65,7 +71,7 @@ class RobotController : public rclcpp::Node
             _timer = this->create_wall_timer(500ms, std::bind(&RobotController::pub_timer_callback, this));
 
             //Subscribes to "diff_drive" topic with a queue size of 10
-            _subscription = this->create_subscription<robot_msgs::msg::DifferentialIn>("diff_drive", 10, std::bind(&RobotController::topic_robot_input_callback, this, _1));
+            _subscription = this->create_subscription<robot_msgs::msg::DifferentialIn>("angle_speed_in", 10, std::bind(&RobotController::topic_robot_input_callback, this, _1));
            
         }
 };
