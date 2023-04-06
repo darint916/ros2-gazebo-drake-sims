@@ -19,7 +19,7 @@ install(TARGETS
   controller_node
   DESTINATION lib/${PROJECT_NAME}
 )
-ament_target_dependencies(controller_node rclcpp robot_msgs)
+ament_target_dependencies(controller_node rclcpp robot_msgs drake)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

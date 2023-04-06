@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>robot_sim</name>
+  <version>0.0.0</version>
+  <description>pos</description>
+  <maintainer email="darint916@gmail.com">Darin Tsai</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <!-- dependencies -->
+<!-- find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(ignition-transport11 REQUIRED) -->
+
+    <depend>rclcpp</depend>
+    <!-- <depend>robot_msgs</depend> -->
+    <depend>geometry_msgs</depend>
+    <depend>ignition-transport11</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
