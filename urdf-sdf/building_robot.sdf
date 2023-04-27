@@ -252,6 +252,8 @@
                 <wheel_separation>1.2</wheel_separation>
                 <wheel_radius>0.4</wheel_radius>
                 <odom_publish_frequency>1</odom_publish_frequency>
+                <odom_topic>odom</odom_topic>
+                <!-- <topic>motor_speeds</topic> -->
                 <topic>cmd_vel</topic>
             </plugin>
             <!-- Moving Forward-->
@@ -261,7 +263,7 @@
         
         <!-- keystrokes This code defines the triggered-publisher plugin. It accepts messages of 
         type ignition.msgs.Int32 on the /keyboard/keypress topic and if the value in the data 
-        field matches 16777235(Up arrow key) it outputs a Twist message on the cmd_vel topic 
+        field matches 16777235(Up arrow key) it outputs a Twist message on the motor_speeds topic 
         with values x: 0.5, z: 0.0.
 
         Each plugin for each arrow key, detected by match field, values found by
@@ -274,6 +276,7 @@
                 <match field="data">16777235</match>
             </input>
             <output type="ignition.msgs.Twist" topic="/cmd_vel">
+            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
                 linear: {x: 0.5}, angular: {z: 0.0}
             </output>
         </plugin>
@@ -285,6 +288,7 @@
                 <match field="data">16777235</match>
             </input>
             <output type="ignition.msgs.Twist" topic="/cmd_vel">
+            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
                 linear: {x: 0.5}, angular: {z: 0.0}
             </output>
         </plugin>
@@ -296,6 +300,7 @@
                 <match field="data">16777236</match>
             </input>
             <output type="ignition.msgs.Twist" topic="/cmd_vel">
+            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
                 linear: {x: 0.0}, angular: {z: -0.5}
             </output>
         </plugin>
@@ -307,6 +312,7 @@
                 <match field="data">16777234</match>
             </input>
             <output type="ignition.msgs.Twist" topic="/cmd_vel">
+            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
                 linear: {x: 0.0}, angular: {z: 0.5}
             </output>
         </plugin>

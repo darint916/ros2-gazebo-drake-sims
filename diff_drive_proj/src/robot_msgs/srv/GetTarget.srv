@@ -1,0 +1,4 @@
+int64 waypoint
+---
+int64 waypoint_next
+geometry_msgs/Pose2D position

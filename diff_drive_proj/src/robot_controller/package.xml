@@ -16,7 +16,9 @@
   <depend>rclcpp</depend>
   <depend>robot_msgs</depend>
   <depend>drake</depend>
-
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  
   <export>
     <build_type>ament_cmake</build_type>
   </export>

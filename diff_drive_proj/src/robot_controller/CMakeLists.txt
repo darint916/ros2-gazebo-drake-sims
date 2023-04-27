@@ -12,14 +12,37 @@ find_package(ament_cmake REQUIRED)
 # find_package(<dependency> REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(robot_msgs REQUIRED)
-find_package(drake REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+# find_package(drake REQUIRED)
+
+add_library(pid_controller_lib SHARED
+  src/pid_controller.cpp
+)
+
+target_include_directories(pid_controller_lib PUBLIC
+  ${PROJECT_SOURCE_DIR}/include
+)
+
+
 add_executable(controller_node src/robot_controller.cpp)
+
+target_link_libraries(controller_node pid_controller_lib)
+
+ament_target_dependencies(controller_node rclcpp robot_msgs geometry_msgs nav_msgs)
+
+
+add_executable(trajectory_server src/trajectory_server.cpp)
+ament_target_dependencies(trajectory_server rclcpp robot_msgs geometry_msgs nav_msgs)
+
+# include_directories() # for the header files (pid.h, etc.)
+
 
 install(TARGETS
   controller_node
+  trajectory_server
   DESTINATION lib/${PROJECT_NAME}
 )
-ament_target_dependencies(controller_node rclcpp robot_msgs drake)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
