@@ -53,20 +53,46 @@ void handle_get_target(
 		{
 			//might need to fix casting? ros2->c++
 			response -> waypoint_next = request -> waypoint + 1;
-			RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Incoming request");
+			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Incoming request, waypoint: " << request -> waypoint); 
 			//temp hardcode pose
 			geometry_msgs::msg::Pose2D temp_pose;
-			if(request -> waypoint % 2 == 0){
-				temp_pose.x = 5.0;
-				temp_pose.y = 0.0;
-				temp_pose.theta = 0.0;
+			// if(request -> waypoint % 2 == 0){
+			// 	temp_pose.x = 5.0;
+			// 	temp_pose.y = 0.0;
+			// 	temp_pose.theta = 0.0;
+			// }
+			// else{
+			// 	temp_pose.x = 0.0;
+			// 	temp_pose.y = 0.0;
+			// 	temp_pose.theta = 0.0;
+			// }
+			temp_pose.x = 5.0;
+			temp_pose.y = 5.0;
+			temp_pose.theta = 3.14/2.0;
+			if(response -> waypoint_next == 2){
+				temp_pose.x = -5.0;
+				temp_pose.y = 5.0;
+				temp_pose.theta = 3.14/2.0;
 			}
-			else{
-				temp_pose.x = 0.0;
-				temp_pose.y = 0.0;
-				temp_pose.theta = 0.0;
+			if(response -> waypoint_next == 3){
+				temp_pose.x = -5.0;
+				temp_pose.y = -5.0;
+				temp_pose.theta = 3.14/2.0;
+			}
+			if(response -> waypoint_next == 4){
+				temp_pose.x = 5.0;
+				temp_pose.y = -5.0;
+				temp_pose.theta = 3.14/2.0;
+			}
+			if(response -> waypoint_next == 5){
+				response -> waypoint_next = 1;
 			}
 			response -> position = temp_pose;
+
+			
+			
+
+			RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sending response");
 		}
 
 int main(int argc, char** argv)
@@ -74,7 +100,7 @@ int main(int argc, char** argv)
     rclcpp::init(argc, argv);
     std::shared_ptr<rclcpp::Node> node = rclcpp::Node::make_shared("trajectory_server");
 	RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Ready to get trajectory target.");
-	auto service = node->create_service<robot_msgs::srv::GetTarget>("get_target", &handle_get_target);
+	rclcpp::Service<robot_msgs::srv::GetTarget>::SharedPtr service = node->create_service<robot_msgs::srv::GetTarget>("get_target", &handle_get_target);
     // rclcpp::spin(std::make_shared<TrajectoryServer>());
     rclcpp::spin(node);
     rclcpp::shutdown();

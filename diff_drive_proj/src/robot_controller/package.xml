@@ -21,5 +21,6 @@
   
   <export>
     <build_type>ament_cmake</build_type>
+    <cpp_standard>20</cpp_standard>
   </export>
 </package>

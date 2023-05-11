@@ -48,7 +48,8 @@ def generate_launch_description():
             # motor_speeds:robot_msgs/msg/MotorSpeeds@ignition/msgs/Vector2d', 
             # 'robot_msgs/msg/MotorSpeeds@/motor_speeds@ignition.msgs.Vector2d'
             '/motor_speeds@geometry_msgs/msg/Twist@gz.msgs.Twist',
-            '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry'
+            '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+            '/world/car_world/dynamic_pose/info@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V'
             ]
         )
     ])

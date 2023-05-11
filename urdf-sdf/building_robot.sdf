@@ -100,6 +100,10 @@
                         </box>
                     </geometry>
                 </collision>
+                <!-- <plugin name="pose_publisher_plugin" filename="libpose_publisher.so">
+                    <topic>robot_pose</topic>
+                    <update_rate>10</update_rate>
+                </plugin> -->
             </link>
 
             <link name='left_wheel'>
@@ -249,9 +253,9 @@
                 name="ignition::gazebo::systems::DiffDrive">
                 <left_joint>left_wheel_joint</left_joint>
                 <right_joint>right_wheel_joint</right_joint>
-                <wheel_separation>1.2</wheel_separation>
+                <wheel_separation>2</wheel_separation>
                 <wheel_radius>0.4</wheel_radius>
-                <odom_publish_frequency>1</odom_publish_frequency>
+                <odom_publish_frequency>4</odom_publish_frequency>
                 <odom_topic>odom</odom_topic>
                 <!-- <topic>motor_speeds</topic> -->
                 <topic>cmd_vel</topic>
