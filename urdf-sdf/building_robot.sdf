@@ -257,8 +257,8 @@
                 <wheel_radius>0.4</wheel_radius>
                 <odom_publish_frequency>4</odom_publish_frequency>
                 <odom_topic>odom</odom_topic>
-                <!-- <topic>motor_speeds</topic> -->
-                <topic>cmd_vel</topic>
+                <topic>motor_speeds</topic>
+                <!-- <topic>cmd_vel</topic> -->
             </plugin>
             <!-- Moving Forward-->
 

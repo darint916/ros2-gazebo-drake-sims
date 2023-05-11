@@ -14,7 +14,7 @@
 #include "nav_msgs/msg/odometry.hpp"
 #include "robot_msgs/srv/get_target.hpp"
 #include "geometry_msgs/msg/pose2_d.hpp"
-
+#include "tf2_msgs/msg/tf_message.hpp"
 
 #include "robot_controller/pid_controller.hpp"
 //error red squiggles from c++ extension
@@ -29,6 +29,7 @@ class RobotController : public rclcpp::Node
         rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr _publisher;
         rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr _subscription;
         rclcpp::Client<robot_msgs::srv::GetTarget>::SharedPtr _client;
+        rclcpp::Subscription<tf2_msgs::msg::TFMessage>::SharedPtr _subscription2;
         int _current_waypoint;
         geometry_msgs::msg::Pose2D _target_pose;
 
@@ -59,7 +60,8 @@ class RobotController : public rclcpp::Node
             // _timer = this->create_wall_timer(500ms, std::bind(&RobotController::pub_timer_callback, this));
 
             //Subscribes to "diff_drive" topic with a queue size of 10
-            _subscription = this->create_subscription<nav_msgs::msg::Odometry>("odom", 10, std::bind(&RobotController::topic_robot_input_callback, this, _1));
+            // _subscription = this->create_subscription<nav_msgs::msg::Odometry>("odom", 10, std::bind(&RobotController::topic_robot_input_callback, this, _1));
+            _subscription2 = this->create_subscription<tf2_msgs::msg::TFMessage>("world/car_world/dynamic_pose/info", 10, std::bind(&RobotController::topic_pose_input_callback, this, _1));
             
             _client = this->create_client<robot_msgs::srv::GetTarget>("get_target");
 
@@ -75,7 +77,69 @@ class RobotController : public rclcpp::Node
         }
 
     private:
+        void topic_pose_input_callback(const tf2_msgs::msg::TFMessage & msg){
+            // RCLCPP_INFO_STREAM(this->get_logger(), "INFO PASSED\n");
+            double curr_cart_x = msg.transforms[0].transform.translation.x;
+            double curr_cart_y = msg.transforms[0].transform.translation.y;
 
+            double curr_quat_w = msg.transforms[0].transform.rotation.w;
+            double curr_quat_z = msg.transforms[0].transform.rotation.z;
+            
+            double wheel_radius = this -> get_parameter("wheel_radius").as_double();
+            double wheel_distance = this -> get_parameter("wheel_distance").as_double();
+
+            double curr_euler_angle = 2 * atan2(curr_quat_z, curr_quat_w); //Finds Yaw, multiply by 2 because of the  quaternion works
+
+            double dx = _target_pose.x - curr_cart_x;
+            double dy = _target_pose.y - curr_cart_y;
+
+            double error_dist = sqrt(dx*dx + dy*dy);
+            
+            double angle_to_target = atan2(dy, dx);
+            double error_angle = angle_to_target - curr_euler_angle;
+            //Keeps error angle between -pi and pi
+            // RCLCPP_INFO_STREAM(this->get_logger(), "ANGLE ERRORS\n" << "error_angle: " << error_angle );
+            while (error_angle > M_PI) error_angle -= 2 * M_PI;
+            while (error_angle < -M_PI) error_angle += 2 * M_PI;
+            
+            RCLCPP_INFO_STREAM(this->get_logger(), "curr_cart_x: " << curr_cart_x << " curr_cart_y: " << curr_cart_y);
+            RCLCPP_INFO_STREAM(this->get_logger(), "target_x: " << _target_pose.x << " target_y: " << _target_pose.y);
+
+
+            double angVelLeft = 0;
+            double angVelRight = 0;
+            if(abs(error_angle) > .2 && error_dist > .15) { //error dist cuz angle error goes up in close proximity, larger tolerance to reach dest faster
+            // if(1 == 0){
+                RCLCPP_INFO_STREAM(this->get_logger(), "ANGLE ERRORS\n" << "error_angle: " << error_angle << " Target: " << angle_to_target << " Current: " << curr_euler_angle); 
+                RCLCPP_INFO_STREAM(this->get_logger(), "DIST ERRORS\n" << "error_dist: " << error_dist << "Target: " << _target_pose.x << "Current: " << curr_cart_x); 
+                double angular_velocity = _angular_pid.calculate(error_angle);
+                angVelLeft = (angular_velocity * wheel_distance / 2) / wheel_radius;
+                // angVelLeft = -angVelRight;
+                angVelRight = -angVelLeft;
+            }else {
+                RCLCPP_INFO_STREAM(this->get_logger(), "ANGLE THRESHOLD PASSED\n" << "error_angle: " << error_angle << " Target: " << angle_to_target << " Current: " << curr_euler_angle);
+                if(abs(error_angle) > .05 && error_dist > .15){ //Fine tune angle while traversing
+                    double angular_velocity = _angular_pid.calculate(error_angle);
+                    angVelLeft = (angular_velocity * wheel_distance / 2) / wheel_radius;
+                    angVelRight = -angVelLeft;
+                }
+                if(error_dist > .05) {
+                    RCLCPP_INFO_STREAM(this->get_logger(), "DIST ERRORS\n" << "error_dist: " << error_dist << "Target: " << _target_pose.x << "Current: " << curr_cart_x); 
+                    double linear_velocity = _linear_pid.calculate(error_dist);
+                    angVelLeft += linear_velocity / wheel_radius;
+                    angVelRight += angVelLeft;
+                }else{
+                    RCLCPP_INFO_STREAM(this->get_logger(), "DIST THRESHOLD PASSED\n");
+                    RCLCPP_INFO_STREAM(this->get_logger(), "curr_cart_x: " << curr_cart_x << " curr_cart_y: " << curr_cart_y);
+                    RCLCPP_INFO_STREAM(this->get_logger(), "target_x: " << _target_pose.x << " target_y: " << _target_pose.y);
+                    if(_next_point_received == false){ //rename to next point requested
+                        _next_point_received = true;
+                        set_next_target();
+                    }
+                }
+            }
+            pub_timer_callback(angVelLeft, angVelRight);
+        }
         void topic_robot_input_callback(const nav_msgs::msg::Odometry & msg)
         {
             double wheel_radius = this -> get_parameter("wheel_radius").as_double();

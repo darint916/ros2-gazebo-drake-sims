@@ -15,6 +15,7 @@ find_package(rclcpp REQUIRED)
 find_package(robot_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(tf2_msgs REQUIRED)
 # find_package(drake REQUIRED)
 include_directories(${PROJECT_SOURCE_DIR}/include) # for the header files (pid.h, etc.)
 
@@ -28,7 +29,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include) # for the header files (pid.h
 
 
 add_executable(controller_node src/robot_controller.cpp src/pid_controller.cpp)
-ament_target_dependencies(controller_node rclcpp robot_msgs geometry_msgs nav_msgs)
+ament_target_dependencies(controller_node rclcpp robot_msgs geometry_msgs nav_msgs tf2_msgs)
 
 # target_link_libraries(controller_node pid_controller_lib)
 
