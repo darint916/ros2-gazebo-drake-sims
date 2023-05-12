@@ -27,7 +27,6 @@ class RobotController : public rclcpp::Node
     private:
         rclcpp::TimerBase::SharedPtr _timer;
         rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr _publisher;
-        rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr _subscription;
         rclcpp::Client<robot_msgs::srv::GetTarget>::SharedPtr _client;
         rclcpp::Subscription<tf2_msgs::msg::TFMessage>::SharedPtr _subscription2;
         rclcpp::Subscription<rosgraph_msgs::msg::Clock>::SharedPtr _clock_sub;
@@ -60,7 +59,7 @@ class RobotController : public rclcpp::Node
             this -> declare_parameter<double>("pos", 0.0);
             this -> declare_parameter<double>("angle", 0.0);
             this -> declare_parameter<int>("csv_buffer_skip_length", 30);
-            // this -> 
+
             //Publishes to "motor_speeds" topic with a queue size of 10
             _publisher = this->create_publisher<geometry_msgs::msg::Twist>("motor_speeds", 10);
 
@@ -107,7 +106,6 @@ class RobotController : public rclcpp::Node
             
             double time_diff = _curr_time - _prev_time;
             time_diff = 1;
-            // RCLCPP_INFO_STREAM(this->get_logger(), "INFO PASSED\n");
             double curr_cart_x = msg.transforms[0].transform.translation.x;
             double curr_cart_y = msg.transforms[0].transform.translation.y;
 
@@ -191,6 +189,17 @@ class RobotController : public rclcpp::Node
             _publisher->publish(message);
         }
 
+        std::tuple<double, double> calculate_motor_speeds(double angVelRight, double angVelLeft) //Angular velocity of both wheels
+        {
+            double wheel_radius = this->get_parameter("wheel_radius").as_double();
+            double wheel_distance = this->get_parameter("wheel_distance").as_double();
+            double leftLinVel = wheel_radius * angVelLeft;
+            double rightLinVel = wheel_radius * angVelRight;
+            double linVel = (leftLinVel + rightLinVel) / 2;
+            double angVel = (rightLinVel - leftLinVel) / wheel_distance;
+            return std::make_tuple(linVel, angVel);
+        }    
+
         void set_next_target()
         {
             auto request = std::make_shared<robot_msgs::srv::GetTarget::Request>();
@@ -218,18 +227,8 @@ class RobotController : public rclcpp::Node
                 RCLCPP_ERROR(this->get_logger(), "Service call failed >:(");
             }
             _next_point_received = false;
-
         }
-        std::tuple<double, double> calculate_motor_speeds(double angVelRight, double angVelLeft) //Angular velocity of both wheels
-        {
-            double wheel_radius = this->get_parameter("wheel_radius").as_double();
-            double wheel_distance = this->get_parameter("wheel_distance").as_double();
-            double leftLinVel = wheel_radius * angVelLeft;
-            double rightLinVel = wheel_radius * angVelRight;
-            double linVel = (leftLinVel + rightLinVel) / 2;
-            double angVel = (rightLinVel - leftLinVel) / wheel_distance;
-            return std::make_tuple(linVel, angVel);
-        }    
+        
 };
 
 int main(int argc, char * argv[])

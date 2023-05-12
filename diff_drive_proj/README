@@ -1,0 +1,42 @@
+# Trajectory Tracking Differential Drive Vehicle in ROS2 + Ignition Gazebo
+
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Differential drive vehicle simulated in Ignition Gazebo with ROS2 control and navigation off preplanned trajectory with PID control. 
+
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Launch](#launch)
+- [Nodes](#nodes)
+- [Topics](#topics)
+- [Parameters](#parameters)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Requirements
+
+Drake, ROS2 Humble Distribution, C++20 or higher, Python3.10 or higher, Ignition Gazebo Fortress 
+
+Make sure to source workspace to allow for ros2 discovery.
+
+Change path for SDF model in launch file to match your own, copy is put into repo for reference.
+
+## Launch
+
+Project launched by going into launch folder and running `ros2 launch robot_drive_launch.py`
+
+## Nodes
+
+Bridge bridges topics between Ignition Gazebo and ROS2.
+Controller node sends angular velocities and contains PID controllers to adjust velocities given the positions of vehicle. 
+Trajectory server as endpoint of trajectory, just a simple service that returns the next point in a sequence given a current point. Generated from trajectory. 
+
+## Parameters
+ 
+Robot wheel parameters can be changed, the trajectory variables can also be modified along with points and many other things. Check constructor for more details.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE). Explain the terms and conditions of the license and provide a link to the full license file.

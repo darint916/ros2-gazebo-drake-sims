@@ -3,10 +3,10 @@
 #include "geometry_msgs/msg/pose2_d.hpp"
 #include "rclcpp/parameter.hpp"
 
-// #include <drake/tra
 #include <cmath>
 #include <memory>
 #include <vector>
+
 using std::placeholders::_1;
 using std::placeholders::_2;
 class TrajectoryServer : public rclcpp::Node
@@ -15,9 +15,7 @@ class TrajectoryServer : public rclcpp::Node
 		rclcpp::Service<robot_msgs::srv::GetTarget>::SharedPtr _service; 
 	public:
 		TrajectoryServer() : Node("trajectory_server")
-
 		{
-
 			_service = this->create_service<robot_msgs::srv::GetTarget>("get_target", std::bind(&TrajectoryServer::handle_get_target, this, _1, _2));
 			this -> declare_parameter<int>("trajectory", 1);
 			this -> declare_parameter<int>("points", 15);
@@ -30,10 +28,9 @@ class TrajectoryServer : public rclcpp::Node
 			int traj_choice = this -> get_parameter("trajectory").as_int();
 			response -> waypoint_next = request -> waypoint + 1;
 			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Incoming request, waypoint: " << request -> waypoint); 
-			//temp hardcode pose
 			geometry_msgs::msg::Pose2D temp_pose;
 			
-			if(traj_choice == 0){ 
+			if(traj_choice == 0){  //Square!
 				temp_pose.x = 5.0;
 				temp_pose.y = 5.0;
 				temp_pose.theta = 3.14/2.0;
@@ -57,14 +54,13 @@ class TrajectoryServer : public rclcpp::Node
 				}
 			}
 
-			if(traj_choice == 1){
+			if(traj_choice == 1){				//Lissajous curve
 				int points = this -> get_parameter("points").as_int();
 				if(response -> waypoint_next >= points) {
 					response -> waypoint_next = 0;
 				}
 				double t = (double)(response -> waypoint_next) * 2 * M_PI / (double)points;
 
-				//Lissajous curve
 				double A = 5.0;
 				double B = 5.0;
 				double a = 1.0;
@@ -80,45 +76,6 @@ class TrajectoryServer : public rclcpp::Node
 			response -> position = temp_pose;
 		}
 };
-
-
-void handle_get_target2(
-		const std::shared_ptr<robot_msgs::srv::GetTarget::Request> request,
-		const std::shared_ptr<robot_msgs::srv::GetTarget::Response> response)
-		{
-			//might need to fix casting? ros2->c++
-			response -> waypoint_next = request -> waypoint + 1;
-			RCLCPP_INFO_STREAM(rclcpp::get_logger("rclcpp"), "Incoming request, waypoint: " << request -> waypoint); 
-			//temp hardcode pose
-			geometry_msgs::msg::Pose2D temp_pose;
-			temp_pose.x = 5.0;
-			temp_pose.y = 5.0;
-			temp_pose.theta = 3.14/2.0;
-			if(response -> waypoint_next == 2){
-				temp_pose.x = -5.0;
-				temp_pose.y = 5.0;
-				temp_pose.theta = 3.14/2.0;
-			}
-			if(response -> waypoint_next == 3){
-				temp_pose.x = -5.0;
-				temp_pose.y = -5.0;
-				temp_pose.theta = 3.14/2.0;
-			}
-			if(response -> waypoint_next == 4){
-				temp_pose.x = 5.0;
-				temp_pose.y = -5.0;
-				temp_pose.theta = 3.14/2.0;
-			}
-			if(response -> waypoint_next == 5){
-				response -> waypoint_next = 1;
-			}
-			response -> position = temp_pose;
-
-			
-			
-
-			RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sending response");
-		}
 
 int main(int argc, char** argv)
 {
