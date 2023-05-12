@@ -36,8 +36,7 @@ def generate_launch_description():
             executable='trajectory_server',
             name='trajectory_server',
             output='screen',
-            emulate_tty=True,
-            parameters=[]
+            emulate_tty=True
         ),
         Node(
             package='ros_gz_bridge',
@@ -49,7 +48,8 @@ def generate_launch_description():
             # 'robot_msgs/msg/MotorSpeeds@/motor_speeds@ignition.msgs.Vector2d'
             '/motor_speeds@geometry_msgs/msg/Twist@gz.msgs.Twist',
             '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-            '/world/car_world/dynamic_pose/info@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V'
+            '/world/car_world/dynamic_pose/info@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V',
+            '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'
             ]
         )
     ])

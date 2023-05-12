@@ -9,11 +9,12 @@ PIDController::PIDController(double kp, double ki, double kd, double max_output,
 PIDController::~PIDController()
 {}
 
-double PIDController::calculate(double error)
+double PIDController::calculate(double error, double dt)
 {
-    double derivative = error - _last_error;
+    if (dt == 0) return _kp * _last_error;
+    double derivative = (error - _last_error) / dt;
     _last_error = error;
-    _total_error += error;
+    _total_error += error * dt;
 
     if(_total_error > _max_integral) _total_error = _max_integral;
     else if(_total_error < -_max_integral) _total_error = -_max_integral;

@@ -7,7 +7,7 @@ class PIDController {
   PIDController(double kp, double ki, double kd, double max_output, double max_integral);
   ~PIDController();
 
-  double calculate(double error);
+  double calculate(double error, double dt);
   void set_gains(double kp, double ki, double kd);
 
  private:

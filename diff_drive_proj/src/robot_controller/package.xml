@@ -19,6 +19,8 @@
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>tf2_msgs</depend>
+  <depend>rosgraph_msgs</depend>
+
   <export>
     <build_type>ament_cmake</build_type>
     <cpp_standard>20</cpp_standard>
