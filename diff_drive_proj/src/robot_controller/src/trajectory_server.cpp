@@ -18,7 +18,7 @@ class TrajectoryServer : public rclcpp::Node
 		{
 			_service = this->create_service<robot_msgs::srv::GetTarget>("get_target", std::bind(&TrajectoryServer::handle_get_target, this, _1, _2));
 			this -> declare_parameter<int>("trajectory", 1);
-			this -> declare_parameter<int>("points", 15);
+			this -> declare_parameter<int>("points", 30);
 		}
 
 		void handle_get_target(
@@ -57,13 +57,14 @@ class TrajectoryServer : public rclcpp::Node
 			if(traj_choice == 1){				//Lissajous curve
 				int points = this -> get_parameter("points").as_int();
 				if(response -> waypoint_next >= points) {
+					// response -> waypoint_next = points; // will miss traversing to first point
 					response -> waypoint_next = 0;
 				}
 				double t = (double)(response -> waypoint_next) * 2 * M_PI / (double)points;
 
 				double A = 5.0;
 				double B = 5.0;
-				double a = 1.0;
+				double a = 3.0;
 				double b = 2.0;
 				double delta = M_PI/2.0;
 				temp_pose.x = A*sin(a*t + delta);

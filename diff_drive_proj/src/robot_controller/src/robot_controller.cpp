@@ -73,8 +73,8 @@ class RobotController : public rclcpp::Node
             _client = this->create_client<robot_msgs::srv::GetTarget>("get_target");
 
             _current_waypoint = 0;
-            _target_pose.x = -1;
-            _target_pose.y = -1;
+            _target_pose.x = 0;
+            _target_pose.y = 0;
             _target_pose.theta = 0;
 
             //integrators
@@ -91,8 +91,8 @@ class RobotController : public rclcpp::Node
             _ang_vel_l = 0.0;
             _ang_vel_r = 0.0;
             
-            _csv_file.open("data.csv");
-            _csv_writer = std::ofstream("data.csv", std::ios::out | std::ios::app);
+            _csv_file.open("../data/data.csv"); //should add as parameter path
+            _csv_writer = std::ofstream("../data/data.csv", std::ios::out | std::ios::app);
             _csv_writer_buffer = 0;
         }
 
@@ -148,7 +148,7 @@ class RobotController : public rclcpp::Node
                     angVelLeft = (angular_velocity * wheel_distance / 2) / wheel_radius;
                     angVelRight = -angVelLeft;
                 }
-                if(error_dist > .05) {
+                if(error_dist > .09) {
                     RCLCPP_INFO_STREAM(this->get_logger(), "DIST ERRORS\n" << "error_dist: " << error_dist << "Target: " << _target_pose.x << "Current: " << curr_cart_x); 
                     double linear_velocity = _linear_pid.calculate(error_dist, time_diff);
                     angVelLeft += linear_velocity / wheel_radius;
