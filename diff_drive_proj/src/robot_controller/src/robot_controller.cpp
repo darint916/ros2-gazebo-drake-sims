@@ -76,6 +76,7 @@ class RobotController : public rclcpp::Node
             _target_pose.x = 0;
             _target_pose.y = 0;
             _target_pose.theta = 0;
+                // angVelRight = -angVelLeft;
 
             //integrators
             // _linear_pid = PIDController(3, 1, 1, 2, 2.0);

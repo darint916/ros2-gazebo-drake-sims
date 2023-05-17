@@ -9,7 +9,7 @@ def generate_launch_description():
     # bridge_pkg = get_package_share_directory('ros_ign_bridge')
     # bridge_launch_file = os.path.join(bridge_pkg, 'launch', 'ros_ign_bridge_launch.py')
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    sdf_file = os.path.join(current_dir, '..', '..', 'urdf-sdf', 'building_robot.sdf')
+    sdf_file = os.path.join(current_dir, '..', '..', 'gazebo', 'building_robot.sdf')
     # launch_ign_gazebo = Command(['ign', 'gazebo', sdf_file])
     # print(sdf_file)
     # ign_gazebo_node = Node(

@@ -64,7 +64,7 @@ class TrajectoryServer : public rclcpp::Node
 
 				double A = 5.0;
 				double B = 5.0;
-				double a = 3.0;
+				double a = 1.0;
 				double b = 2.0;
 				double delta = M_PI/2.0;
 				temp_pose.x = A*sin(a*t + delta);
