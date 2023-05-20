@@ -21,5 +21,5 @@ void Testing::PostUpdate(const ignition::gazebo::UpdateInfo &_info, const igniti
     if (!_info.paused) msg += "not ";
     msg += "paused.";
 
-    ignmsg << msg << std::endl; //could need change, only works with running verbosity 3+
+    // ignmsg << msg << std::endl; //could need change, only works with running verbosity 3+
 }
