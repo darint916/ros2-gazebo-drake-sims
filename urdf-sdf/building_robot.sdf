@@ -58,9 +58,6 @@
             </link>
         </model>
 
-
-        
-
         <model name='vehicle_blue' canonical_link='chassis'>
             <pose relative_to='world'>0 0 0 0 0 0</pose>
 

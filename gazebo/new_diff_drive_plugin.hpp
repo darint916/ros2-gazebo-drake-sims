@@ -14,8 +14,7 @@ namespace new_diff_drive_plugin
         public ignition::gazebo::ISystemUpdate
     {
         public:
-            void Configure(const Entity &_entity,
-                const std::shared_ptr<const sdf::Element> &_sdf,
+            void Configure(const Entity &_entity, const std::shared_ptr<const sdf::Element> &_sdf,
                 ignition::gazebo::EntityComponentManager &_ecm,
                 EventManager &_eventMgr) override;
 

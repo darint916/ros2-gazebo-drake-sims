@@ -19,10 +19,10 @@
         </plugin>
         
         <!-- custom plugin -->
-        <plugin
+        <!-- <plugin
             filename="test_plugin"
             name="test_plugin::Testing">
-        </plugin>
+        </plugin> -->
         <light type="directional" name="sun">
             <cast_shadows>true</cast_shadows>
             <pose>0 0 10 0 0 0</pose>
@@ -253,7 +253,7 @@
                 <parent>chassis</parent>
                 <child>caster</child>
             </joint>
-            <plugin
+            <!-- <plugin
                 filename="libignition-gazebo-diff-drive-system.so"
                 name="ignition::gazebo::systems::DiffDrive">
                 <left_joint>left_wheel_joint</left_joint>
@@ -263,10 +263,23 @@
                 <odom_publish_frequency>4</odom_publish_frequency>
                 <odom_topic>odom</odom_topic>
                 <topic>motor_speeds</topic>
-                <!-- <topic>cmd_vel</topic> -->
+                <topic>cmd_vel</topic>
+            </plugin>  -->
+            
+            <plugin
+                filename="differential_drive_plugin"
+                name="ignition::gazebo::DiffDrive">
+                <left_joint>left_wheel_joint</left_joint>
+                <right_joint>right_wheel_joint</right_joint>
+                <wheel_radius>0.4</wheel_radius>
+                <wheel_separation>2</wheel_separation>
+                <odom_publish_frequency>4</odom_publish_frequency>
+                <control_input_topic>cmd_vel</control_input_topic>
+                <odometry_topic>odom</odometry_topic>
+                <left_link_inertia>0.08</left_link_inertia>
+                <right_link_inertia>0.08</right_link_inertia>
             </plugin>
-            <!-- Moving Forward-->
-
+             
         </model>
         
         
