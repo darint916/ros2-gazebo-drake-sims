@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="URDF_Bodies">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="1.18081715738015E-18 -0.0125 3.31698102144784E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.00375126000883085" />
+      <inertia
+        ixx="2.03613705094794E-07"
+        ixy="-2.63663820251277E-24"
+        ixz="1.61442194776398E-40"
+        iyy="2.70935390886525E-07"
+        iyz="6.95893500210631E-24"
+        izz="4.58077936711611E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="RW_Flap">
+    <inertial>
+      <origin
+        xyz="0.0156057597241795 0.0034001458033575 -1.3850164634205E-19"
+        rpy="0 0 0" />
+      <mass
+        value="0.000155627268196262" />
+      <inertia
+        ixx="4.74272194335383E-10"
+        ixy="-3.11441094664687E-10"
+        ixz="2.90754063791994E-27"
+        iyy="1.63660400355119E-09"
+        iyz="1.75590052600086E-26"
+        izz="1.79962166149405E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/RW_Flap.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/RW_Flap.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RW_Flap"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="RW_Flap" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RW_Pitch">
+    <inertial>
+      <origin
+        xyz="2.24568426444422E-19 -0.00100833700983606 0.0375"
+        rpy="0 0 0" />
+      <mass
+        value="0.00236285860241809" />
+      <inertia
+        ixx="1.24968886529E-06"
+        ixy="-5.80940508974298E-24"
+        ixz="3.02468933762989E-24"
+        iyy="1.10995489616372E-06"
+        iyz="1.05324845357289E-23"
+        izz="1.44463821686765E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/RW_Pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/RW_Pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RW_Pitch"
+    type="revolute">
+    <origin
+      xyz="0.0213291561975888 0 0"
+      rpy="0 1.5707963267949 0" />
+    <parent
+      link="RW_Flap" />
+    <child
+      link="RW_Pitch" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LW_Flap">
+    <inertial>
+      <origin
+        xyz="0.0156057597241795 0.0034001458033575 2.18897362057492E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.000155627268196262" />
+      <inertia
+        ixx="4.74272194335383E-10"
+        ixy="-3.11441094664687E-10"
+        ixz="-1.97534871550618E-25"
+        iyy="1.63660400355119E-09"
+        iyz="-4.05435150469755E-26"
+        izz="1.79962166149405E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/LW_Flap.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/LW_Flap.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LW_Flap"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="3.14159265358979 0 3.14159265358979" />
+    <parent
+      link="base_link" />
+    <child
+      link="LW_Flap" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LW_Pitch">
+    <inertial>
+      <origin
+        xyz="2.24568426444422E-19 -0.00100833700983606 0.0375"
+        rpy="0 0 0" />
+      <mass
+        value="0.00236285860241809" />
+      <inertia
+        ixx="1.24968886529E-06"
+        ixy="-5.80940508974298E-24"
+        ixz="3.02468933762989E-24"
+        iyy="1.10995489616372E-06"
+        iyz="1.47624932070643E-23"
+        izz="1.44463821686765E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/LW_Pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://URDF_Bodies/meshes/LW_Pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LW_Pitch"
+    type="revolute">
+    <origin
+      xyz="0.0963291561975888 0 0"
+      rpy="3.14159265358979 -1.5707963267949 0" />
+    <parent
+      link="LW_Flap" />
+    <child
+      link="LW_Pitch" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

@@ -1,0 +1,278 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+   <world name="world">
+      <physics name="1ms" type="ignored">
+         <max_step_size>0.001</max_step_size>
+         <real_time_factor>1.0</real_time_factor>
+      </physics>
+      <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
+        </plugin>
+      <plugin filename="libignition-gazebo-user-commands-system.so" name="ignition::gazebo::systems::UserCommands">
+        </plugin>
+      <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster">
+        </plugin>
+      <light type="directional" name="sun">
+         <cast_shadows>true</cast_shadows>
+         <pose>0 0 10 0 0 0</pose>
+         <diffuse>0.8 0.8 0.8 1</diffuse>
+         <specular>0.2 0.2 0.2 1</specular>
+         <attenuation>
+            <range>1000</range>
+            <constant>0.9</constant>
+            <linear>0.01</linear>
+            <quadratic>0.001</quadratic>
+         </attenuation>
+         <direction>-0.5 0.1 -0.9</direction>
+      </light>
+      <model name="ground_plane">
+         <pose relative_to="world">0 0 0 0 0 0</pose>
+         <static>true</static>
+         <link name="link">
+            <collision name="collision">
+               <geometry>
+                  <plane>
+                     <normal>0 0 1</normal>
+                  </plane>
+               </geometry>
+            </collision>
+            <visual name="visual">
+               <geometry>
+                  <plane>
+                     <normal>0 0 1</normal>
+                     <size>100 100</size>
+                  </plane>
+               </geometry>
+               <material>
+                  <ambient>0.8 0.8 0.8 1</ambient>
+                  <diffuse>0.8 0.8 0.8 1</diffuse>
+                  <specular>0.8 0.8 0.8 1</specular>
+               </material>
+            </visual>
+         </link>
+      </model>
+      <model name="URDF_Bodies">
+         <pose relative_to="world">10 0 0 0 0 0</pose>
+         <link name="base_link">
+            <inertial>
+               <pose>1.18081715738015E-18 -0.0125 3.31698102144784E-19 0 0 0</pose>
+               <mass>0.00375126000883085</mass>
+               <inertia>
+                  <ixx>2.03613705094794E-07</ixx>
+                  <ixy>-2.63663820251277E-24</ixy>
+                  <ixz>1.61442194776398E-40</ixz>
+                  <iyy>2.70935390886525E-07</iyy>
+                  <iyz>6.95893500210631E-24</iyz>
+                  <izz>4.58077936711611E-07</izz>
+               </inertia>
+            </inertial>
+            <visual name="visual">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/base_link.STL</uri>
+                  </mesh>
+               </geometry>
+               <material name="">
+                  <color rgba="1 1 1 1"/>
+               </material>
+            </visual>
+            <collision name="collision">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/base_link.STL</uri>
+                  </mesh>
+               </geometry>
+            </collision>
+         </link>
+         <link name="RW_Flap">
+            <inertial>
+               <pose>0.0156057597241795 0.0034001458033575 -1.3850164634205E-19 0 0 0</pose>
+               <mass>0.000155627268196262</mass>
+               <inertia>
+                  <ixx>4.74272194335383E-10</ixx>
+                  <ixy>-3.11441094664687E-10</ixy>
+                  <ixz>2.90754063791994E-27</ixz>
+                  <iyy>1.63660400355119E-09</iyy>
+                  <iyz>1.75590052600086E-26</iyz>
+                  <izz>1.79962166149405E-09</izz>
+               </inertia>
+            </inertial>
+            <visual name="visual">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/RW_Flap.STL</uri>
+                  </mesh>
+               </geometry>
+               <material name="">
+                  <color rgba="1 1 1 1"/>
+               </material>
+            </visual>
+            <collision name="collision">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/RW_Flap.STL</uri>
+                  </mesh>
+               </geometry>
+            </collision>
+         </link>
+         <joint name="RW_Flap" type="revolute">
+            <pose>0 0 0 0 0 0</pose>
+            <parent>base_link</parent>
+            <child>RW_Flap</child>
+            <axis>
+               <xyz expressed_in="__model__">0 -1 0</xyz>
+               <limit>
+                  <lower>0</lower>
+                  <upper>0</upper>
+                  <effort>0</effort>
+                  <velocity>0</velocity>
+               </limit>
+            </axis>
+         </joint>
+         <link name="RW_Pitch">
+            <inertial>
+               <pose>2.24568426444422E-19 -0.00100833700983606 0.0375 0 0 0</pose>
+               <mass>0.00236285860241809</mass>
+               <inertia>
+                  <ixx>1.24968886529E-06</ixx>
+                  <ixy>-5.80940508974298E-24</ixy>
+                  <ixz>3.02468933762989E-24</ixz>
+                  <iyy>1.10995489616372E-06</iyy>
+                  <iyz>1.05324845357289E-23</iyz>
+                  <izz>1.44463821686765E-07</izz>
+               </inertia>
+            </inertial>
+            <visual name="visual">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/RW_Pitch.STL</uri>
+                  </mesh>
+               </geometry>
+               <material name="">
+                  <color rgba="1 1 1 1"/>
+               </material>
+            </visual>
+            <collision name="collision">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/RW_Pitch.STL</uri>
+                  </mesh>
+               </geometry>
+            </collision>
+         </link>
+         <joint name="RW_Pitch" type="revolute">
+            <pose>0.0213291561975888 0 0 0 1.5707963267949 0</pose>
+            <parent>RW_Flap</parent>
+            <child>RW_Pitch</child>
+            <axis>
+               <xyz expressed_in="__model__">0 0 -1</xyz>
+               <limit>
+                  <lower>0</lower>
+                  <upper>0</upper>
+                  <effort>0</effort>
+                  <velocity>0</velocity>
+               </limit>
+            </axis>
+         </joint>
+         <link name="LW_Flap">
+            <inertial>
+               <pose>0.0156057597241795 0.0034001458033575 2.18897362057492E-18 0 0 0</pose>
+               <mass>0.000155627268196262</mass>
+               <inertia>
+                  <ixx>4.74272194335383E-10</ixx>
+                  <ixy>-3.11441094664687E-10</ixy>
+                  <ixz>-1.97534871550618E-25</ixz>
+                  <iyy>1.63660400355119E-09</iyy>
+                  <iyz>-4.05435150469755E-26</iyz>
+                  <izz>1.79962166149405E-09</izz>
+               </inertia>
+            </inertial>
+            <visual name="visual">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/LW_Flap.STL</uri>
+                  </mesh>
+               </geometry>
+               <material name="">
+                  <color rgba="1 1 1 1"/>
+               </material>
+            </visual>
+            <collision name="collision">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/LW_Flap.STL</uri>
+                  </mesh>
+               </geometry>
+            </collision>
+         </link>
+         <joint name="LW_Flap" type="revolute">
+            <pose>0 0 0 3.14159265358979 0 3.14159265358979</pose>
+            <parent>base_link</parent>
+            <child>LW_Flap</child>
+            <axis>
+               <xyz expressed_in="__model__">0 -1 0</xyz>
+               <limit>
+                  <lower>0</lower>
+                  <upper>0</upper>
+                  <effort>0</effort>
+                  <velocity>0</velocity>
+               </limit>
+            </axis>
+         </joint>
+         <link name="LW_Pitch">
+            <inertial>
+               <pose>2.24568426444422E-19 -0.00100833700983606 0.0375 0 0 0</pose>
+               <mass>0.00236285860241809</mass>
+               <inertia>
+                  <ixx>1.24968886529E-06</ixx>
+                  <ixy>-5.80940508974298E-24</ixy>
+                  <ixz>3.02468933762989E-24</ixz>
+                  <iyy>1.10995489616372E-06</iyy>
+                  <iyz>1.47624932070643E-23</iyz>
+                  <izz>1.44463821686765E-07</izz>
+               </inertia>
+            </inertial>
+            <visual name="visual">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/LW_Pitch.STL</uri>
+                  </mesh>
+               </geometry>
+               <material name="">
+                  <color rgba="1 1 1 1"/>
+               </material>
+            </visual>
+            <collision name="collision">
+               <pose>0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>package://URDF_Bodies/meshes/LW_Pitch.STL</uri>
+                  </mesh>
+               </geometry>
+            </collision>
+         </link>
+         <joint name="LW_Pitch" type="revolute">
+            <pose>0.0963291561975888 0 0 3.14159265358979 -1.5707963267949 0</pose>
+            <parent>LW_Flap</parent>
+            <child>LW_Pitch</child>
+            <axis>
+               <xyz expressed_in="__model__">0 0 1</xyz>
+               <limit>
+                  <lower>0</lower>
+                  <upper>0</upper>
+                  <effort>0</effort>
+                  <velocity>0</velocity>
+               </limit>
+            </axis>
+         </joint>
+      </model>
+   </world>
+</sdf>
