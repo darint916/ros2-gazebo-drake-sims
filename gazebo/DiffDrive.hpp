@@ -78,7 +78,7 @@ namespace diff_drive
         
         public:
             DiffDrive();
-            ~DiffDrive();
+            ~DiffDrive() override = default;
 
             void Configure(
                 const ignition::gazebo::Entity &_entity,
