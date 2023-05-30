@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.8">
-   <world name="world">
+   <world name="world1">
       <physics name="1ms" type="ignored">
          <max_step_size>0.001</max_step_size>
          <real_time_factor>1.0</real_time_factor>
@@ -50,26 +50,25 @@
             </visual>
          </link>
       </model>
-      <model name="URDF_Bodies">
-         <pose relative_to="world">10 0 0 0 0 0</pose>
+      <model name="URDF_Bodies.2">
+         <pose relative_to="world">0 0 0 0 0 0</pose>
          <link name="base_link">
+            <pose>1.28701571668501E-17 -0.125 1.11232366633435E-17 0 0 0</pose>
             <inertial>
-               <pose>1.18081715738015E-18 -0.0125 3.31698102144784E-19 0 0 0</pose>
-               <mass>0.00375126000883085</mass>
+               <mass>3.75126000883085</mass>
                <inertia>
-                  <ixx>2.03613705094794E-07</ixx>
-                  <ixy>-2.63663820251277E-24</ixy>
-                  <ixz>1.61442194776398E-40</ixz>
-                  <iyy>2.70935390886525E-07</iyy>
-                  <iyz>6.95893500210631E-24</iyz>
-                  <izz>4.58077936711611E-07</izz>
+                  <ixx>0.0203613705094794</ixx>
+                  <ixy>0</ixy>
+                  <ixz>0</ixz>
+                  <iyy>0.0270935390886525</iyy>
+                  <iyz>1.14587975343948E-18</iyz>
+                  <izz>0.0458077936711611</izz>
                </inertia>
             </inertial>
             <visual name="visual">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/base_link.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/base_link.STL</uri>
                   </mesh>
                </geometry>
                <material name="">
@@ -77,32 +76,30 @@
                </material>
             </visual>
             <collision name="collision">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/base_link.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/base_link.STL</uri>
                   </mesh>
                </geometry>
             </collision>
          </link>
          <link name="RW_Flap">
+            <pose>0.156057597241795 0.034001458033575 -2.95203009004169E-18 0 0 0</pose>
             <inertial>
-               <pose>0.0156057597241795 0.0034001458033575 -1.3850164634205E-19 0 0 0</pose>
-               <mass>0.000155627268196262</mass>
+               <mass>0.155627268196262</mass>
                <inertia>
-                  <ixx>4.74272194335383E-10</ixx>
-                  <ixy>-3.11441094664687E-10</ixy>
-                  <ixz>2.90754063791994E-27</ixz>
-                  <iyy>1.63660400355119E-09</iyy>
-                  <iyz>1.75590052600086E-26</iyz>
-                  <izz>1.79962166149405E-09</izz>
+                  <ixx>4.74272194335383E-05</ixx>
+                  <ixy>-3.11441094664687E-05</ixy>
+                  <ixz>-1.2222922292435E-21</ixz>
+                  <iyy>0.000163660400355119</iyy>
+                  <iyz>3.14258673086696E-22</iyz>
+                  <izz>0.000179962166149405</izz>
                </inertia>
             </inertial>
             <visual name="visual">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/RW_Flap.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
                <material name="">
@@ -110,16 +107,15 @@
                </material>
             </visual>
             <collision name="collision">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/RW_Flap.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
             </collision>
          </link>
-         <joint name="RW_Flap" type="revolute">
-            <pose>0 0 0 0 0 0</pose>
+         <joint name="joint_RW_Flap" type="revolute">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
             <parent>base_link</parent>
             <child>RW_Flap</child>
             <axis>
@@ -133,23 +129,22 @@
             </axis>
          </joint>
          <link name="RW_Pitch">
+            <pose>-1.37117854616102E-18 -0.0100833700983606 0.5669624057783 0 0 0</pose>
             <inertial>
-               <pose>2.24568426444422E-19 -0.00100833700983606 0.0375 0 0 0</pose>
-               <mass>0.00236285860241809</mass>
+               <mass>2.36285860241809</mass>
                <inertia>
-                  <ixx>1.24968886529E-06</ixx>
-                  <ixy>-5.80940508974298E-24</ixy>
-                  <ixz>3.02468933762989E-24</ixz>
-                  <iyy>1.10995489616372E-06</iyy>
-                  <iyz>1.05324845357289E-23</iyz>
-                  <izz>1.44463821686765E-07</izz>
+                  <ixx>0.124968886529001</ixx>
+                  <ixy>8.8618054691128E-19</ixy>
+                  <ixz>-4.47593547437603E-19</ixz>
+                  <iyy>0.110995489616372</iyy>
+                  <iyz>6.04666277036323E-18</iyz>
+                  <izz>0.0144463821686765</izz>
                </inertia>
             </inertial>
             <visual name="visual">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/RW_Pitch.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/RW_Pitch.STL</uri>
                   </mesh>
                </geometry>
                <material name="">
@@ -157,16 +152,15 @@
                </material>
             </visual>
             <collision name="collision">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/RW_Pitch.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/RW_Pitch.STL</uri>
                   </mesh>
                </geometry>
             </collision>
          </link>
-         <joint name="RW_Pitch" type="revolute">
-            <pose>0.0213291561975888 0 0 0 1.5707963267949 0</pose>
+         <joint name="joint_RW_Pitch" type="revolute">
+            <origin xyz="0.021329 0 0" rpy="0 1.5708 0"/>
             <parent>RW_Flap</parent>
             <child>RW_Pitch</child>
             <axis>
@@ -180,23 +174,22 @@
             </axis>
          </joint>
          <link name="LW_Flap">
+            <pose>0.156057597241795 0.034001458033575 2.0322722579128E-17 0 0 0</pose>
             <inertial>
-               <pose>0.0156057597241795 0.0034001458033575 2.18897362057492E-18 0 0 0</pose>
-               <mass>0.000155627268196262</mass>
+               <mass>0.155627268196262</mass>
                <inertia>
-                  <ixx>4.74272194335383E-10</ixx>
-                  <ixy>-3.11441094664687E-10</ixy>
-                  <ixz>-1.97534871550618E-25</ixz>
-                  <iyy>1.63660400355119E-09</iyy>
-                  <iyz>-4.05435150469755E-26</iyz>
-                  <izz>1.79962166149405E-09</izz>
+                  <ixx>4.74272194335383E-05</ixx>
+                  <ixy>-3.11441094664687E-05</ixy>
+                  <ixz>-2.12665334480973E-20</ixz>
+                  <iyy>0.000163660400355119</iyy>
+                  <iyz>-5.49599335761171E-21</iyz>
+                  <izz>0.000179962166149405</izz>
                </inertia>
             </inertial>
             <visual name="visual">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/LW_Flap.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/LW_Flap.STL</uri>
                   </mesh>
                </geometry>
                <material name="">
@@ -204,16 +197,15 @@
                </material>
             </visual>
             <collision name="collision">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/LW_Flap.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/LW_Flap.STL</uri>
                   </mesh>
                </geometry>
             </collision>
          </link>
-         <joint name="LW_Flap" type="revolute">
-            <pose>0 0 0 3.14159265358979 0 3.14159265358979</pose>
+         <joint name="joint_LW_Flap" type="revolute">
+            <origin xyz="0 0 0" rpy="3.1416 0 3.1416"/>
             <parent>base_link</parent>
             <child>LW_Flap</child>
             <axis>
@@ -227,23 +219,22 @@
             </axis>
          </joint>
          <link name="LW_Pitch">
+            <pose>-1.37117854616102E-18 -0.0100833700983606 -0.4919624057783 0 0 0</pose>
             <inertial>
-               <pose>2.24568426444422E-19 -0.00100833700983606 0.0375 0 0 0</pose>
-               <mass>0.00236285860241809</mass>
+               <mass>2.36285860241809</mass>
                <inertia>
-                  <ixx>1.24968886529E-06</ixx>
-                  <ixy>-5.80940508974298E-24</ixy>
-                  <ixz>3.02468933762989E-24</ixz>
-                  <iyy>1.10995489616372E-06</iyy>
-                  <iyz>1.47624932070643E-23</iyz>
-                  <izz>1.44463821686765E-07</izz>
+                  <ixx>0.124968886529001</ixx>
+                  <ixy>8.8618054691128E-19</ixy>
+                  <ixz>-4.47593547437603E-19</ixz>
+                  <iyy>0.110995489616372</iyy>
+                  <iyz>5.77249514599596E-18</iyz>
+                  <izz>0.0144463821686765</izz>
                </inertia>
             </inertial>
             <visual name="visual">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/LW_Pitch.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/LW_Pitch.STL</uri>
                   </mesh>
                </geometry>
                <material name="">
@@ -251,16 +242,15 @@
                </material>
             </visual>
             <collision name="collision">
-               <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>package://URDF_Bodies/meshes/LW_Pitch.STL</uri>
+                     <uri>model://URDF_Bodies.2/meshes/LW_Pitch.STL</uri>
                   </mesh>
                </geometry>
             </collision>
          </link>
-         <joint name="LW_Pitch" type="revolute">
-            <pose>0.0963291561975888 0 0 3.14159265358979 -1.5707963267949 0</pose>
+         <joint name="joint_LW_Pitch" type="revolute">
+            <origin xyz="0.0963291561975888 0 0" rpy="3.14159265358979 -1.5707963267949 0"/>
             <parent>LW_Flap</parent>
             <child>LW_Pitch</child>
             <axis>

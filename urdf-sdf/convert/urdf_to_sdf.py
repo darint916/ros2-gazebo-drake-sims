@@ -42,33 +42,17 @@ def convert_urdf_to_sdf(urdf_fp, sdf_fp, world_name):
     print("world:" + world_name)
     world_element.attrib['name'] = world_name
     for element in urdf_tree.iter('robot'):
-        # print(element.tag )
-            # print("robot found in URDF:" + element.attrib['name'])
         element.tag = 'model'
         world_element.append(element)
-    # robot_element = urdf_tree.findall('robot')
-    # if robot_element is None:
-    #     print("robot not found in URDF")
-    # if robot_element is not None:
-    # # for robot_element in urdf_tree.findall('robot'):
-    #     print("robot found in URDF:")
-    #     print(robot_element)
-    #     for robot in robot_element:
-    #         print(robot.attrib['name'])
-    #         world_element.append(robot)
-    #     # robot_element[0].tag = 'model' 
-    # for model_element in urdf_tree.findall('model'):
-    #     print("model found in URDF:" + model_element.attrib['name'])
-    #     world_element.append(model_element)
     
     sdf_tree = world_template_tree
     base_pose_coord_list = [0] * 6
     for i, model_element in enumerate(sdf_tree.iter('model')):
         print("model with findall found in SDF:" + model_element.attrib['name'])
         pose_element = ET.Element('pose')
-        pose_element.attrib['relative_to'] = world_name
+        pose_element.attrib['relative_to'] = 'world' #might cause error?
         pose_element.text = ' '.join([str(x) for x in base_pose_coord_list])
-        base_pose_coord_list[0] += 10 * (i + 1)
+        base_pose_coord_list[0] += 10 * i
         model_element.insert(0, pose_element)  
 
         for link_element in model_element.findall('link'):
@@ -81,13 +65,20 @@ def convert_urdf_to_sdf(urdf_fp, sdf_fp, world_name):
             visual_element = link_element.find('visual')
             if visual_element is not None: #adds attr
                 visual_element.attrib['name'] = 'visual'
-            
+                origin_element = visual_element.find('origin')
+                if origin_element is not None:
+                    visual_element.remove(origin_element)
+
             collision_element = link_element.find('collision')
             if collision_element is not None: #adds attr
                 collision_element.attrib['name'] = 'collision'
-
+                origin_element = collision_element.find('origin')
+                if origin_element is not None:
+                    collision_element.remove(origin_element)
+                    
         for joint_element in model_element.findall('joint'):
             print("joint found in SDF:" + joint_element.attrib['name'])
+            joint_element.attrib['name'] = 'joint_' + joint_element.attrib['name']
             attrib_to_text(joint_element.find('parent'), 'link')
             attrib_to_text(joint_element.find('child'), 'link')
             all_attrib_to_element(joint_element.find('axis'))
@@ -100,18 +91,47 @@ def convert_urdf_to_sdf(urdf_fp, sdf_fp, world_name):
                 xyz = axis.find('xyz')
                 if xyz is not None:
                     xyz.attrib['expressed_in'] = '__model__' #Not sure if needed? allows for xyz axis in respect to model frame
-        
-    for origin in sdf_tree.iter('origin'):
-        print("origin found in SDF:" + origin.attrib['xyz'])
-        origin.tag = 'pose'
-        origin.text = origin.attrib['xyz'] + ' ' + origin.attrib['rpy']
-        origin.attrib.clear()
+    
+    for tag in ['link', 'joint']:
+        for entity in sdf_tree.iter(tag):
+            inertial = entity.find('inertial')
+            if inertial is not None:
+                origin = inertial.find('origin')
+                if origin is not None:
+                    print("origin found in SDF:" + origin.attrib['xyz'])
+                    origin.tag = 'pose'
+                    origin.text = origin.attrib['xyz'] + ' ' + origin.attrib['rpy']
+                    origin.attrib.clear()
+                    entity.insert(0, origin)
+                inertial.remove(origin)
+  
     #change origin value of links?
     
     for mesh in sdf_tree.iter('mesh'):
         print("mesh found in SDF:" + mesh.attrib['filename'])
         attrib_to_element(mesh, 'filename', 'uri')
 
+
+    # visual_snippet = '''
+    #     <ambient>0.8 0.8 0.8 1</ambient>
+    #     <diffuse>0.8 0.8 0.8 1</diffuse>
+    #     <specular>0.8 0.8 0.8 1</specular>
+    # '''
+    # visual_parse = ET.fromstring('<root>' + visual_snippet + '</root>')
+    for material_element in sdf_tree.iter('material'):
+        material_element.attrib.clear()
+        color_element = material_element.find('color')
+        if color_element is not None:
+            material_element.remove(color_element)
+        for visual_child in visual_parse.iter():
+            material_element.append(visual_child)
+
+
+    for mesh_element in sdf_tree.iter('mesh'):
+        for uri_element in mesh_element.iter('uri'):
+            uri_element.text = uri_element.text.replace('package://', 'model://') #not sure if every case is covered
+
+    #printing/writing
     sdf_root = sdf_tree.getroot()
     formatted_xml = minidom.parseString(ET.tostring(sdf_root)).toprettyxml(indent="   ")
     line = formatted_xml.split('\n')
@@ -126,7 +146,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-u', '--urdf', help='URDF file path', dest='urdf_path',required=True, type=str)
     parser.add_argument('-s', '--sdf', help='SDF file path', dest='sdf_path', required=True, type=str)
-    parser.add_argument('-w', '--world', help='World name', dest='world_name', required=False, type=str, default='world')
+    parser.add_argument('-w', '--world', help='World name', dest='world_name', required=False, type=str, default='world1')
 
     args = parser.parse_args()
     convert_urdf_to_sdf(args.urdf_path, args.sdf_path, args.world_name)
