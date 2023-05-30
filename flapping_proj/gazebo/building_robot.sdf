@@ -248,22 +248,28 @@
                 <parent>chassis</parent>
                 <child>caster</child>
             </joint>
-            <plugin
-                filename="libignition-gazebo-diff-drive-system.so"
-                name="ignition::gazebo::systems::DiffDrive">
-                <left_joint>left_wheel_joint</left_joint>
-                <right_joint>right_wheel_joint</right_joint>
-                <wheel_separation>2</wheel_separation>
-                <wheel_radius>0.4</wheel_radius>
-                <odom_publish_frequency>4</odom_publish_frequency>
-                <odom_topic>odom</odom_topic>
-                <topic>motor_speeds</topic>
-                <!-- <topic>cmd_vel</topic> -->
-            </plugin>
+        
             <!-- Moving Forward-->
 
+        <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
+            <joint_name>right_wheel_joint</joint_name>
+            <use_force_commands>true</use_force_commands>
+            <topic>cmd_vel</topic>
+            <initial_velocity>0</initial_velocity>
+         </plugin>
         </model>
-        
+
+         
+         <plugin filename="libignition-gazebo-triggered-publisher-system.so"
+                name="ignition::gazebo::systems::TriggeredPublisher">
+            <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
+                <match field="data">16777237</match>
+            </input>
+            <output type="ignition.msgs.Double" topic="/cmd_vel">
+            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
+               data: 1
+            </output>
+        </plugin>
         
         <!-- keystrokes This code defines the triggered-publisher plugin. It accepts messages of 
         type ignition.msgs.Int32 on the /keyboard/keypress topic and if the value in the data 
@@ -274,17 +280,7 @@
         checking data packet of keystroke: ign topic -e -t /keyboard/keypress
 
         More info: https://github.com/gazebosim/gz-sim/blob/ign-gazebo2/tutorials/triggered_publisher.md-->
-        <!-- down -->
-        <plugin filename="libignition-gazebo-triggered-publisher-system.so"
-                name="ignition::gazebo::systems::TriggeredPublisher">
-            <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
-                <match field="data">16777237</match>
-            </input>
-            <output type="ignition.msgs.Twist" topic="/cmd_vel">
-            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
-                linear: {x: -3}, angular: {z: 0.0}
-            </output>
-        </plugin>
+     
 
         <!-- Moving Forward-->
         <plugin filename="libignition-gazebo-triggered-publisher-system.so"

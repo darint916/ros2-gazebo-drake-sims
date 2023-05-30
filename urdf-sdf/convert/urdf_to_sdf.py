@@ -45,9 +45,6 @@ def insert_material_snippet(sdf_tree, snippet = '''
     '''):
     visual_parse = ET.fromstring('<root>' + snippet + '</root>')
     for material_element in sdf_tree.iter('material'):
-        if material_element is ground_material:
-            print("ground material found")
-            continue
         material_element.attrib.clear()
         color_element = material_element.find('color')
         if color_element is not None:
@@ -62,6 +59,33 @@ def origin_to_pose(origin_element, relative_name=None):
     origin_element.attrib.clear()
     if relative_name is not None:
         origin_element.attrib['relative_to'] = relative_name
+
+def add_revolute_joint_limit(sdf_tree, limit_snippet=
+    '''<limit>
+        <lower>-1.79769e+308</lower>    <!--negative infinity-->
+        <upper>1.79769e+308</upper>     <!--positive infinity-->
+    </limit>'''):
+    limit_parse = ET.fromstring('<root>' + limit_snippet + '</root>')
+    for joint_element in sdf_tree.iter('joint'):
+
+            #remove outer limit
+            # limit = joint_element.find('limit')
+            # axis = joint_element.find('axis')
+            # if limit is not None and axis is not None:
+            #     joint_element.remove(limit)
+
+        if joint_element.attrib['type'] == 'revolute':
+            axis_element = joint_element.find('axis')
+            outer_limit = joint_element.find('limit')
+            if outer_limit is not None and axis_element is not None:
+                joint_element.remove(outer_limit)
+            if axis_element is not None:
+                limit_element = axis_element.find('limit')
+                if limit_element is not None:
+                    axis_element.remove(limit_element)
+                axis_element.append(limit_parse.find('limit')) #removes root wrapper
+                    
+    
 
 def convert_urdf_to_sdf(urdf_fp, sdf_fp, world_name):
     curr_dir = os.path.dirname(os.path.abspath(__file__))
@@ -124,14 +148,11 @@ def convert_urdf_to_sdf(urdf_fp, sdf_fp, world_name):
             joint_child_map[joint_element.find('child').text] = joint_element.attrib['name'] #save child name
             origin_to_pose(joint_element.find('origin'), joint_element.find('parent').text) #fix joint pose to be relative to parent
             
-            limit = joint_element.find('limit')
-            axis = joint_element.find('axis')
-            if limit is not None and axis is not None:
-                joint_element.remove(limit)
-                axis.append(limit)
-                xyz = axis.find('xyz')
-                if xyz is not None:
-                    xyz.attrib['expressed_in'] = '__model__' #Not sure if needed? allows for xyz axis in respect to model frame
+            
+                # axis.append(limit)
+                # xyz = axis.find('xyz')
+                # if xyz is not None:
+                #     xyz.attrib['expressed_in'] = '__model__' #Not sure if needed? allows for xyz axis in respect to model frame
     #Pulls inertia pose out to be link pose
     # for tag in ['link', 'joint']:
     #     for entity in sdf_tree.iter(tag):
@@ -185,6 +206,9 @@ def convert_urdf_to_sdf(urdf_fp, sdf_fp, world_name):
     #Optional modificiations (1 or the other)
     delete_material(sdf_tree)
     # insert_material_snippet(sdf_tree)
+
+    #add revolute joint limit
+    add_revolute_joint_limit(sdf_tree)
 
     #fixing path
     for mesh_element in sdf_tree.iter('mesh'):

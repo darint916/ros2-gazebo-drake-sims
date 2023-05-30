@@ -11,6 +11,7 @@
         </plugin>
       <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster">
         </plugin>
+      
       <light type="directional" name="sun">
          <cast_shadows>true</cast_shadows>
          <pose>0 0 10 0 0 0</pose>
@@ -51,7 +52,7 @@
          </link>
       </model>
       <model name="URDF_Bodies2.SLDASM">
-         <pose relative_to="world">0 0 0 0 0 0</pose>
+         <pose relative_to="world">0 0 .05 0 0 0</pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -73,12 +74,6 @@
                      <uri>model://URDF_Bodies2.SLDASM/meshes/base_link.STL</uri>
                   </mesh>
                </geometry>
-               <material>
-                  <ambient>0.0 0.0 1.0 1</ambient>
-                  <diffuse>0.0 0.0 1.0 1</diffuse>
-                  <specular>0.0 0.0 1.0 1</specular>
-
-               </material>
             </visual>
             <collision name="base_link">
                <pose>0 0 0 0 0 0</pose>
@@ -89,7 +84,7 @@
                </geometry>
             </collision>
          </link>
-         <link name="RW_Flap">
+         <!-- <link name="RW_Flap">
             <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
             <inertial>
                <pose>0.032766 0.034001 -8.7011E-19 0 0 0</pose>
@@ -125,10 +120,12 @@
             <parent>base_link</parent>
             <child>RW_Flap</child>
             <axis>
-               <xyz>0 -1 0</xyz>
+               <xyz expressed_in="__model__">0 -1 0</xyz>
                <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
+                  <lower>0</lower>
+                  <upper>0</upper>
+                  <effort>0</effort>
+                  <velocity>0</velocity>
                </limit>
             </axis>
          </joint>
@@ -168,13 +165,15 @@
             <parent>RW_Flap</parent>
             <child>RW_Pitch</child>
             <axis>
-               <xyz>-1 0 0</xyz>
+               <xyz expressed_in="__model__">-1 0 0</xyz>
                <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
+                  <lower>0</lower>
+                  <upper>0</upper>
+                  <effort>0</effort>
+                  <velocity>0</velocity>
                </limit>
             </axis>
-         </joint>
+         </joint> -->
          <link name="LW_Flap">
             <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
             <inertial>
@@ -211,14 +210,14 @@
             <parent>base_link</parent>
             <child>LW_Flap</child>
             <axis>
-               <xyz>0 -1 0</xyz>
+               <xyz expressed_in="__model__">0 -1 0</xyz>
                <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
+                  <lower>-1.79769e+308</lower>    <!--negative infinity-->
+                  <upper>1.79769e+308</upper>     <!--positive infinity-->
                </limit>
             </axis>
          </joint>
-         <link name="LW_Pitch">
+         <!-- <link name="LW_Pitch">
             <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
             <inertial>
                <pose>-0.375 -0.050083 1.3712E-18 0 0 0</pose>
@@ -254,13 +253,16 @@
             <parent>LW_Flap</parent>
             <child>LW_Pitch</child>
             <axis>
-               <xyz>1 0 0</xyz>
+               <xyz expressed_in="__model__">1 0 0</xyz>
                <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit> 
+                  <lower>0</lower>
+                  <upper>0</upper>
+                  <effort>0</effort>
+                  <velocity>0</velocity>
+               </limit>
             </axis>
-         </joint>
+         </joint> -->
+
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_LW_J_Pitch</joint_name>
             <use_force_commands>true</use_force_commands>
@@ -335,5 +337,6 @@
             </output>
         </plugin>
       </model>
+      
    </world>
 </sdf>
