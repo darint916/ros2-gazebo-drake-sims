@@ -1,0 +1,5 @@
+# Basic Flapping Vehicle test
+
+ROS2 framework for control found in the ros2 folder, can be intialized with colcon Build
+gazebo folder hosts the SDF which was converted from an URDF with a script in the urdf-sdf folder.
+URDF was exported from SolidWorks using a Ros to Gazebo Plugin. 
