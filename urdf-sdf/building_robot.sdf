@@ -216,8 +216,8 @@
                 </collision>
             </link>
 
-            <joint name='left_wheel_joint' type='revolute'>
-                <pose relative_to='left_wheel'/>
+            <joint name='left_wheetive_to='left_whl_joint' type='revolute'>
+                <pose relaeel'/>
                     <parent>chassis</parent>
                     <child>left_wheel</child>
                         <axis>
