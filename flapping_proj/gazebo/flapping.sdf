@@ -51,12 +51,13 @@
          </link>
       </model>
       <model name="URDF_Bodies2.SLDASM">
-         <pose relative_to="world">0 0 0 0 0 0</pose>
+         <pose relative_to="world">0 0 10 0 0 0< /pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
                <pose>1.287E-17 -0.125 1.1123E-17 0 0 0</pose>
                <mass>3.7513</mass>
+               <!-- <mass>10e20</mass> -->
                <inertia>
                   <ixx>0.020361</ixx>
                   <ixy>0</ixy>
@@ -88,7 +89,20 @@
                   </mesh>
                </geometry>
             </collision>
+             
          </link>
+         <!-- <plugin filename="libignition-gazebo6-velocity-control-system.so" name="ignition::gazebo::systems::VelocityControl"> -->
+               <!-- <topic>/cmd_vel</topic> -->
+               <!-- <link_name>base_link</link_name> -->
+               <!-- <initial_velocity>0 0 -10</initial_velocity> -->
+               <!-- <initial_angular>5 0 0</initial_angular> -->
+         <!-- </plugin> -->
+         <plugin
+            filename="velocity_control"
+            name="ignition::gazebo::VelocityControl">
+            <initial_angular>5 0 0</initial_angular>
+         </plugin>
+
          <link name="RW_Flap">
             <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
             <inertial>
@@ -223,6 +237,7 @@
             <inertial>
                <pose>-0.375 -0.050083 1.3712E-18 0 0 0</pose>
                <mass>2.3629</mass>
+               <!-- <mass>100</mass> -->
                <inertia>
                   <ixx>0.014446</ixx>
                   <ixy>6.0467E-18</ixy>
@@ -255,38 +270,48 @@
             <child>LW_Pitch</child>
             <axis>
                <xyz>1 0 0</xyz>
+               <dynamics>
+                  <damping>0</damping>
+                  <friction>0</friction>   
+
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_stiffness>20</spring_stiffness> -->
+               </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
                   <upper>1.79769e+308</upper>
                </limit> 
             </axis>
          </joint>
+
+        
+
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_LW_J_Pitch</joint_name>
             <use_force_commands>true</use_force_commands>
             <topic>cmd_vel</topic>
-            <initial_velocity>10</initial_velocity>
+            <!-- <initial_velocity>100</initial_velocity> -->
          </plugin>
 
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_LW_J_Flap</joint_name>
             <use_force_commands>false</use_force_commands>
             <topic>cmd_vel</topic>
-            <initial_velocity>10</initial_velocity>
+            <!-- <initial_velocity>10</initial_velocity> -->
          </plugin>
 
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_RW_J_Pitch</joint_name>
             <use_force_commands>true</use_force_commands>
             <topic>cmd_vel</topic>
-            <initial_velocity>10</initial_velocity>
+            <!-- <initial_velocity>5</initial_velocity> -->
          </plugin>
 
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_RW_J_Flap</joint_name>
             <use_force_commands>true</use_force_commands>
             <topic>cmd_vel</topic>
-            <initial_velocity>10</initial_velocity>
+            <!-- <initial_velocity>10</initial_velocity> -->
          </plugin>
 
          <plugin filename="libignition-gazebo-triggered-publisher-system.so"
@@ -335,5 +360,6 @@
             </output>
         </plugin>
       </model>
+      <!-- <gravity>0 0 -9.8</gravity> -->
    </world>
 </sdf>
