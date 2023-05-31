@@ -11,6 +11,17 @@
         </plugin>
       <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster">
         </plugin>
+        <plugin
+      filename="ignition-gazebo-apply-link-wrench-system"
+      name="ignition::gazebo::systems::ApplyLinkWrench">
+      <topic>/gazebo/apply_body_wrench</topic>
+      <persistent>
+        <entity_name>URDF_Bodies2.SLDASM</entity_name>
+        <entity_type>model</entity_type>
+        <force>0 0 100</force>
+        <torque>0 0 0</torque>
+      </persistent>
+    </plugin>
       <light type="directional" name="sun">
          <cast_shadows>true</cast_shadows>
          <pose>0 0 10 0 0 0</pose>
@@ -97,11 +108,11 @@
                <!-- <initial_velocity>0 0 -10</initial_velocity> -->
                <!-- <initial_angular>5 0 0</initial_angular> -->
          <!-- </plugin> -->
-         <plugin
+         <!-- <plugin
             filename="velocity_control"
             name="ignition::gazebo::VelocityControl">
-            <initial_angular>5 0 0</initial_angular>
-         </plugin>
+            <initial_angular>50 0 0</initial_angular>
+         </plugin> -->
 
          <link name="RW_Flap">
             <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>

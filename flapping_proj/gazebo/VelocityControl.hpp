@@ -71,7 +71,7 @@ namespace velocity_control
   /// \brief All link velocites
   public: std::unordered_map<std::string, msgs::Twist> linkVels;
 
-    // bool initial_step = True;
+    bool initial_step;
 };
 
 

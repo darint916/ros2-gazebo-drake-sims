@@ -119,6 +119,8 @@ void VelocityControl::Configure(const Entity &_entity,
            << linkTopic << "]"
            << std::endl;
   }
+
+  this->dataPtr->initial_step = true;
 }
 
 //////////////////////////////////////////////////
@@ -136,9 +138,15 @@ void VelocityControl::PreUpdate(const UpdateInfo &_info,
   }
 
   // Nothing left to do if paused.
-  if (_info.paused )
+  if (_info.paused)
     return;
-
+    //  ignwarn << "RUNNINGGGGGGG" << std::endl;
+    // ignwarn << this->dataPtr->initial_step << std::endl;
+    if(this->dataPtr->initial_step == false){
+        ignwarn << "initial step is false" << std::endl;
+        return;
+    }
+    this->dataPtr->initial_step = false;
   // update angular velocity of model
   auto modelAngularVel =
     _ecm.Component<components::AngularVelocityCmd>(
@@ -247,6 +255,7 @@ void VelocityControl::PreUpdate(const UpdateInfo &_info,
               << linkName << "]" << std::endl;
     }
   }
+  this->dataPtr->initial_step = false;
 }
 
 //////////////////////////////////////////////////
