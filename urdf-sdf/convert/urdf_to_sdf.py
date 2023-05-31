@@ -3,6 +3,15 @@ import argparse
 import os
 import xml.dom.minidom as minidom
 
+''' main changes 
+Converting attributes to text
+adding new material
+changing routing
+
+
+'''
+
+
 def attrib_to_text(element, attrib_name):
     if element is None: return
     if attrib_name in element.attrib:
@@ -42,15 +51,18 @@ def insert_material_snippet(sdf_tree, snippet = '''
         <ambient>0.8 0.8 0.8 1</ambient>
         <diffuse>0.8 0.8 0.8 1</diffuse>
         <specular>0.8 0.8 0.8 1</specular>
-    '''):
+    '''): #basically dummy values that get replacd by the rgba values that were originally in urdf
     visual_parse = ET.fromstring('<root>' + snippet + '</root>')
     for material_element in sdf_tree.iter('material'):
         material_element.attrib.clear()
         color_element = material_element.find('color')
         if color_element is not None:
+            color_val = color_element.attrib['rgba']
             material_element.remove(color_element)
         for visual_child in visual_parse.iter():
+            visual_child.text = color_val
             material_element.append(visual_child)
+
 
 def origin_to_pose(origin_element, relative_name=None):
     if origin_element is None: return
