@@ -49,7 +49,8 @@ def generate_launch_description():
             '/motor_speeds@geometry_msgs/msg/Twist@gz.msgs.Twist',
             '/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
             '/world/car_world/dynamic_pose/info@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V',
-            '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'
+            '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
+            '/model/vehicle_blue/pose@geometry_msgs/msg/PoseStamped@ignition.msgs.Pose'
             ]
         )
     ])

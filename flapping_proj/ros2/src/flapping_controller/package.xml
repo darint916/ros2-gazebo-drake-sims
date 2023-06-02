@@ -4,8 +4,8 @@
   <name>flapping_controller</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="darint916@gmail.com">grasshopper</maintainer>
-  <license>TODO: License declaration</license>
+  <maintainer email="darint916@gmail.com">Darin Tsai</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

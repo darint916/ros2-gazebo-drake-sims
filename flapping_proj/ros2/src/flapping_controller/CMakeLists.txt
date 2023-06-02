@@ -11,13 +11,13 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-add_executable(torque_publisher src/torque_publisher.cpp)
-target_include_directories(torque_publisher PUBLIC
+add_executable(control_node src/control_node.cpp)
+target_include_directories(control_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-target_compile_features(torque_publisher PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(control_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
-install(TARGETS torque_publisher
+install(TARGETS control_node
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
