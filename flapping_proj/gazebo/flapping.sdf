@@ -11,7 +11,7 @@
         </plugin>
       <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster">
         </plugin>
-        <plugin
+      <!-- <plugin
       filename="ignition-gazebo-apply-link-wrench-system"
       name="ignition::gazebo::systems::ApplyLinkWrench">
       <topic>/gazebo/apply_body_wrench</topic>
@@ -21,7 +21,7 @@
         <force>0 0 100</force>
         <torque>0 0 0</torque>
       </persistent>
-    </plugin>
+    </plugin> -->
       <light type="directional" name="sun">
          <cast_shadows>true</cast_shadows>
          <pose>0 0 10 0 0 0</pose>
@@ -285,8 +285,8 @@
                   <damping>0</damping>
                   <friction>0</friction>   
 
-                  <!-- <spring_reference>1.5708</spring_reference> -->
-                  <!-- <spring_stiffness>20</spring_stiffness> -->
+                  <spring_reference>1.5708</spring_reference>
+                  <spring_stiffness>1</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -294,7 +294,15 @@
                </limit> 
             </axis>
          </joint>
-
+         <plugin 
+            filename="odometry_state_plugin" 
+            name="odometry_state">
+            <world_name>world1</world_name>
+            <odometry_topic>/odome</odometry_topic>
+            <odom_publish_frequency>20.0</odom_publish_frequency>
+            <joint>joint_LW_J_Flap</joint> 
+            <joint>joint_LW_J_Pitch</joint>
+         </plugin>
         
 
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
@@ -371,6 +379,6 @@
             </output>
         </plugin>
       </model>
-      <!-- <gravity>0 0 -9.8</gravity> -->
+      <gravity>0 0 0</gravity>
    </world>
 </sdf>
