@@ -303,35 +303,58 @@
             <joint>joint_LW_J_Flap</joint> 
             <joint>joint_LW_J_Pitch</joint>
          </plugin>
-        
+         
+         
 
+         <!-- subscribes to model_name/joint/jointname/cmd_force , takes doubles -->
+         <plugin  
+            filename="libignition-gazebo-apply-joint-force-system.so" 
+            name = "ignition::gazebo::systems::ApplyJointForce">
+            <joint_name>joint_LW_J_Pitch</joint_name>
+         </plugin>
+         <plugin  
+            filename="libignition-gazebo-apply-joint-force-system.so" 
+            name = "ignition::gazebo::systems::ApplyJointForce">
+            <joint_name>joint_LW_J_Flap</joint_name>
+         </plugin>
+         <plugin  
+            filename="libignition-gazebo-apply-joint-force-system.so" 
+            name = "ignition::gazebo::systems::ApplyJointForce">
+            <joint_name>joint_RW_J_Pitch</joint_name>
+         </plugin>
+         <plugin  
+            filename="libignition-gazebo-apply-joint-force-system.so" 
+            name = "ignition::gazebo::systems::ApplyJointForce">
+         <joint_name>joint_RW_J_Flap</joint_name> 
+         </plugin>
+         <!--
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_LW_J_Pitch</joint_name>
             <use_force_commands>true</use_force_commands>
             <topic>cmd_vel</topic>
-            <!-- <initial_velocity>100</initial_velocity> -->
+            <initial_velocity>100</initial_velocity>
          </plugin>
 
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_LW_J_Flap</joint_name>
             <use_force_commands>false</use_force_commands>
             <topic>cmd_vel</topic>
-            <!-- <initial_velocity>10</initial_velocity> -->
+            <initial_velocity>10</initial_velocity>
          </plugin>
 
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_RW_J_Pitch</joint_name>
             <use_force_commands>true</use_force_commands>
             <topic>cmd_vel</topic>
-            <!-- <initial_velocity>5</initial_velocity> -->
+            <initial_velocity>5</initial_velocity>
          </plugin>
 
          <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
             <joint_name>joint_RW_J_Flap</joint_name>
             <use_force_commands>true</use_force_commands>
             <topic>cmd_vel</topic>
-            <!-- <initial_velocity>10</initial_velocity> -->
-         </plugin>
+            <initial_velocity>10</initial_velocity>
+         </plugin> -->
 
          <plugin filename="libignition-gazebo-triggered-publisher-system.so"
                 name="ignition::gazebo::systems::TriggeredPublisher">
