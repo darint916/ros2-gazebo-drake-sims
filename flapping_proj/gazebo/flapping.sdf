@@ -61,7 +61,7 @@
             </visual>
          </link>
       </model>
-      <model name="URDF_Bodies2.SLDASM">
+      <model name="URDF_Bodies2SLDASM"> <!-- removed . because its used as topic name for joint force plugin-->
          <pose relative_to="world">0 0 10 0 0 0< /pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
@@ -298,10 +298,12 @@
             filename="odometry_state_plugin" 
             name="odometry_state">
             <world_name>world1</world_name>
-            <odometry_topic>/odome</odometry_topic>
+            <odometry_topic>/odom</odometry_topic>
             <odom_publish_frequency>20.0</odom_publish_frequency>
             <joint>joint_LW_J_Flap</joint> 
             <joint>joint_LW_J_Pitch</joint>
+            <joint>joint_RW_J_Pitch</joint>
+            <joint>joint_RW_J_Flap</joint>
          </plugin>
          
          

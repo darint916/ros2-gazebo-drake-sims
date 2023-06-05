@@ -3,3 +3,21 @@
 ROS2 framework for control found in the ros2 folder, can be intialized with colcon Build
 gazebo folder hosts the SDF which was converted from an URDF with a script in the urdf-sdf folder.
 URDF was exported from SolidWorks using a Ros to Gazebo Plugin. 
+
+# Lauching project
+
+To launch, make sure you have:
+
+Sourced:
+ - Ros2 workspace
+ - Ignition Gazebo Fortress workspace
+ - ros_gz bridge
+ - Igniton Gazebo Plugin Resource build path
+    - `export IGN_GAZEBO_SYSTEM_PLUGIN_PATH="...ros2-gazebo-drake-sims/flapping_proj/gazebo/build"`
+ - Current ros2 package install
+    - `. .../ros2-gazebo-drake-sims/flapping_proj/ros2/install/local_setup.bash`
+
+Colcon build ros2 workspace, and cmake build and make gazebo workspace
+- Gazebo can be tested with `ign gazebo flapping.sdf` in the gazebo folder
+
+Launch the project with `ros2 launch launch/launch.py` 

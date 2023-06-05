@@ -1,5 +1,3 @@
-// #include <cstdio>
-// #include <iostream>
 #include <memory>
 #include <string>
 #include <mutex>
@@ -13,7 +11,11 @@
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "std_msgs/msg/float64.hpp"
 
-
+/*
+TODO: 
+Be able to extract parameters from gazebo plugin to input as headers,
+parameter joints should be ordered properly?
+*/
 
 
 class ControlNode : public rclcpp::Node
