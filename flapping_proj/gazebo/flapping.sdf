@@ -52,7 +52,7 @@
       </model>
       
       <model name="URDF_Bodies2SLDASM"> <!-- removed . because its used as topic name for joint force plugin-->
-         <pose relative_to="world">0 0 10 0 0 0< /pose>
+         <pose relative_to="world">0 0 300 0 0 0< /pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -297,7 +297,7 @@
          </joint>
 
          <!-- hold model in air -->
-         <joint name="anchor" type="revolute"> 
+         <!-- <joint name="anchor" type="revolute"> 
             <pose relative_to="base_link">0 0 0 0 0 0</pose>
             <parent>world</parent>
             <child>base_link</child>
@@ -308,7 +308,7 @@
                   <upper>0</upper>
                </limit>        
             </axis>
-         </joint>
+         </joint> -->
          
          <!-- controller/odom plugin-->
          <plugin 

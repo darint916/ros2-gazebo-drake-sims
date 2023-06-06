@@ -39,15 +39,18 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
         return;
     }
 
+    this->dataPtr->modelName = this->dataPtr->model.Name(_ecm);
+
     //Get canonical link
     std::vector<ignition::gazebo::Entity> links = _ecm.ChildrenByComponents(this->dataPtr->model.Entity(), ignition::gazebo::components::CanonicalLink());
-    if(!links.empty()) this->dataPtr->canonicalLink = links[0];
-    auto canonicalLinkNamePtr = _ecm.Component<igz::components::Name>(this->dataPtr->canonicalLink);
-    if(canonicalLinkNamePtr == nullptr) {
-        ignerr << "Canonical link name not found" << std::endl;
-        return;
-    }
-    this->dataPtr->canonicalLinkName = canonicalLinkNamePtr->Data();
+    /*Instead of canonical link, replaced with overall model pose, due to pose of link publishing as reference*/
+    // if(!links.empty()) this->dataPtr->canonicalLink = links[0];
+    // auto canonicalLinkNamePtr = _ecm.Component<igz::components::Name>(this->dataPtr->canonicalLink);
+    // if(canonicalLinkNamePtr == nullptr) {
+    //     ignerr << "Canonical link name not found" << std::endl;
+    //     return;
+    // }
+    // this->dataPtr->canonicalLinkName = canonicalLinkNamePtr->Data();
 
     //create joint map
     auto sdf_ptr = const_cast<sdf::Element*>(_sdf.get());
@@ -105,24 +108,24 @@ void OdometryState::PostUpdate(const igz::UpdateInfo &_info, const igz::EntityCo
     
     //gets main body pose, much easier than accessing each component prop imo
     ignition::msgs::Pose poseMsg;
-    if(this->dataPtr->canonicalLinkIndex < 0){
+    if(this->dataPtr->modelPositionIndex < 0){
         int poses = poseMsgs.pose_size();
         ignwarn << "poseMsgs size: " << poses << std::endl;
-        ignwarn << "canonicalLinkName: " << this->dataPtr->canonicalLinkName << std::endl;
+        ignwarn << "modelName: " << this->dataPtr->modelName << std::endl;
         for(int i = 0; i < poses; ++i){
-            if(poseMsgs.pose(i).name() == this->dataPtr->canonicalLinkName){
-                this->dataPtr->canonicalLinkIndex = i;
+            if(poseMsgs.pose(i).name() == this->dataPtr->modelName){
+                this->dataPtr->modelPositionIndex = i;
                 break;
             }
         }
     }
-    if(this->dataPtr->canonicalLinkIndex < 0){
-        ignerr << "Canonical link pose not found" << std::endl;
+    if(this->dataPtr->modelPositionIndex < 0){
+        ignerr << "model pose not found" << std::endl;
         return;
     }
     ignition::msgs::Pose_V odomMsg;
     odomMsg.mutable_header()->CopyFrom(poseMsg.header());
-    odomMsg.add_pose()->CopyFrom(poseMsgs.pose(this->dataPtr->canonicalLinkIndex));
+    odomMsg.add_pose()->CopyFrom(poseMsgs.pose(this->dataPtr->modelPositionIndex));
     
     //iterate through joint map and add them as pose
     for(auto const& joint : this->dataPtr->jointMap){

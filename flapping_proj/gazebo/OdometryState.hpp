@@ -18,9 +18,10 @@ namespace odometry_state
         std::chrono::steady_clock::duration prevOdomPubTime = std::chrono::steady_clock::duration::zero();
         std::mutex mutex;
 
-        ignition::gazebo::Entity canonicalLink;
-        std::string canonicalLinkName;
-        int canonicalLinkIndex = -1;
+        // ignition::gazebo::Entity canonicalLink;
+        
+        std::string modelName;
+        int modelPositionIndex = -1;
         std::map<std::string, ignition::gazebo::Entity> jointMap;
 
 
