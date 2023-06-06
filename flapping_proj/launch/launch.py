@@ -10,9 +10,9 @@ def process_user_input():
     ''''''''''''''''''''''''
     joint_names = ['joint_LW_J_Pitch', 'joint_RW_J_Pitch', 'joint_LW_J_Flap', 'joint_RW_J_Flap']
     model_name = 'URDF_Bodies2SLDASM'
-    world_name = 'world1'
+    # world_name = 'world1'
     ''''''''''''''''''''''''
-    return joint_names, model_name, world_name
+    return joint_names, model_name
 
 
 def generate_launch_description():
@@ -20,11 +20,11 @@ def generate_launch_description():
     sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
     data_file = os.path.join(current_dir, '..', 'data', 'data.csv')
 
-    joint_names, model_name, world_name = process_user_input()
-    position_topic = '/world/' + world_name + '/dynamic_pose/info'  
+    joint_names, model_name = process_user_input()
+    position_topic = '/odom'  #from sdf plugin
     joint_control_topics = []
     for joint in joint_names:
-        joint_control_topics.append('/' + model_name + '/joint/' + joint + '/cmd_force')  
+        joint_control_topics.append('/model/' + model_name + '/joint/' + joint + '/cmd_force')  
 
 
     #default odom topic, then joint forces

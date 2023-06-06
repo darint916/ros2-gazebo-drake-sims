@@ -11,17 +11,6 @@
         </plugin>
       <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster">
         </plugin>
-      <!-- <plugin
-      filename="ignition-gazebo-apply-link-wrench-system"
-      name="ignition::gazebo::systems::ApplyLinkWrench">
-      <topic>/gazebo/apply_body_wrench</topic>
-      <persistent>
-        <entity_name>URDF_Bodies2.SLDASM</entity_name>
-        <entity_type>model</entity_type>
-        <force>0 0 100</force>
-        <torque>0 0 0</torque>
-      </persistent>
-    </plugin> -->
       <light type="directional" name="sun">
          <cast_shadows>true</cast_shadows>
          <pose>0 0 10 0 0 0</pose>
@@ -61,6 +50,7 @@
             </visual>
          </link>
       </model>
+      
       <model name="URDF_Bodies2SLDASM"> <!-- removed . because its used as topic name for joint force plugin-->
          <pose relative_to="world">0 0 10 0 0 0< /pose>
          <link name="base_link">
@@ -102,17 +92,6 @@
             </collision>
              
          </link>
-         <!-- <plugin filename="libignition-gazebo6-velocity-control-system.so" name="ignition::gazebo::systems::VelocityControl"> -->
-               <!-- <topic>/cmd_vel</topic> -->
-               <!-- <link_name>base_link</link_name> -->
-               <!-- <initial_velocity>0 0 -10</initial_velocity> -->
-               <!-- <initial_angular>5 0 0</initial_angular> -->
-         <!-- </plugin> -->
-         <!-- <plugin
-            filename="velocity_control"
-            name="ignition::gazebo::VelocityControl">
-            <initial_angular>50 0 0</initial_angular>
-         </plugin> -->
 
          <link name="RW_Flap">
             <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
@@ -145,18 +124,6 @@
                </geometry>
             </collision>
          </link>
-         <joint name="joint_RW_J_Flap" type="revolute">
-            <pose relative_to="base_link">0.12329 0 0 0 0 0</pose>
-            <parent>base_link</parent>
-            <child>RW_Flap</child>
-            <axis>
-               <xyz>0 -1 0</xyz>
-               <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit>
-            </axis>
-         </joint>
          <link name="RW_Pitch">
             <pose relative_to="joint_RW_J_Pitch">0 0 0 0 0 0</pose>
             <inertial>
@@ -188,18 +155,6 @@
                </geometry>
             </collision>
          </link>
-         <joint name="joint_RW_J_Pitch" type="revolute">
-            <pose relative_to="RW_Flap">0.09 0.04 0 0 0 0</pose>
-            <parent>RW_Flap</parent>
-            <child>RW_Pitch</child>
-            <axis>
-               <xyz>-1 0 0</xyz>
-               <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit>
-            </axis>
-         </joint>
          <link name="LW_Flap">
             <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
             <inertial>
@@ -231,18 +186,6 @@
                </geometry>
             </collision>
          </link>
-         <joint name="joint_LW_J_Flap" type="revolute">
-            <pose relative_to="base_link">-0.12329 0 0 0 0 0</pose>
-            <parent>base_link</parent>
-            <child>LW_Flap</child>
-            <axis>
-               <xyz>0 -1 0</xyz>
-               <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit>
-            </axis>
-         </joint>
          <link name="LW_Pitch">
             <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
             <inertial>
@@ -275,6 +218,8 @@
                </geometry>
             </collision>
          </link>
+
+         <!-- joints -->
          <joint name="joint_LW_J_Pitch" type="revolute">
             <pose relative_to="LW_Flap">-0.09 0.04 0 0 0 0</pose>
             <parent>LW_Flap</parent>
@@ -282,11 +227,10 @@
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
-                  <damping>0</damping>
-                  <friction>0</friction>   
-
-                  <spring_reference>1.5708</spring_reference>
-                  <spring_stiffness>1</spring_stiffness>
+                  <damping>.5</damping>
+                  <friction>1</friction>   
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_stiffness>1</spring_stiffness> -->
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -294,6 +238,79 @@
                </limit> 
             </axis>
          </joint>
+         
+         <joint name="joint_LW_J_Flap" type="revolute">
+            <pose relative_to="base_link">-0.12329 0 0 0 0 0</pose>
+            <parent>base_link</parent>
+            <child>LW_Flap</child>
+            <axis>
+               <xyz>0 -1 0</xyz>
+               <dynamics>
+                  <damping>.5</damping>
+                  <friction>1</friction>   
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_stiffness>1</spring_stiffness> -->
+               </dynamics>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+         
+         <joint name="joint_RW_J_Pitch" type="revolute">
+            <pose relative_to="RW_Flap">0.09 0.04 0 0 0 0</pose>
+            <parent>RW_Flap</parent>
+            <child>RW_Pitch</child>
+            <axis>
+               <xyz>-1 0 0</xyz>
+               <dynamics>
+                  <damping>.5</damping>
+                  <friction>1</friction>   
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_stiffness>1</spring_stiffness> -->
+               </dynamics>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+         
+         <joint name="joint_RW_J_Flap" type="revolute">
+            <pose relative_to="base_link">0.12329 0 0 0 0 0</pose>
+            <parent>base_link</parent>
+            <child>RW_Flap</child>
+            <axis>
+               <xyz>0 -1 0</xyz>
+               <dynamics>
+                  <damping>.5</damping>
+                  <friction>1</friction>   
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_stiffness>1</spring_stiffness> -->
+               </dynamics>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+
+         <!-- hold model in air -->
+         <joint name="anchor" type="revolute"> 
+            <pose relative_to="base_link">0 0 0 0 0 0</pose>
+            <parent>world</parent>
+            <child>base_link</child>
+            <axis>
+               <xyz>0 0 1</xyz>
+               <limit>
+                  <lower>0</lower>
+                  <upper>0</upper>
+               </limit>        
+            </axis>
+         </joint>
+         
+         <!-- controller/odom plugin-->
          <plugin 
             filename="odometry_state_plugin" 
             name="odometry_state">
@@ -305,8 +322,6 @@
             <joint>joint_RW_J_Pitch</joint>
             <joint>joint_RW_J_Flap</joint>
          </plugin>
-         
-         
 
          <!-- subscribes to model_name/joint/jointname/cmd_force , takes doubles -->
          <plugin  
@@ -329,81 +344,8 @@
             name = "ignition::gazebo::systems::ApplyJointForce">
          <joint_name>joint_RW_J_Flap</joint_name> 
          </plugin>
-         <!--
-         <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
-            <joint_name>joint_LW_J_Pitch</joint_name>
-            <use_force_commands>true</use_force_commands>
-            <topic>cmd_vel</topic>
-            <initial_velocity>100</initial_velocity>
-         </plugin>
 
-         <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
-            <joint_name>joint_LW_J_Flap</joint_name>
-            <use_force_commands>false</use_force_commands>
-            <topic>cmd_vel</topic>
-            <initial_velocity>10</initial_velocity>
-         </plugin>
-
-         <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
-            <joint_name>joint_RW_J_Pitch</joint_name>
-            <use_force_commands>true</use_force_commands>
-            <topic>cmd_vel</topic>
-            <initial_velocity>5</initial_velocity>
-         </plugin>
-
-         <plugin filename="libignition-gazebo-joint-controller-system.so" name="ignition::gazebo::systems::JointController">
-            <joint_name>joint_RW_J_Flap</joint_name>
-            <use_force_commands>true</use_force_commands>
-            <topic>cmd_vel</topic>
-            <initial_velocity>10</initial_velocity>
-         </plugin> -->
-
-         <plugin filename="libignition-gazebo-triggered-publisher-system.so"
-                name="ignition::gazebo::systems::TriggeredPublisher">
-            <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
-                <match field="data">16777237</match>
-            </input>
-            <output type="ignition.msgs.Double" topic="/cmd_vel">
-            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
-               data: 3
-            </output>
-        </plugin>
-
-        <plugin filename="libignition-gazebo-triggered-publisher-system.so"
-                name="ignition::gazebo::systems::TriggeredPublisher">
-            <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
-                <match field="data">16777235</match>
-            </input>
-            <output type="ignition.msgs.Double" topic="/cmd_vel">
-            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
-               data: 3
-            </output>
-        </plugin>
-
-        <!-- Moving right-->
-        <plugin filename="libignition-gazebo-triggered-publisher-system.so"
-                name="ignition::gazebo::systems::TriggeredPublisher">
-            <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
-                <match field="data">16777236</match>
-            </input>
-            <output type="ignition.msgs.Double" topic="/cmd_vel">
-            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
-               data: 3
-            </output>
-        </plugin>
-
-        <!-- Moving left-->
-        <plugin filename="libignition-gazebo-triggered-publisher-system.so"
-                name="ignition::gazebo::systems::TriggeredPublisher">
-            <input type="ignition.msgs.Int32" topic="/keyboard/keypress">
-                <match field="data">16777234</match>
-            </input>
-            <output type="ignition.msgs.Double" topic="/cmd_vel">
-            <!-- <output type="ignition.msgs.Twist" topic="/motor_speeds"> -->
-               data: 3
-            </output>
-        </plugin>
       </model>
-      <gravity>0 0 0</gravity>
+      <!-- <gravity>0 0 0</gravity> -->
    </world>
 </sdf>

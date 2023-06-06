@@ -21,3 +21,8 @@ Colcon build ros2 workspace, and cmake build and make gazebo workspace
 - Gazebo can be tested with `ign gazebo flapping.sdf` in the gazebo folder
 
 Launch the project with `ros2 launch launch/launch.py` 
+
+# Debugging
+
+Igniton Gazebo can be debugged by setting verbose with launching sdf with -v or send ignerr msgs. 
+Ros2 can use RCLCPP stream to output

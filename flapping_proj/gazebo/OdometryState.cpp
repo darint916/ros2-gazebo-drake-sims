@@ -35,7 +35,7 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
 {
     this->dataPtr->model = igz::Model(_entity);
     if(!this->dataPtr->model.Valid(_ecm)) {
-        ignerr << "DiffDrive plugin should be attached to a model entity, fail init" << std::endl;
+        ignerr << "plugin should be attached to a model entity, fail init" << std::endl;
         return;
     }
 
@@ -55,7 +55,6 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
     while(jointElem != nullptr){
         std::string jointName = jointElem->Get<std::string>();
         igz::Entity jointEntity = this->dataPtr->model.JointByName(_ecm, jointName);
-        ignerr << "Joint [" << jointName << std::endl;
         if (jointEntity == igz::kNullEntity) {
             ignerr << "Joint [" << jointName << "] not found" << std::endl;
         } else {

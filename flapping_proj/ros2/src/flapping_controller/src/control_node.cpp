@@ -72,6 +72,7 @@ class ControlNode : public rclcpp::Node
 			}
 
 			//Subscriber for Position
+			RCLCPP_INFO_STREAM(this->get_logger(), "Subscribing to position topic: " << this->get_parameter("position_topic").as_string());
 			_poseArraySubscriber = this->create_subscription<geometry_msgs::msg::PoseArray>(
 				this->get_parameter("position_topic").as_string(),
 				10, std::bind(&ControlNode::position_topic_callback,
@@ -99,6 +100,7 @@ class ControlNode : public rclcpp::Node
 
 			//Time updates
 			_previousPoseTime = _currentPoseTime;
+
 			_currentPoseTime = msg->poses[pose_size - 1].position.x; //Time is stored as last pose obj in plugin, due to missing header
 			_csvWriter << _currentPoseTime << "," << _currentPose.position.x << "," << _currentPose.position.y << "," << _currentPose.position.z << ","
 						<< _currentPose.orientation.x << "," << _currentPose.orientation.y << "," << _currentPose.orientation.z << "," << _currentPose.orientation.w;
@@ -130,10 +132,10 @@ class ControlNode : public rclcpp::Node
 		
 		void sin_torque_control(){
 			//hardcoded params
-			double amplitude = 20;
-			double frequency = 1;
+			double amplitude = 30;
+			double frequency = 2;
 			double phase = 0;
-			
+			// RCLCPP_INFO_STREAM(this->get_logger(), "Current time: " << _currentPoseTime);
 			for (auto & joint : _jointTorqueControlMap) {
 				joint.second = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime + phase);
 			} 

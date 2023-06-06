@@ -7,7 +7,7 @@ import xml.dom.minidom as minidom
 Converting attributes to text
 adding new material
 changing routing
-
+#TODO add dynamics to joints
 
 '''
 
