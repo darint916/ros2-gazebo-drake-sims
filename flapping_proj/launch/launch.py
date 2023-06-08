@@ -43,7 +43,7 @@ def generate_launch_description():
                 {'joint_names': joint_names},
                 {'joint_control_topics': joint_control_topics},
                 {'position_topic': position_topic},
-                {'control_publish_frequency': -1}, #not implemented yet?
+                {'control_publish_frequency': 3}, #not implemented yet?
                 {'data_file_path': data_file}, 
             ]
         ),

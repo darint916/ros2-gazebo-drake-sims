@@ -43,8 +43,6 @@ class ControlNode : public rclcpp::Node
 	public:
 		ControlNode() : Node("control_node")
 		{
-			//Timer for publication
-			_timer = this->create_wall_timer(std::chrono::milliseconds(100), std::bind(&ControlNode::timer_callback, this));
 
 			//params
 			auto param_desc = rcl_interfaces::msg::ParameterDescriptor();
@@ -53,7 +51,7 @@ class ControlNode : public rclcpp::Node
 			this->declare_parameter<std::vector<std::string>>("joint_names", {"placeholder"}, param_desc);
 			this->declare_parameter<std::vector<std::string>>("joint_control_topics", {"placeholder"});
 			this->declare_parameter<std::string>("position_topic", "/world/world1/dynamic_pose/info");
-			this->declare_parameter<int>("control_publish_frequency", -1);
+			this->declare_parameter<int>("control_publish_frequency", 30);
 			this->declare_parameter<std::string>("data_file_path", "../data/data.csv");
 
 			//creating joint publishers and mapping joints
@@ -70,7 +68,10 @@ class ControlNode : public rclcpp::Node
 				_jointTorqueControlMap[jointNames[i]] = 0.0;
 				_jointPositionMap[jointNames[i]] = 0.0;
 			}
-
+			//Timer for publication
+			auto publishPeriod = std::chrono::duration<double>(1.0 / this->get_parameter("control_publish_frequency").as_int());
+			_timer = this->create_wall_timer(std::chrono::duration_cast<std::chrono::nanoseconds>(publishPeriod), std::bind(&ControlNode::timer_callback, this));
+			
 			//Subscriber for Position
 			RCLCPP_INFO_STREAM(this->get_logger(), "Subscribing to position topic: " << this->get_parameter("position_topic").as_string());
 			_poseArraySubscriber = this->create_subscription<geometry_msgs::msg::PoseArray>(
