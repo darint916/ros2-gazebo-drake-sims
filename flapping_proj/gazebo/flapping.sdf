@@ -52,7 +52,7 @@
       </model>
       
       <model name="URDF_Bodies2SLDASM"> <!-- removed . because its used as topic name for joint force plugin-->
-         <pose relative_to="world">0 0 300 0 0 0< /pose>
+         <pose relative_to="world">0 0 300 1.5708 0 0< /pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -114,6 +114,11 @@
                      <uri>model://URDF_Bodies2.SLDASM/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
+               <material>
+                  <ambient>1.0 0.0 1.0 .9</ambient>
+                  <diffuse>1.0 0.0 1.0 .9</diffuse>
+                  <specular>1.0 0.0 1.0 .9</specular>
+               </material>
             </visual>
             <collision name="RW_Flap">
                <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
@@ -145,6 +150,11 @@
                      <uri>model://URDF_Bodies2.SLDASM/meshes/RW_Pitch.STL</uri>
                   </mesh>
                </geometry>
+               <material>
+                  <ambient>0.0 1.0 0.0 .8</ambient>
+                  <diffuse>0.0 1.0 0.0 .8</diffuse>
+                  <specular>0.0 1.0 0.0 .75</specular>
+               </material>
             </visual>
             <collision name="RW_Pitch">
                <pose relative_to="joint_RW_J_Pitch">0 0 0 0 0 0</pose>
@@ -176,6 +186,11 @@
                      <uri>model://URDF_Bodies2.SLDASM/meshes/LW_Flap.STL</uri>
                   </mesh>
                </geometry>
+               <material>
+                  <ambient>1.0 0.0 1.0 .9</ambient>
+                  <diffuse>1.0 0.0 1.0 .9</diffuse>
+                  <specular>1.0 0.0 1.0 .9</specular>
+               </material>
             </visual>
             <collision name="LW_Flap">
                <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
@@ -208,6 +223,11 @@
                      <uri>model://URDF_Bodies2.SLDASM/meshes/LW_Pitch.STL</uri>
                   </mesh>
                </geometry>
+               <material>
+                  <ambient>0.0 1.0 0.0 .8</ambient>
+                  <diffuse>0.0 1.0 0.0 .8</diffuse>
+                  <specular>0.0 1.0 0.0 .75</specular>
+               </material>
             </visual>
             <collision name="LW_Pitch">
                <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
@@ -221,7 +241,7 @@
 
          <!-- joints -->
          <joint name="joint_LW_J_Pitch" type="revolute">
-            <pose relative_to="LW_Flap">-0.09 0.04 0 0 0 0</pose>
+            <pose relative_to="LW_Flap">-0.09 0.04 0 -0.785398 0 0</pose>
             <parent>LW_Flap</parent>
             <child>LW_Pitch</child>
             <axis>
@@ -240,7 +260,7 @@
          </joint>
          
          <joint name="joint_LW_J_Flap" type="revolute">
-            <pose relative_to="base_link">-0.12329 0 0 0 0 0</pose>
+            <pose relative_to="base_link">-0.12329 0 0 0 0.261799 0</pose>
             <parent>base_link</parent>
             <child>LW_Flap</child>
             <axis>
@@ -258,8 +278,8 @@
             </axis>
          </joint>
          
-         <joint name="joint_RW_J_Pitch" type="revolute">
-            <pose relative_to="RW_Flap">0.09 0.04 0 0 0 0</pose>
+         <joint name="joint_RW_J_Pitch" type="revolute"> <!--positive rot for down-->
+            <pose relative_to="RW_Flap">0.09 0.04 0 -0.785398 0 0</pose>
             <parent>RW_Flap</parent>
             <child>RW_Pitch</child>
             <axis>
@@ -277,8 +297,8 @@
             </axis>
          </joint>
          
-         <joint name="joint_RW_J_Flap" type="revolute">
-            <pose relative_to="base_link">0.12329 0 0 0 0 0</pose>
+         <joint name="joint_RW_J_Flap" type="revolute"> <!--positive rot for down-->
+            <pose relative_to="base_link">0.12329 0 0 0 -0.261799 0</pose>
             <parent>base_link</parent>
             <child>RW_Flap</child>
             <axis>
@@ -302,10 +322,17 @@
             <parent>world</parent>
             <child>base_link</child>
             <axis>
+               <dynamics>
+                  <damping>.5</damping>
+                  <friction>1</friction>   
+                  <spring_reference>1.5708</spring_reference>
+                  <spring_stiffness>1</spring_stiffness>
+               </dynamics>
                <xyz>0 0 1</xyz>
                <limit>
                   <lower>0</lower>
                   <upper>0</upper>
+                  
                </limit>        
             </axis>
          </joint> -->
