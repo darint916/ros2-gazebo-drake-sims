@@ -82,8 +82,6 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
         std::chrono::duration<double> odomPeriod(1 / odometryFreq);
         this->dataPtr->odomPubPeriod = std::chrono::duration_cast<std::chrono::steady_clock::duration>(odomPeriod);
     }    
-
-    
 }
 
 // void OdometryState::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm)

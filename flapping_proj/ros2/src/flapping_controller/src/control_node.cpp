@@ -95,7 +95,7 @@ class ControlNode : public rclcpp::Node
 		void position_topic_callback(const geometry_msgs::msg::PoseArray::SharedPtr msg)
 		{
 			std::lock_guard<std::mutex> lock(_mutex);
-			RCLCPP_INFO_STREAM(this->get_logger(), "Received position topic time: " << msg->header.stamp.sec << " " << msg->header.stamp.nanosec);
+			// RCLCPP_INFO_STREAM(this->get_logger(), "Received position topic time: " << msg->header.stamp.sec << " " << msg->header.stamp.nanosec);
 			_currentPose = msg->poses[0]; 
 			int pose_size = msg->poses.size();
 

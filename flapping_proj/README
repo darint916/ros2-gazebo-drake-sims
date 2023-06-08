@@ -26,3 +26,5 @@ Launch the project with `ros2 launch launch/launch.py`
 
 Igniton Gazebo can be debugged by setting verbose with launching sdf with -v or send ignerr msgs. 
 Ros2 can use RCLCPP stream to output
+
+If data reports with duplicate or redundant timestamps, most likey multiple instances of gazebo are running. Could be resolved from restarting computer
