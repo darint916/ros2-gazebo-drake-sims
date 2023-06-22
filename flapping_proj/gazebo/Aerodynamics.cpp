@@ -1,4 +1,7 @@
 #include <mutex>
+#include <sstream>
+
+
 #include <ignition/plugin/Register.hh>
 #include <ignition/transport/Node.hh>
 #include <ignition/common/Profiler.hh>
@@ -69,22 +72,95 @@ void Aerodynamics::PreUpdate(const UpdateInfo &_info, EntityComponentManager &_e
 
 void AerodynamicsData::Load(const EntityComponentManager &_ecm, const sdf::ElementPtr &_sdf)
 {
-    //TODO: Finish Data query from SDF
-    std::string linkName = _sdf->Get<std::string>("link_name", "");
-    if (linkName.empty())
-    {
-        ignerr << "Aerodynamics plugin should have a <link_name> child." << std::endl;
-        this->validConfig = false;
-        return;
-    }
+    //TODO: Add checking for link is actually a link (not that important) check ref for other checks
 
-    this->linkEntity = this->model.LinkByName(_ecm, linkName);
-    this->linkPose = this->model.Pose(_ecm, this->linkEntity);
+    auto sdf_ptr = const_cast<sdf::Element*>(_sdf.get());
+    sdf::ElementPtr linkElement = sdf_ptr->GetElement("link");
+    while(linkElement != nullptr){
+        //if below doesnt work, try
+        //std::string linkName = linkElement->Get<std::string>("link_name", "").first;
+        //std::string linkType = linkElement->Get<std::string>("link_type", "").first;
+        std::string linkName = linkElement->GetElement("link_name")->Get<std::string>();
+        
+        std::string linkType = linkElement->GetElement("link_type")->Get<std::string>();
+        if (linkName.empty() || linkType.empty())
+        {
+            ignerr << "Aerodynamics plugin should have a <link_name> and <link_type> child." << std::endl;
+            this->validConfig = false;
+            return;
+        }
+        if (linkType != "Generic" && linkType != "Wing")
+        {
+            ignerr << "Aerodynamics plugin should have a <link_type> of Generic or Wing." << std::endl;
+            this->validConfig = false;
+            return;
+        }
+        this->linkMap[linkName].linkType = linkType;
+        this->linkMap[linkName].stallAngle = linkElement->GetElement("stall_angle")->Get<double>();
+        this->linkMap[linkName].fluidDensity = linkElement->GetElement("fluid_density")->Get<double>();
+        this->linkMap[linkName].dragCoefficient = linkElement->GetElement("drag_coefficient")->Get<double>();
+        this->linkMap[linkName].liftCoefficient = linkElement->GetElement("lift_coefficient")->Get<double>();
+        if(linkType == "Wing")
+        {
+            this->linkMap[linkName].wingParameters.blades = linkElement->GetElement("int")->Get<int>();
+            this->linkMap[linkName].wingParameters.wingSpan = linkElement->GetElement("wing_span")->Get<double>();
+        
+            //String to values for blade chord list
+            std::stringstream ss(linkElement->GetElement("blade_chord_list")->Get<std::string>());
+            std::string token;
+            while(std::getline(ss, token, ',')){
+                token.erase(std::remove(token.begin(), token.end(), ' '), token.end());
+                try { //string to double parsing
+                    this->linkMap[linkName].wingParameters.bladeChordList.push_back(std::stod(token));
+                } catch (const std::invalid_argument& ia) {
+                    ignerr << "blade_chord_list STOD Invalid argument: " << ia.what() << std::endl;
+                    this->validConfig = false;
+                    return;
+                } catch (const std::out_of_range& oor) {
+                    ignerr << "blade_chord_list STOD Out of Range error: " << oor.what() << std::endl;
+                    this->validConfig = false;
+                    return;
+                }
+            }
+            if (this->linkMap[linkName].wingParameters.bladeChordList.size() != this->linkMap[linkName].wingParameters.blades){
+                ignerr << "blade_chord_list size does not match blades" << std::endl;
+                this->validConfig = false;
+                return;
+            }
+
+            //String to values for center pressure list
+            std::stringstream ss2(linkElement->GetElement("center_pressure_list")->Get<std::string>());
+            std::string token2;
+            while(std::getline(ss2, token2, ',')){
+                token2.erase(std::remove(token2.begin(), token2.end(), ' '), token2.end());
+                try { //string to double parsing
+                    this->linkMap[linkName].centerPressureList.push_back(std::stod(token2));
+                } catch (const std::invalid_argument& ia) {
+                    ignerr << "center_pressure_list STOD Invalid argument: " << ia.what() << std::endl;
+                    this->validConfig = false;
+                    return;
+                } catch (const std::out_of_range& oor) {
+                    ignerr << "center_pressure_list STOD Out of Range error: " << oor.what() << std::endl;
+                    this->validConfig = false;
+                    return;
+                }
+            }
+        } else if (linkType == "Generic"){
+            this->linkMap[linkName].centerPressure = linkElement->GetElement("center_pressure")->Get<ignition::math::Vector3d>();
+        }
+
+        linkElement = linkElement->GetNextElement("link");
+    }
 }
 
 void AerodynamicsData::Update(EntityComponentManager &_ecm)
 {
     //Todo calculate aerodynamic equations, query link pose, apply wrench, publish wrench
+    for (auto &link : this->linkMap){
+        ignition::msgs::Pose linkPose = this->model.Pose(_ecm, this->model.LinkByName(_ecm, link.first));
+
+    }
+
 }
 IGNITION_ADD_PLUGIN(Aerodynamics,
                     System,

@@ -10,8 +10,45 @@ namespace aerodynamics
     /*
         SDF Parameter Shape
         <plugin filename="aerodynamics_plugin" name="aerodynamics">
+            <link>
+                <link_name>link1</link_name>
+                <link_type>Wing</link_type>
+                <stall_angle>15</stall_angle>
+                <fluid_density>1.293</fluid_density>
+                <drag_coefficient>1</drag_coefficient>
+                <lift_coefficient>1</lift_coefficient>
+            </link>
+            <link>
+                <link_name>link2</link_name>
+                <link_type>Generic</link_type>
+                <stall_angle>15</stall_angle>
+                <fluid_density>1.293</fluid_density>
+                <drag_coefficient>1</drag_coefficient>
+                <lift_coefficient>1</lift_coefficient>
+            </link>
+        </plugin>
+
             
     */
+    struct AerodynamicLinkParameters //Defaults added for override + allocate
+    {
+        std::string linkType = "Generic"; //Wing, Generic, etc.
+        double stallAngle = 0; //degrees
+        double fluidDensity = 1.293; //kg*m^-3 air density at 273K
+        double dragCoefficient = 1; //unitless + variable
+        double liftCoefficient = 1; //unitless + variable
+        WingParameters wingParameters; //Wing specific parameters
+        std::vector<ignition::math::Vector3d> centerPressureList; //try ::Zero if err //meters from COM, Center of Pressure
+    
+        
+    };
+
+    struct WingParameters
+    {
+        int blades = 1; //number of blades for Blade Element method
+        double wingSpan = 1; //meters (total length of wing)
+        std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
+    }
     struct AerodynamicsData
     {
         igz::Model model{igz::kNullEntity};
@@ -33,8 +70,8 @@ namespace aerodynamics
         sdf::ElementPtr sdfConfig;
 
         //Sim parameters
-        ignition::msgs::Pose linkPose;
-        
+        // ignition::msgs::Pose linkPose;
+        linkMap<std::string, AerodynamicLinkParameters> linkMap;
 
         //sdf parameters
         double fluidDensity = 1.293; //kg*m^-3 air density at 273K
