@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 #include <ignition/gazebo/System.hh>
-
+#include <cmath>
 namespace aerodynamics 
 {
     namespace igz = ignition::gazebo;
@@ -17,6 +17,7 @@ namespace aerodynamics
                 <fluid_density>1.293</fluid_density>
                 <drag_coefficient>1</drag_coefficient>
                 <lift_coefficient>1</lift_coefficient>
+                <jointName>joint1</jointName>
             </link>
             <link>
                 <link_name>link2</link_name>
@@ -32,19 +33,21 @@ namespace aerodynamics
     */
     struct AerodynamicLinkParameters //Defaults added for override + allocate
     {
+        igz::Entity linkEntity;
         std::string linkType = "Generic"; //Wing, Generic, etc.
-        double stallAngle = 0; //degrees
+        double stallAngle = M_PI / 2; //radians
+        double angleOfAttack = 0; //radians
         double fluidDensity = 1.293; //kg*m^-3 air density at 273K
         double dragCoefficient = 1; //unitless + variable
         double liftCoefficient = 1; //unitless + variable
         WingParameters wingParameters; //Wing specific parameters
         std::vector<ignition::math::Vector3d> centerPressureList; //try ::Zero if err //meters from COM, Center of Pressure
-    
-        
     };
 
     struct WingParameters
     {
+        std::string controlJointName = "";
+        igz::Entity controlJointEntity;
         int blades = 1; //number of blades for Blade Element method
         double wingSpan = 1; //meters (total length of wing)
         std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
