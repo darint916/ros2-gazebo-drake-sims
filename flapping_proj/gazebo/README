@@ -1,0 +1,5 @@
+To edit + build:
+`cd build`
+`cmake ..`
+`make`
+

@@ -31,6 +31,15 @@ namespace aerodynamics
 
             
     */
+    struct WingParameters
+    {
+        std::string controlJointName = "";
+        igz::Entity controlJointEntity;
+        int blades = 1; //number of blades for Blade Element method
+        double wingSpan = 1; //meters (total length of wing)
+        std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
+    };
+
     struct AerodynamicLinkParameters //Defaults added for override + allocate
     {
         igz::Entity linkEntity;
@@ -44,14 +53,6 @@ namespace aerodynamics
         std::vector<ignition::math::Vector3d> centerPressureList; //try ::Zero if err //meters from COM, Center of Pressure
     };
 
-    struct WingParameters
-    {
-        std::string controlJointName = "";
-        igz::Entity controlJointEntity;
-        int blades = 1; //number of blades for Blade Element method
-        double wingSpan = 1; //meters (total length of wing)
-        std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
-    }
     struct AerodynamicsData
     {
         igz::Model model{igz::kNullEntity};
@@ -74,18 +75,18 @@ namespace aerodynamics
 
         //Sim parameters
         // ignition::msgs::Pose linkPose;
-        linkMap<std::string, AerodynamicLinkParameters> linkMap;
+        std::map<std::string, AerodynamicLinkParameters> linkMap;
 
         //sdf parameters
         double fluidDensity = 1.293; //kg*m^-3 air density at 273K
         double dragCoefficient = 1; //unitless + variable
         double liftCoefficient = 1; //unitless + variable
 
-        void Load(const EntityComponentManager &_ecm, const sdf::ElementPtr &_sdf);
-        void Update(EntityComponentManager &_ecm);
-    }
+        void Load(igz::EntityComponentManager &_ecm, const sdf::ElementPtr &_sdf);
+        void Update(igz::EntityComponentManager &_ecm);
+    };
     
-    class Aerodynamics : public igz::System, public igz::ISystemConfigure, igz:: ISystemPostUpdate
+    class Aerodynamics : public igz::System, public igz::ISystemConfigure, public igz:: ISystemPreUpdate
     {
         private:
             std::unique_ptr<AerodynamicsData> dataPtr;
@@ -93,7 +94,7 @@ namespace aerodynamics
             Aerodynamics();
             ~Aerodynamics() override = default;
             void Configure(const igz::Entity &_entity, const std::shared_ptr<const sdf::Element> &_sdf, igz::EntityComponentManager &_ecm, igz::EventManager &_eventMgr) override;
-            void PostUpdate(const igz::UpdateInfo &_info, const igz::EntityComponentManager &_ecm) override;
+            void PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm) override;
     };
 }
 #endif // __AERODYNAMICS_HPP__
