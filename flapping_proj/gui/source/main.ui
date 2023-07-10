@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>912</width>
-    <height>789</height>
+    <width>996</width>
+    <height>1014</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -230,11 +230,11 @@ border: 0px solid;</string>
                <property name="styleSheet">
                 <string notr="true">QPushButton {
 	color: rgb(255, 255, 255);
-	background-color: rgb(113, 199, 212);
+	background-color: rgb(54, 54, 54);
 	border: 0px solid;
 }
 QPushButton:hover {
-	background-color:rgb(73, 192, 236);
+	background-color:rgb(40, 40, 40);
 }</string>
                </property>
                <property name="text">
@@ -253,11 +253,11 @@ QPushButton:hover {
                <property name="styleSheet">
                 <string notr="true">QPushButton {
 	color: rgb(255, 255, 255);
-	background-color: rgb(113, 199, 212);
+	background-color: rgb(54, 54, 54);
 	border: 0px solid;
 }
 QPushButton:hover {
-	background-color:rgb(73, 192, 236);
+	background-color:rgb(40, 40, 40);
 }</string>
                </property>
                <property name="text">
@@ -276,11 +276,11 @@ QPushButton:hover {
                <property name="styleSheet">
                 <string notr="true">QPushButton {
 	color: rgb(255, 255, 255);
-	background-color: rgb(113, 199, 212);
+	background-color: rgb(54, 54, 54);
 	border: 0px solid;
 }
 QPushButton:hover {
-	background-color:rgb(73, 192, 236);
+	background-color:rgb(40, 40, 40);
 }</string>
                </property>
                <property name="text">
@@ -1394,425 +1394,10 @@ background-position: center bottom;
             <widget class="QWidget" name="page_6">
              <layout class="QGridLayout" name="gridLayout_37">
               <item row="3" column="0">
-               <layout class="QGridLayout" name="gridLayout_42">
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-               </layout>
-              </item>
-              <item row="1" column="0">
-               <widget class="QGroupBox" name="aerodynamicsGroupBox">
-                <property name="title">
-                 <string>Aerodynamics</string>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_32">
-                 <item row="2" column="1">
-                  <layout class="QVBoxLayout" name="verticalLayout_21">
-                   <property name="rightMargin">
-                    <number>10</number>
-                   </property>
-                   <item>
-                    <widget class="QGroupBox" name="groupBox_23">
-                     <property name="title">
-                      <string>Parameters</string>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_43">
-                      <item row="0" column="0">
-                       <widget class="QGroupBox" name="groupBox_24">
-                        <property name="title">
-                         <string>Shared Parameters</string>
-                        </property>
-                        <property name="checkable">
-                         <bool>false</bool>
-                        </property>
-                        <layout class="QGridLayout" name="gridLayout_44">
-                         <item row="4" column="2">
-                          <widget class="QCheckBox" name="aerodynamicsUseDefaultLiftCoefficient">
-                           <property name="text">
-                            <string>Use Default</string>
-                           </property>
-                           <property name="checked">
-                            <bool>true</bool>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="1">
-                          <widget class="QLineEdit" name="aerodynamicsDragCoefficient">
-                           <property name="text">
-                            <string/>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="0">
-                          <widget class="QLabel" name="label_28">
-                           <property name="text">
-                            <string>Drag Coefficient</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="2">
-                          <widget class="QCheckBox" name="aerodynamicsUseDefaultDragCoefficient">
-                           <property name="text">
-                            <string>Use Default</string>
-                           </property>
-                           <property name="checked">
-                            <bool>true</bool>
-                           </property>
-                           <property name="tristate">
-                            <bool>false</bool>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="4" column="1">
-                          <widget class="QLineEdit" name="aerodynamicsLiftCoefficient"/>
-                         </item>
-                         <item row="4" column="0">
-                          <widget class="QLabel" name="label_31">
-                           <property name="text">
-                            <string>Lift Coefficient</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="2">
-                          <widget class="QComboBox" name="aerodynamicsAngleOfAttackUnitDropdown">
-                           <item>
-                            <property name="text">
-                             <string>Degrees</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>Radians</string>
-                            </property>
-                           </item>
-                          </widget>
-                         </item>
-                         <item row="0" column="2">
-                          <widget class="QComboBox" name="aerodynamicsStallAngleUnitDropdown">
-                           <item>
-                            <property name="text">
-                             <string>Degrees</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>Radians</string>
-                            </property>
-                           </item>
-                          </widget>
-                         </item>
-                         <item row="1" column="1">
-                          <widget class="QDoubleSpinBox" name="aerodynamicsAngleOfAttack"/>
-                         </item>
-                         <item row="2" column="1">
-                          <widget class="QDoubleSpinBox" name="aerodynamicsFluidDensity"/>
-                         </item>
-                         <item row="2" column="0">
-                          <widget class="QLabel" name="label_29">
-                           <property name="text">
-                            <string>Fluid Density</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="2" column="2">
-                          <widget class="QLabel" name="label_30">
-                           <property name="text">
-                            <string>kg/m3</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="1">
-                          <widget class="QDoubleSpinBox" name="aerodynamicsStallAngle"/>
-                         </item>
-                         <item row="0" column="0">
-                          <widget class="QLabel" name="label_24">
-                           <property name="text">
-                            <string>Stall Angle</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="0">
-                          <widget class="QLabel" name="label_27">
-                           <property name="text">
-                            <string>Angle of Attack</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QGroupBox" name="groupBox_25">
-                        <property name="title">
-                         <string>Rigid Body </string>
-                        </property>
-                        <layout class="QGridLayout" name="gridLayout_46">
-                         <item row="3" column="0" colspan="4">
-                          <widget class="QLabel" name="label_32">
-                           <property name="text">
-                            <string>*center of pressures are relative of COM of component</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="2">
-                          <widget class="QDoubleSpinBox" name="aerodynamicsRigidCenterPressureY"/>
-                         </item>
-                         <item row="0" column="3">
-                          <widget class="QDoubleSpinBox" name="aerodynamicsRigidCenterPressureZ"/>
-                         </item>
-                         <item row="0" column="1">
-                          <widget class="QDoubleSpinBox" name="aerodynamicsRigidCenterPressureX"/>
-                         </item>
-                         <item row="2" column="1">
-                          <spacer name="verticalSpacer_5">
-                           <property name="orientation">
-                            <enum>Qt::Vertical</enum>
-                           </property>
-                           <property name="sizeHint" stdset="0">
-                            <size>
-                             <width>20</width>
-                             <height>40</height>
-                            </size>
-                           </property>
-                          </spacer>
-                         </item>
-                         <item row="0" column="0">
-                          <widget class="QLabel" name="label_25">
-                           <property name="text">
-                            <string>Center of Pressure</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="0">
-                          <widget class="QLabel" name="label_34">
-                           <property name="text">
-                            <string>(meters)</string>
-                           </property>
-                           <property name="alignment">
-                            <set>Qt::AlignCenter</set>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </widget>
-                      </item>
-                      <item row="0" column="2" rowspan="2">
-                       <widget class="QGroupBox" name="groupBox_26">
-                        <property name="title">
-                         <string>Wing</string>
-                        </property>
-                        <layout class="QGridLayout" name="gridLayout_47">
-                         <item row="4" column="0" rowspan="2" colspan="2">
-                          <widget class="QGroupBox" name="groupBox_27">
-                           <property name="title">
-                            <string>Center of Pressures &lt;x,y,z&gt; (meters)</string>
-                           </property>
-                           <layout class="QGridLayout" name="gridLayout_48">
-                            <item row="0" column="1">
-                             <widget class="QDoubleSpinBox" name="aerodynamicsWingCenterPressureX"/>
-                            </item>
-                            <item row="0" column="0">
-                             <widget class="QLabel" name="label_26">
-                              <property name="text">
-                               <string>Center of Pressure</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="0" column="4">
-                             <widget class="QPushButton" name="aerodynamicsWingCenterPressureAdd">
-                              <property name="text">
-                               <string>add</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="0" column="2">
-                             <widget class="QDoubleSpinBox" name="aerodynamicsWingCenterPressureY"/>
-                            </item>
-                            <item row="0" column="3">
-                             <widget class="QDoubleSpinBox" name="aerodynamicsWingCenterPressureZ"/>
-                            </item>
-                            <item row="1" column="0" colspan="5">
-                             <widget class="QTextEdit" name="aerodynamicsWingCenterPressureText"/>
-                            </item>
-                           </layout>
-                          </widget>
-                         </item>
-                         <item row="2" column="1">
-                          <widget class="QComboBox" name="aerodynamicsWingRootJointDropdown"/>
-                         </item>
-                         <item row="3" column="0" colspan="2">
-                          <widget class="QGroupBox" name="groupBox_28">
-                           <property name="title">
-                            <string>Blade Chords </string>
-                           </property>
-                           <layout class="QGridLayout" name="gridLayout_49">
-                            <item row="0" column="0">
-                             <widget class="QLabel" name="label_38">
-                              <property name="text">
-                               <string>Chord (meters)</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="0" column="1">
-                             <widget class="QDoubleSpinBox" name="aerodynamicsWingChordLength"/>
-                            </item>
-                            <item row="0" column="2">
-                             <widget class="QPushButton" name="aerodynamicsWingChordLengthAdd">
-                              <property name="text">
-                               <string>add</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item row="1" column="0" colspan="3">
-                             <widget class="QTextEdit" name="aerodynamicsWingChordLengthText"/>
-                            </item>
-                           </layout>
-                          </widget>
-                         </item>
-                         <item row="0" column="0">
-                          <widget class="QLabel" name="label_35">
-                           <property name="text">
-                            <string>Blades</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="0">
-                          <widget class="QLabel" name="label_36">
-                           <property name="text">
-                            <string>Wing Span (meters)</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="1">
-                          <widget class="QSpinBox" name="aerodynamicsWingSpan"/>
-                         </item>
-                         <item row="0" column="1">
-                          <widget class="QSpinBox" name="aerodynamicsWingBlades">
-                           <property name="maximum">
-                            <number>99999</number>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="2" column="0">
-                          <widget class="QLabel" name="label_37">
-                           <property name="text">
-                            <string>Wing Root Joint</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QListWidget" name="aerodynamicsComponentsListWidget"/>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_23">
-                   <property name="text">
-                    <string>Components</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0" colspan="2">
-                  <layout class="QGridLayout" name="gridLayout_45">
-                   <property name="bottomMargin">
-                    <number>10</number>
-                   </property>
-                   <item row="1" column="0">
-                    <widget class="QListWidget" name="aerodynamicsGeneralComponentsListWidget">
-                     <property name="editTriggers">
-                      <set>QAbstractItemView::NoEditTriggers</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_21">
-                     <property name="text">
-                      <string>General Components</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <layout class="QVBoxLayout" name="verticalLayout_20">
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QPushButton" name="aerodynamicsGeneralToWingButton">
-                       <property name="maximumSize">
-                        <size>
-                         <width>30</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="text">
-                        <string>-&gt;</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QPushButton" name="aerodynamicsWingToGeneralButton">
-                       <property name="maximumSize">
-                        <size>
-                         <width>30</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="text">
-                        <string>&lt;-</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QListWidget" name="aerodynamicsWingsListWidget">
-                     <property name="editTriggers">
-                      <set>QAbstractItemView::NoEditTriggers</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QLabel" name="label_22">
-                     <property name="text">
-                      <string>Wings</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="4" column="0">
                <layout class="QGridLayout" name="gridLayout_40">
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item row="0" column="1">
-                 <spacer name="verticalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                 <item row="0" column="0">
                  <spacer name="horizontalSpacer_6">
                   <property name="orientation">
@@ -1822,6 +1407,19 @@ background-position: center bottom;
                    <size>
                     <width>40</width>
                     <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1">
+                 <spacer name="verticalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
                    </size>
                   </property>
                  </spacer>
@@ -1849,6 +1447,563 @@ background-position: center bottom;
                 <property name="pixmap">
                  <pixmap resource="C:/Users/darin/Downloads/test.qrc">:/d/output-onlinepngtools (1).png</pixmap>
                 </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="aerodynamicsGroupBox">
+                <property name="title">
+                 <string>Aerodynamics</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_32">
+                 <item row="0" column="0" colspan="2">
+                  <layout class="QGridLayout" name="gridLayout_45">
+                   <property name="bottomMargin">
+                    <number>10</number>
+                   </property>
+                   <item row="1" column="0">
+                    <widget class="QListWidget" name="aerodynamicsGeneralComponentsListWidget">
+                     <property name="editTriggers">
+                      <set>QAbstractItemView::NoEditTriggers</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_21">
+                     <property name="text">
+                      <string>General Components</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <layout class="QVBoxLayout" name="verticalLayout_20">
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QToolButton" name="aerodynamicsGeneralToWingButton">
+                       <property name="text">
+                        <string>...</string>
+                       </property>
+                       <property name="arrowType">
+                        <enum>Qt::RightArrow</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QToolButton" name="aerodynamicsWingToGeneralButton">
+                       <property name="text">
+                        <string>...</string>
+                       </property>
+                       <property name="arrowType">
+                        <enum>Qt::LeftArrow</enum>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QListWidget" name="aerodynamicsWingsListWidget">
+                     <property name="editTriggers">
+                      <set>QAbstractItemView::NoEditTriggers</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="2">
+                    <widget class="QLabel" name="label_22">
+                     <property name="text">
+                      <string>Wings</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="2" column="1">
+                  <layout class="QVBoxLayout" name="verticalLayout_21">
+                   <property name="rightMargin">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_23">
+                     <property name="title">
+                      <string>Parameters</string>
+                     </property>
+                     <property name="checkable">
+                      <bool>false</bool>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_43">
+                      <item row="0" column="0">
+                       <widget class="QGroupBox" name="groupBox_24">
+                        <property name="title">
+                         <string/>
+                        </property>
+                        <property name="checkable">
+                         <bool>false</bool>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_44">
+                         <item row="1" column="1">
+                          <widget class="QDoubleSpinBox" name="aerodynamicsFluidDensity"/>
+                         </item>
+                         <item row="0" column="2">
+                          <widget class="QComboBox" name="aerodynamicsStallAngleUnitDropdown">
+                           <item>
+                            <property name="text">
+                             <string>Degrees</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>Radians</string>
+                            </property>
+                           </item>
+                          </widget>
+                         </item>
+                         <item row="3" column="0">
+                          <widget class="QLabel" name="label_31">
+                           <property name="text">
+                            <string>Lift Coefficient</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="2">
+                          <widget class="QLabel" name="label_30">
+                           <property name="text">
+                            <string>kg/m3</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0">
+                          <widget class="QLabel" name="label_24">
+                           <property name="text">
+                            <string>Stall Angle</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <widget class="QLabel" name="label_29">
+                           <property name="text">
+                            <string>Fluid Density</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QDoubleSpinBox" name="aerodynamicsStallAngle"/>
+                         </item>
+                         <item row="2" column="2">
+                          <widget class="QCheckBox" name="aerodynamicsUseDefaultDragCoefficient">
+                           <property name="text">
+                            <string>Use Default</string>
+                           </property>
+                           <property name="checked">
+                            <bool>true</bool>
+                           </property>
+                           <property name="tristate">
+                            <bool>false</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="2">
+                          <widget class="QCheckBox" name="aerodynamicsUseDefaultLiftCoefficient">
+                           <property name="text">
+                            <string>Use Default</string>
+                           </property>
+                           <property name="checked">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QLineEdit" name="aerodynamicsDragCoefficient">
+                           <property name="text">
+                            <string/>
+                           </property>
+                           <property name="placeholderText">
+                            <string>Enter Expression </string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="1">
+                          <widget class="QLineEdit" name="aerodynamicsLiftCoefficient">
+                           <property name="placeholderText">
+                            <string>Enter Expression</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="label_28">
+                           <property name="text">
+                            <string>Drag Coefficient</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="4" column="0" colspan="3">
+                          <widget class="QLabel" name="label_44">
+                           <property name="text">
+                            <string>Drag/Lift Coefficient Expression use phi as AOA</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QGroupBox" name="groupBox_27">
+                        <property name="title">
+                         <string>CP: Center of Pressure(s) &lt;x,y,z&gt; (m)</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_48">
+                         <item row="3" column="0" colspan="3">
+                          <widget class="QLabel" name="label_25">
+                           <property name="text">
+                            <string>*General component = 1 cp, Wing = 1 cp for each blade </string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <widget class="QTextEdit" name="aerodynamicsWingCenterPressureText"/>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="label_32">
+                           <property name="text">
+                            <string>*CP are relative of COM of component</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="7" column="0">
+                       <widget class="QGroupBox" name="groupBox_13">
+                        <property name="title">
+                         <string>Upward Vector(s) &lt;x,y,z&gt; (m)</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_12">
+                         <item row="1" column="0" colspan="2">
+                          <widget class="QLabel" name="label_43">
+                           <property name="text">
+                            <string>*Vector perpindicular to wing, upside of wing, at initial orientation at COM</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0" colspan="2">
+                          <widget class="QTextEdit" name="textEdit"/>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="9" column="1">
+                       <layout class="QGridLayout" name="gridLayout_51">
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item row="1" column="0">
+                         <widget class="QLabel" name="label_27">
+                          <property name="text">
+                           <string>Angle of Attack Joint</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0">
+                         <widget class="QLabel" name="label_37">
+                          <property name="text">
+                           <string>Wing Root Joint</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="1">
+                         <widget class="QComboBox" name="aerodynamicsWingRootJointDropdown"/>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QComboBox" name="comboBox_2">
+                          <item>
+                           <property name="text">
+                            <string>None</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item row="8" column="0" rowspan="2">
+                       <widget class="QGroupBox" name="groupBox_31">
+                        <property name="title">
+                         <string>Current Wing Settings</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_53">
+                         <item row="1" column="0" colspan="3">
+                          <widget class="QLabel" name="label_26">
+                           <property name="text">
+                            <string>*Wing multi-entry are from wing root to tip (chord, up-vector)</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QPushButton" name="pushButton_2">
+                           <property name="text">
+                            <string>Import Settings</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QPushButton" name="pushButton_3">
+                           <property name="text">
+                            <string>Export Settings</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0" colspan="3">
+                          <widget class="QTableWidget" name="tableWidget">
+                           <column>
+                            <property name="text">
+                             <string>Blade</string>
+                            </property>
+                           </column>
+                           <column>
+                            <property name="text">
+                             <string>CP&lt;x,y,z&gt;</string>
+                            </property>
+                           </column>
+                           <column>
+                            <property name="text">
+                             <string>Up&lt;x,y,z&gt;</string>
+                            </property>
+                           </column>
+                           <column>
+                            <property name="text">
+                             <string>Area</string>
+                            </property>
+                           </column>
+                          </widget>
+                         </item>
+                         <item row="2" column="2">
+                          <widget class="QPushButton" name="pushButton_4">
+                           <property name="text">
+                            <string>Clear Blades</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="0" column="1" rowspan="9">
+                       <widget class="QGroupBox" name="groupBox_26">
+                        <property name="title">
+                         <string>Blade Element</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_47">
+                         <item row="8" column="1">
+                          <layout class="QGridLayout" name="gridLayout_54">
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_34">
+                             <property name="text">
+                              <string>Span Length (m)</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QDoubleSpinBox" name="doubleSpinBox">
+                             <property name="maximum">
+                              <double>99999.990000000005239</double>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QGroupBox" name="groupBox_29">
+                           <property name="title">
+                            <string>Area Solver Methods</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_46">
+                            <item row="1" column="0">
+                             <widget class="QComboBox" name="comboBox">
+                              <item>
+                               <property name="text">
+                                <string>Reimann Sum (Left)</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Reimann Sum (Mid)</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Reimann Sum (Right)</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Trapezoidal </string>
+                               </property>
+                              </item>
+                             </widget>
+                            </item>
+                            <item row="0" column="0">
+                             <widget class="QComboBox" name="comboBox_3">
+                              <item>
+                               <property name="text">
+                                <string>Area List for Each Blade</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Edge Functions </string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Blade Chord List</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string/>
+                               </property>
+                              </item>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="6" column="1">
+                          <widget class="QGroupBox" name="groupBox_25">
+                           <property name="title">
+                            <string>Trailing Edge Expression</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_42">
+                            <item row="0" column="0">
+                             <widget class="QLineEdit" name="lineEdit_2">
+                              <property name="placeholderText">
+                               <string>.01 * pow(r, 2) - .1 * sqrt(r) + .1 * pi * r </string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="4" column="1">
+                          <widget class="QGroupBox" name="groupBox_30">
+                           <property name="title">
+                            <string>Area List Input (m^2)</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_52">
+                            <item row="0" column="0">
+                             <widget class="QTextEdit" name="textEdit_2"/>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="7" column="1">
+                          <widget class="QGroupBox" name="groupBox_28">
+                           <property name="title">
+                            <string>Blade Chords (meters)</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_49">
+                            <item row="1" column="0" colspan="2">
+                             <widget class="QTextEdit" name="aerodynamicsWingChordLengthText"/>
+                            </item>
+                            <item row="2" column="0" colspan="2">
+                             <widget class="QLabel" name="label_36">
+                              <property name="text">
+                               <string>*Trapezoidal method requires blade + 1 chords</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="0" colspan="2">
+                             <widget class="QLabel" name="label_38">
+                              <property name="text">
+                               <string>*Expressions use Python Eval, use 'r' as var</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="5" column="1">
+                          <widget class="QGroupBox" name="groupBox_21">
+                           <property name="title">
+                            <string>Leading Edge Expression</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_34">
+                            <item row="0" column="0">
+                             <widget class="QLineEdit" name="lineEdit">
+                              <property name="placeholderText">
+                               <string>.25</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="9" column="1">
+                          <widget class="QPushButton" name="pushButton">
+                           <property name="text">
+                            <string>Evalulate Area</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="1">
+                          <layout class="QGridLayout" name="gridLayout_13">
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_35">
+                             <property name="text">
+                              <string>Blades</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QSpinBox" name="aerodynamicsWingBlades">
+                             <property name="maximum">
+                              <number>99999</number>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QListWidget" name="aerodynamicsComponentsListWidget">
+                   <property name="editTriggers">
+                    <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QLabel" name="label_23">
+                   <property name="text">
+                    <string>Components To Simulate (Check applies aerodynamics)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -1946,6 +2101,7 @@ background-position: center bottom;
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="page_7"/>
            </widget>
           </item>
          </layout>
