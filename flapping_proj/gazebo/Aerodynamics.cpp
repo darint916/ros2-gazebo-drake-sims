@@ -17,6 +17,7 @@
 #include "ignition/gazebo/components/Pose.hh" 
 #include "ignition/gazebo/components/Name.hh" 
 #include "ignition/gazebo/components/ExternalWorldWrenchCmd.hh"
+#include "ignition/gazebo/components/Link.hh"
 
 #include "ignition/gazebo/Link.hh"
 #include "ignition/gazebo/Model.hh"
@@ -154,7 +155,6 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
             this->linkMap[linkName].wingParameters.blades = linkElement->GetElement("blades")->Get<int>();
             // this->linkMap[linkName].wingParameters.wingSpan = linkElement->GetElement("wing_span")->Get<double>();
             std::string controlJointName = linkElement->GetElement("control_joint")->Get<std::string>();
-            this->linkMap[linkName].wingParameters.controlJointName = controlJointName;
             //NEED TO DO JOINT NAME VERIFICATION???
             igz::Entity jointEntity = this->model.JointByName(_ecm, controlJointName);
             if (jointEntity == igz::kNullEntity) {
@@ -169,7 +169,7 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
                 this->validConfig = false;
             }
             //Creating component will create error, might have to do the link properties
-            _ecm.CreateComponent(this->linkMap[linkName].linkEntity, igz::components::WorldPose()); //Init pose values for query
+            // _ecm.CreateComponent(this->linkMap[linkName].linkEntity, igz::components::WorldPose()); //Init pose values for query
             _ecm.CreateComponent(jointEntity, igz::components::JointVelocity()); //Init vel values for query
             //String to values for blade chord list
             // _ecm.CreateComponent()
@@ -210,17 +210,15 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
             std::stringstream ss3(linkElement->GetElement("upward_vector_list")->Get<std::string>());
             parsedList = ParseStringStringToVector(ss3);
             for(int i = 0; i < parsedList.size(); i+= 3){
-                this->linkMap[linkName].wingParameters.upVectorList.push_back(ignition::math::Vector3d(parsedList[i], parsedList[i+1], parsedList[i+2]));
+                ignition::math::Vector3d upVector(parsedList[i], parsedList[i+1], parsedList[i+2]);
+                this->linkMap[linkName].wingParameters.upVectorList.push_back(upVector.Normalized());
             }
             if (this->linkMap[linkName].wingParameters.upVectorList.size() != 1 && this->linkMap[linkName].wingParameters.upVectorList.size() != this->linkMap[linkName].wingParameters.blades){
                 ignerr << "upVector is not singular or does not match blades" << std::endl;
                 this->validConfig = false;
                 return;
             }
-            for (auto &upVector : this->linkMap[linkName].wingParameters.upVectorList){
-                upVector.Normalize();
-            }
-
+         
             std::stringstream ss4(linkElement->GetElement("blade_area_list")->Get<std::string>());
             this->linkMap[linkName].wingParameters.bladeAreaList = ParseStringStringToVector(ss4);
             if (this->linkMap[linkName].wingParameters.bladeAreaList.size() != this->linkMap[linkName].wingParameters.blades){
@@ -241,52 +239,22 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
 
 void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
 {
-    //Todo calculate aerodynamic equations, query link pose, apply wrench, publish wrench
-    //Change way velocity is retreived, different for each blade, currently using COM vel as approx.
     for (auto &link : this->linkMap){
-        // ignition::msgs::Pose linkPose = this->model.Pose(_ecm, link.second.linkEntity);
-        igz::Link linkObj{igz::kNullEntity};
+        // _ecm.CreateComponent(link.second.linkEntity, igz::components::Link());
+        igz::Link linkObj;
         if (this->validConfig){ //Enable velocity be queried (init basically)
-            igz::Link linkObj(link.second.linkEntity);
+            linkObj = igz::Link(link.second.linkEntity);
             linkObj.EnableVelocityChecks(_ecm, true);
         }
-        igz::enableComponent<igz::components::WorldPose>(_ecm, link.second.linkEntity, true);
+        //Init obj Pose
         std::optional<ignition::math::Pose3<double>> optionalPose = linkObj.WorldPose(_ecm);
-        // ignerr << "Link pose: " << optionalPose.value() << std::endl;
-        if(optionalPose == std::nullopt) {
+        if(!optionalPose.has_value()) {
             ignerr << "World pose not found" << std::endl;
             return;
-        }
-        if(!optionalPose.has_value()) {
-            // ignerr << "World pose not found" << std::endl;
-            return;
         } 
+        const ignition::math::Pose3<double> linkWorldPose = optionalPose.value();
         
-        // const ignition::math::Pose3<double> &pose = optionalPose.value();
-        // std::vector<ignition::math::Vector3d> centerPressureWorldList;  //cp relative to world frame
-        // for(auto &centerPressure : link.second.centerPressureList){
-        //     centerPressureWorldList.push_back(pose.Rot().RotateVector(centerPressure)); //If rotate doesnt work, just add as transformation
-        // }
-
-        //???????
-        // components::JointPosition *controlJointPosition = nullptr;
-        // if (this->controlJointEntity != kNullEntity)
-        // {
-        //     controlJointPosition =
-        //         _ecm.Component<components::JointPosition>(this->controlJointEntity);
-        // }
-
         if (link.second.linkType == "wing"){
-            /*
-            Could add component testing with:
-            if (!_ecm.EntityHasComponentType(this->linkEntity,
-                                     components::Link::typeId))
-            */
-            //Query joint velocity, pose
-            // const auto jointPosePtr = _ecm.Component<igz::components::WorldPose>(link.second.wingParameters.controlJointEntity);
-            // const auto jointVelPtr = _ecm.Component<igz::components::JointVelocity>(link.second.wingParameters.controlJointEntity);
-            // ignition::msgs::Pose3<double> jointPose = jointPosePtr->Data();
-            // const double jointVelocity = jointVelPtr->Data()[0]; // rad/s [first element since revolute joint 1 DOF]
             for (int i = 0; i < link.second.wingParameters.blades; i++){
                 std::optional<ignition::math::Vector3d> optionalCenterPressureLinearVelocity = linkObj.WorldLinearVelocity(_ecm, link.second.centerPressureList[i]);
                 if(!optionalCenterPressureLinearVelocity.has_value()) {
@@ -294,13 +262,19 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
                     continue;
                 }
                 const ignition::math::Vector3d centerPressureLinVel = optionalCenterPressureLinearVelocity.value();
-                if(centerPressureLinVel.Length() < .001){ //negligible small force
+                if(centerPressureLinVel.Length() > .0001){ //negligible small force
+                    link.second.wingParameters.upVectorList[i] = linkWorldPose.Rot().RotateVector(link.second.wingParameters.upVectorList[i]); //Rotate to world frame
                     //F = .5 * p * Cd * v^2 * A
                     double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * pow(centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]), 2) * link.second.wingParameters.bladeAreaList[i];
                     ignition::math::Vector3d flapDragForce = flapDragScalar * link.second.wingParameters.upVectorList[i];
                     linkObj.AddWorldForce(_ecm, link.second.centerPressureList[i], flapDragForce);// https://github.com/gazebosim/gz-sim/blob/4ce01eab7fbba7ff3ec2f876e0289e2abdab45ae/src/Link.cc#L383
+                    
+                    ignerr << "\n";
+                    ignerr << "Wing blade: " << link.first << " " << i << std::endl; 
+                    ignerr << "Wing blade proj velocity: " << centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]) << std::endl;
                     ignerr << "Wing blade FORCE: " << flapDragScalar << std::endl;
-                    ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl; 
+                    ignerr << "upVector: " << link.second.wingParameters.upVectorList[i] << std::endl;
+                    ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl;
                 }
             }
         } else if (link.second.linkType == "generic"){

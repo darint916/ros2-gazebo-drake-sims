@@ -39,7 +39,6 @@ namespace aerodynamics
     */
     struct WingParameters
     {
-        std::string controlJointName = "";
         igz::Entity controlJointEntity;
         igz::Entity wingPitchJointEntity;
         int blades = 1; //number of blades for Blade Element method
@@ -47,6 +46,7 @@ namespace aerodynamics
         // std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
         std::vector<ignition::math::Vector3d> upVectorList;
         std::vector<double> bladeAreaList;
+
     };
 
     struct AerodynamicLinkParameters //Defaults added for override + allocate

@@ -52,7 +52,7 @@
       </model>
       
       <model name="URDF_Bodies2SLDASM"> <!-- removed . because its used as topic name for joint force plugin-->
-         <pose relative_to="world">0 0 300 1.5708 0 0< /pose>
+         <pose relative_to="world">0 0 10 1.5708 0 0< /pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -250,11 +250,11 @@
                   <damping>.5</damping>
                   <friction>1</friction>   
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <!-- <spring_stiffness>1</spring_stiffness> -->
+                  <spring_stiffness>1</spring_stiffness>
                </dynamics>
                <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
+                  <lower>-3.14</lower>
+                  <upper>3.14</upper>
                </limit> 
             </axis>
          </joint>
@@ -269,7 +269,7 @@
                   <damping>.5</damping>
                   <friction>1</friction>   
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <!-- <spring_stiffness>1</spring_stiffness> -->
+                  <spring_stiffness>5</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -288,11 +288,11 @@
                   <damping>.5</damping>
                   <friction>1</friction>   
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <!-- <spring_stiffness>1</spring_stiffness> -->
+                  <spring_stiffness>1</spring_stiffness>
                </dynamics>
                <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
+                  <lower>-3.14</lower>
+                  <upper>3.14</upper>
                </limit>
             </axis>
          </joint>
@@ -307,7 +307,7 @@
                   <damping>.5</damping>
                   <friction>1</friction>   
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <!-- <spring_stiffness>1</spring_stiffness> -->
+                  <spring_stiffness>5</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -336,14 +336,43 @@
                </limit>        
             </axis>
          </joint> -->
-         
+         <plugin filename="aero_state_plugins" name="aerodynamics">
+            <link>
+                <link_name>RW_Pitch</link_name>
+                <link_type>wing</link_type>
+                <stall_angle>15</stall_angle>
+                <fluid_density>1.293</fluid_density>
+                <drag_coefficient>1</drag_coefficient>
+                <lift_coefficient>1</lift_coefficient>
+                <control_joint>joint_RW_J_Flap</control_joint>
+                <wing_pitch_joint>joint_RW_J_Pitch</wing_pitch_joint>
+                <blades>1</blades>
+                <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
+                <upward_vector_list>0,0,1</upward_vector_list>
+                <blade_area_list>.1688</blade_area_list>
+            </link>
+            <link>
+                <link_name>LW_Pitch</link_name>
+                <link_type>wing</link_type>
+                <stall_angle>15</stall_angle>
+                <fluid_density>1.293</fluid_density>
+                <drag_coefficient>1</drag_coefficient>
+                <lift_coefficient>1</lift_coefficient>
+                <control_joint>joint_LW_J_Flap</control_joint>
+                <wing_pitch_joint>joint_LW_J_Pitch</wing_pitch_joint>
+                <blades>1</blades>
+                <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
+                <upward_vector_list>0,0,1</upward_vector_list>
+                <blade_area_list>1</blade_area_list>
+            </link>
+         </plugin>
          <!-- controller/odom plugin-->
          <plugin 
-            filename="odometry_state_plugin" 
+            filename="aero_state_plugins" 
             name="odometry_state">
             <world_name>world1</world_name>
             <odometry_topic>/odom</odometry_topic>
-            <odom_publish_frequency>20.0</odom_publish_frequency>
+            <odom_publish_frequency>1000.0</odom_publish_frequency>
             <joint>joint_LW_J_Flap</joint> 
             <joint>joint_LW_J_Pitch</joint>
             <joint>joint_RW_J_Pitch</joint>
