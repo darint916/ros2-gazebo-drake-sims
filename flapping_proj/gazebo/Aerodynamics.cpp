@@ -42,6 +42,32 @@
 using namespace std;
 using namespace aerodynamics;
 namespace igz = ignition::gazebo;
+
+static std::vector<ignition::math::Vector3d> ParseStringStringToVector(std::stringstream &ss) 
+{
+    std::vector<ignition::math::Vector3d> vectorList; 
+    std::vector<std::string> tokens;
+    std::string token;
+    while(std::getline(ss, token, ',')){
+        token.erase(std::remove(token.begin(), token.end(), ' '), token.end());
+        tokens.push_back(token);
+        try { //string to double parsing
+            if(tokens.size() % 3 == 0) {
+                ignition::math::Vector3d vector(std::stod(tokens[0]), std::stod(tokens[1]), std::stod(tokens[2]));
+                vectorList.push_back(vector);
+                tokens.clear();
+            }
+        } catch (const std::invalid_argument& ia) {
+            ignerr << "STOD Invalid argument: " << ia.what() << std::endl;
+            return vectorList;
+        } catch (const std::out_of_range& oor) {
+            ignerr << "STOD Out of Range error: " << oor.what() << std::endl;
+            return vectorList;
+        }
+    }
+    return vectorList;
+}
+
 Aerodynamics::Aerodynamics() {
     this->dataPtr = std::make_unique<AerodynamicsData>();
 }
@@ -105,74 +131,77 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
         this->linkMap[linkName].stallAngle = linkElement->GetElement("stall_angle")->Get<double>();
         this->linkMap[linkName].angleOfAttack = linkElement->GetElement("angle_of_attack")->Get<double>();
         this->linkMap[linkName].fluidDensity = linkElement->GetElement("fluid_density")->Get<double>();
-        this->linkMap[linkName].dragCoefficient = linkElement->GetElement("drag_coefficient")->Get<double>();
+        this->linkMap[linkName].dragCoefficient = linkElement->GetElement("drag_coefficient")->Get<double>(); //Change to be expression eval later
         this->linkMap[linkName].liftCoefficient = linkElement->GetElement("lift_coefficient")->Get<double>();
         if(linkType == "Wing") {
-            this->linkMap[linkName].wingParameters.blades = linkElement->GetElement("int")->Get<int>();
+            this->linkMap[linkName].wingParameters.blades = linkElement->GetElement("blades")->Get<int>();
             this->linkMap[linkName].wingParameters.wingSpan = linkElement->GetElement("wing_span")->Get<double>();
-            std::string controlJointName = linkElement->GetElement("control_joint_name")->Get<std::string>();
+            std::string controlJointName = linkElement->GetElement("control_joint")->Get<std::string>();
             this->linkMap[linkName].wingParameters.controlJointName = controlJointName;
+            //NEED TO DO JOINT NAME VERIFICATION???
             igz::Entity jointEntity = this->model.JointByName(_ecm, controlJointName);
             this->linkMap[linkName].wingParameters.controlJointEntity = jointEntity;
+            std::string wingPitchJointName = linkElement->GetElement("wing_pitch_joint")->Get<std::string>();
+            this->linkMap[linkName].wingParameters.wingPitchJointEntity = this->model.JointByName(_ecm, wingPitchJointName);
+
             _ecm.CreateComponent(jointEntity, igz::components::JointVelocity()); //Init vel values for query
             //String to values for blade chord list
-            std::stringstream ss(linkElement->GetElement("blade_chord_list")->Get<std::string>());
-            std::string token;
-            while(std::getline(ss, token, ',')){
-                token.erase(std::remove(token.begin(), token.end(), ' '), token.end());
-                try { //string to double parsing
-                    this->linkMap[linkName].wingParameters.bladeChordList.push_back(std::stod(token));
-                } catch (const std::invalid_argument& ia) {
-                    ignerr << "blade_chord_list STOD Invalid argument: " << ia.what() << std::endl;
-                    this->validConfig = false;
-                    return;
-                } catch (const std::out_of_range& oor) {
-                    ignerr << "blade_chord_list STOD Out of Range error: " << oor.what() << std::endl;
-                    this->validConfig = false;
-                    return;
-                }
-            }
-            if (this->linkMap[linkName].wingParameters.bladeChordList.size() != this->linkMap[linkName].wingParameters.blades){
-                ignerr << "blade_chord_list size does not match blades" << std::endl;
-                this->validConfig = false;
-                return;
-            }
+
+            // std::stringstream ss(linkElement->GetElement("blade_chord_list")->Get<std::string>());
+            // std::string token;
+            // while(std::getline(ss, token, ',')){
+            //     token.erase(std::remove(token.begin(), token.end(), ' '), token.end());
+            //     try { //string to double parsing
+            //         this->linkMap[linkName].wingParameters.bladeChordList.push_back(std::stod(token));
+            //     } catch (const std::invalid_argument& ia) {
+            //         ignerr << "blade_chord_list STOD Invalid argument: " << ia.what() << std::endl;
+            //         this->validConfig = false;
+            //         return;
+            //     } catch (const std::out_of_range& oor) {
+            //         ignerr << "blade_chord_list STOD Out of Range error: " << oor.what() << std::endl;
+            //         this->validConfig = false;
+            //         return;
+            //     }
+            // }
+            // if (this->linkMap[linkName].wingParameters.bladeChordList.size() != this->linkMap[linkName].wingParameters.blades){
+            //     ignerr << "blade_chord_list size does not match blades" << std::endl;
+            //     this->validConfig = false;
+            //     return;
+            // }
 
             //String to values for center pressure list
             std::stringstream ss2(linkElement->GetElement("center_pressure_list")->Get<std::string>());
-            std::vector<std::string> tokens;
-            std::string token2;
-            while(std::getline(ss2, token2, ',')){
-                token2.erase(std::remove(token2.begin(), token2.end(), ' '), token2.end());
-                tokens.push_back(token2);
-                try { //string to double parsing
-                    if(tokens.size() % 3 == 0) {
-                        ignition::math::Vector3d centerPressure(std::stod(tokens[0]), std::stod(tokens[1]), std::stod(tokens[2]));
-                        this->linkMap[linkName].centerPressureList.push_back(centerPressure);
-                        tokens.clear();
-                    }
-                } catch (const std::invalid_argument& ia) {
-                    ignerr << "center_pressure_list STOD Invalid argument: " << ia.what() << std::endl;
-                    this->validConfig = false;
-                    return;
-                } catch (const std::out_of_range& oor) {
-                    ignerr << "center_pressure_list STOD Out of Range error: " << oor.what() << std::endl;
-                    this->validConfig = false;
-                    return;
-                }
-            }
+            this->linkMap[linkName].centerPressureList = ParseStringStringToVector(ss2);
             if (this->linkMap[linkName].centerPressureList.size() != this->linkMap[linkName].wingParameters.blades){
                 ignerr << "center_pressure_list size does not match blades" << std::endl;
                 this->validConfig = false;
                 return;
             }
 
+            std::stringstream ss3(linkElement->GetElement("upward_vector_list")->Get<std::string>());
+            this->linkMap[linkName].upVectorList = ParseStringStringToVector(ss3);
+            if (this->linkMap[linkName].centerPressureList.size() != this->linkMap[linkName].wingParameters.blades){
+                ignerr << "upVector size does not match blades" << std::endl;
+                this->validConfig = false;
+                return;
+            }
+
+            std::stringstream ss4(linkElement->GetElement("blade_area_list")->Get<std::string>());
+            this->linkMap[linkName].wingParameters.bladeAreaList = ParseStringStringToVector(ss4);
+            if (this->linkMap[linkName].centerPressureList.size() != this->linkMap[linkName].wingParameters.blades){
+                ignerr << "bladeArea size does not match blades" << std::endl;
+                this->validConfig = false;
+                return;
+            }
         } else if (linkType == "Generic"){
             this->linkMap[linkName].centerPressureList.push_back(linkElement->GetElement("center_pressure")->Get<ignition::math::Vector3d>());
         }
         linkElement = linkElement->GetNextElement("link");
     }
 }
+
+
+
 
 void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
 {

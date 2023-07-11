@@ -35,6 +35,7 @@ namespace aerodynamics
     {
         std::string controlJointName = "";
         igz::Entity controlJointEntity;
+        igz::Entity wingPitchJointEntity;
         int blades = 1; //number of blades for Blade Element method
         double wingSpan = 1; //meters (total length of wing)
         std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
@@ -51,6 +52,8 @@ namespace aerodynamics
         double liftCoefficient = 1; //unitless + variable
         WingParameters wingParameters; //Wing specific parameters
         std::vector<ignition::math::Vector3d> centerPressureList; //try ::Zero if err //meters from COM, Center of Pressure
+        std::vector<ignition::math::Vector3d> upVectorList;
+        std::vector<ignition::math::Vector3d> 
     };
 
     struct AerodynamicsData
