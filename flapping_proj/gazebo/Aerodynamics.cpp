@@ -1,5 +1,10 @@
 #include <mutex>
 #include <sstream>
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include <sdf/Element.hh>
 #include <ignition/plugin/RegisterMore.hh>
@@ -43,20 +48,22 @@ using namespace std;
 using namespace aerodynamics;
 namespace igz = ignition::gazebo;
 
-static std::vector<ignition::math::Vector3d> ParseStringStringToVector(std::stringstream &ss) 
+
+//Working func, tested, comma delimiter, could be optimized? (string copied)
+static std::vector<double> ParseStringStringToVector(std::stringstream &ss) 
 {
-    std::vector<ignition::math::Vector3d> vectorList; 
-    std::vector<std::string> tokens;
+    std::vector<double> vectorList; 
+    // std::vector<std::string> tokens;
     std::string token;
     while(std::getline(ss, token, ',')){
-        token.erase(std::remove(token.begin(), token.end(), ' '), token.end());
-        tokens.push_back(token);
+        token.erase(std::remove(token.begin(), token.end(), ' '), token.end()); //remove spaces
+        // tokens.push_back(token);
         try { //string to double parsing
-            if(tokens.size() % 3 == 0) {
-                ignition::math::Vector3d vector(std::stod(tokens[0]), std::stod(tokens[1]), std::stod(tokens[2]));
-                vectorList.push_back(vector);
-                tokens.clear();
-            }
+            // if(tokens.size() % 3 == 0) {
+                // ignition::math::Vector3d vector(std::stod(tokens[0]), std::stod(tokens[1]), std::stod(tokens[2]));
+            vectorList.push_back(stod(token));
+                // tokens.clear();
+            // }
         } catch (const std::invalid_argument& ia) {
             ignerr << "STOD Invalid argument: " << ia.what() << std::endl;
             return vectorList;
@@ -86,6 +93,7 @@ void Aerodynamics::Configure(const igz::Entity &_entity, const std::shared_ptr<c
 void Aerodynamics::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm)
 { //could slow down as preupdate always called at each timestep?
     IGN_PROFILE("Aerodynamics::PreUpdate");
+    // ignerr << "PreUpdate" << std::endl;
     if (!this->dataPtr->initialized){
         this->dataPtr->initialized = true;
        
@@ -94,8 +102,12 @@ void Aerodynamics::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentM
     }
 
     if (_info.paused) return;
-
+    if(!this->dataPtr->validConfig){
+        ignerr << "Invalid config" << std::endl;
+        return;
+    }
     if (this->dataPtr->initialized && this->dataPtr->validConfig){
+        // ignerr << "Valid config" << std::endl;
         this->dataPtr->Update(_ecm);
     }
     return;
@@ -119,34 +131,48 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
             this->validConfig = false;
             return;
         }
-        if (linkType != "Generic" && linkType != "Wing")
+        if (linkType != "generic" && linkType != "wing")
         {
-            ignerr << "Aerodynamics plugin should have a <link_type> of Generic or Wing." << std::endl;
+            ignerr << "Aerodynamics plugin should have a <link_type> of generic or wing." << std::endl;
             this->validConfig = false;
             return;
         }
 
         this->linkMap[linkName].linkEntity = this->model.LinkByName(_ecm, linkName);
+        if (this->linkMap[linkName].linkEntity == igz::kNullEntity) {
+                ignerr << "Link [" << linkName << "] not found" << std::endl;
+                this->validConfig = false;
+        }
+
         this->linkMap[linkName].linkType = linkType;
         this->linkMap[linkName].stallAngle = linkElement->GetElement("stall_angle")->Get<double>();
-        this->linkMap[linkName].angleOfAttack = linkElement->GetElement("angle_of_attack")->Get<double>();
+        // this->linkMap[linkName].angleOfAttack = linkElement->GetElement("angle_of_attack")->Get<double>();
         this->linkMap[linkName].fluidDensity = linkElement->GetElement("fluid_density")->Get<double>();
         this->linkMap[linkName].dragCoefficient = linkElement->GetElement("drag_coefficient")->Get<double>(); //Change to be expression eval later
         this->linkMap[linkName].liftCoefficient = linkElement->GetElement("lift_coefficient")->Get<double>();
-        if(linkType == "Wing") {
+        if(linkType == "wing") {
             this->linkMap[linkName].wingParameters.blades = linkElement->GetElement("blades")->Get<int>();
-            this->linkMap[linkName].wingParameters.wingSpan = linkElement->GetElement("wing_span")->Get<double>();
+            // this->linkMap[linkName].wingParameters.wingSpan = linkElement->GetElement("wing_span")->Get<double>();
             std::string controlJointName = linkElement->GetElement("control_joint")->Get<std::string>();
             this->linkMap[linkName].wingParameters.controlJointName = controlJointName;
             //NEED TO DO JOINT NAME VERIFICATION???
             igz::Entity jointEntity = this->model.JointByName(_ecm, controlJointName);
+            if (jointEntity == igz::kNullEntity) {
+                ignerr << "Control Joint [" << controlJointName << "] not found" << std::endl;
+                this->validConfig = false;
+            }
             this->linkMap[linkName].wingParameters.controlJointEntity = jointEntity;
             std::string wingPitchJointName = linkElement->GetElement("wing_pitch_joint")->Get<std::string>();
             this->linkMap[linkName].wingParameters.wingPitchJointEntity = this->model.JointByName(_ecm, wingPitchJointName);
-
+            if (this->linkMap[linkName].wingParameters.wingPitchJointEntity == igz::kNullEntity) {
+                ignerr << "Pitch Joint [" << wingPitchJointName << "] not found" << std::endl;
+                this->validConfig = false;
+            }
+            //Creating component will create error, might have to do the link properties
+            _ecm.CreateComponent(this->linkMap[linkName].linkEntity, igz::components::WorldPose()); //Init pose values for query
             _ecm.CreateComponent(jointEntity, igz::components::JointVelocity()); //Init vel values for query
             //String to values for blade chord list
-
+            // _ecm.CreateComponent()
             // std::stringstream ss(linkElement->GetElement("blade_chord_list")->Get<std::string>());
             // std::string token;
             // while(std::getline(ss, token, ',')){
@@ -171,7 +197,10 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
 
             //String to values for center pressure list
             std::stringstream ss2(linkElement->GetElement("center_pressure_list")->Get<std::string>());
-            this->linkMap[linkName].centerPressureList = ParseStringStringToVector(ss2);
+            std::vector<double> parsedList = ParseStringStringToVector(ss2);
+            for(int i = 0; i < parsedList.size(); i+= 3){
+                this->linkMap[linkName].centerPressureList.push_back(ignition::math::Vector3d(parsedList[i], parsedList[i+1], parsedList[i+2]));
+            }
             if (this->linkMap[linkName].centerPressureList.size() != this->linkMap[linkName].wingParameters.blades){
                 ignerr << "center_pressure_list size does not match blades" << std::endl;
                 this->validConfig = false;
@@ -179,25 +208,32 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
             }
 
             std::stringstream ss3(linkElement->GetElement("upward_vector_list")->Get<std::string>());
-            this->linkMap[linkName].upVectorList = ParseStringStringToVector(ss3);
-            if (this->linkMap[linkName].centerPressureList.size() != this->linkMap[linkName].wingParameters.blades){
-                ignerr << "upVector size does not match blades" << std::endl;
+            parsedList = ParseStringStringToVector(ss3);
+            for(int i = 0; i < parsedList.size(); i+= 3){
+                this->linkMap[linkName].wingParameters.upVectorList.push_back(ignition::math::Vector3d(parsedList[i], parsedList[i+1], parsedList[i+2]));
+            }
+            if (this->linkMap[linkName].wingParameters.upVectorList.size() != 1 && this->linkMap[linkName].wingParameters.upVectorList.size() != this->linkMap[linkName].wingParameters.blades){
+                ignerr << "upVector is not singular or does not match blades" << std::endl;
                 this->validConfig = false;
                 return;
+            }
+            for (auto &upVector : this->linkMap[linkName].wingParameters.upVectorList){
+                upVector.Normalize();
             }
 
             std::stringstream ss4(linkElement->GetElement("blade_area_list")->Get<std::string>());
             this->linkMap[linkName].wingParameters.bladeAreaList = ParseStringStringToVector(ss4);
-            if (this->linkMap[linkName].centerPressureList.size() != this->linkMap[linkName].wingParameters.blades){
+            if (this->linkMap[linkName].wingParameters.bladeAreaList.size() != this->linkMap[linkName].wingParameters.blades){
                 ignerr << "bladeArea size does not match blades" << std::endl;
                 this->validConfig = false;
                 return;
             }
-        } else if (linkType == "Generic"){
+        } else if (linkType == "generic"){
             this->linkMap[linkName].centerPressureList.push_back(linkElement->GetElement("center_pressure")->Get<ignition::math::Vector3d>());
         }
         linkElement = linkElement->GetNextElement("link");
     }
+    this->validConfig = true;
 }
 
 
@@ -214,27 +250,23 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
             igz::Link linkObj(link.second.linkEntity);
             linkObj.EnableVelocityChecks(_ecm, true);
         }
-        //Link velocities in reference to world frame
-        // const auto worldLinVelPtr = _ecm.Component<igz::components::WorldLinearVelocity>(link.second.linkEntity);
-        // const auto worldAngVelPtr = _ecm.Component<igz::components::WorldAngularVelocity>(link.second.linkEntity);
-        // const auto worldPosePtr = _ecm.Component<igz::components::WorldPose>(link.second.linkEntity);
-        // if (!worldLinVelPtr || !worldAngVelPtr || !worldPosePtr){
-        //     ignerr << "World velocity or pose not found" << std::endl;
-        //     return;
-        // }
-        // const double worldLinVel = worldLinVelPtr->Data();
-        // const double worldAngVel = worldAngVelPtr->Data();
-        // const ignition::msgs::Pose &pose = worldPosePtr->Data();
+        igz::enableComponent<igz::components::WorldPose>(_ecm, link.second.linkEntity, true);
         std::optional<ignition::math::Pose3<double>> optionalPose = linkObj.WorldPose(_ecm);
-        if(!optionalPose.has_value()) {
+        // ignerr << "Link pose: " << optionalPose.value() << std::endl;
+        if(optionalPose == std::nullopt) {
             ignerr << "World pose not found" << std::endl;
             return;
-        } 
-        const ignition::math::Pose3<double> &pose = optionalPose.value();
-        std::vector<ignition::math::Vector3d> centerPressureWorldList;  //cp relative to world frame
-        for(auto &centerPressure : link.second.centerPressureList){
-            centerPressureWorldList.push_back(pose.Rot().RotateVector(centerPressure)); //If rotate doesnt work, just add as transformation
         }
+        if(!optionalPose.has_value()) {
+            // ignerr << "World pose not found" << std::endl;
+            return;
+        } 
+        
+        // const ignition::math::Pose3<double> &pose = optionalPose.value();
+        // std::vector<ignition::math::Vector3d> centerPressureWorldList;  //cp relative to world frame
+        // for(auto &centerPressure : link.second.centerPressureList){
+        //     centerPressureWorldList.push_back(pose.Rot().RotateVector(centerPressure)); //If rotate doesnt work, just add as transformation
+        // }
 
         //???????
         // components::JointPosition *controlJointPosition = nullptr;
@@ -244,7 +276,7 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
         //         _ecm.Component<components::JointPosition>(this->controlJointEntity);
         // }
 
-        if (link.second.linkType == "Wing"){
+        if (link.second.linkType == "wing"){
             /*
             Could add component testing with:
             if (!_ecm.EntityHasComponentType(this->linkEntity,
@@ -255,54 +287,24 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
             // const auto jointVelPtr = _ecm.Component<igz::components::JointVelocity>(link.second.wingParameters.controlJointEntity);
             // ignition::msgs::Pose3<double> jointPose = jointPosePtr->Data();
             // const double jointVelocity = jointVelPtr->Data()[0]; // rad/s [first element since revolute joint 1 DOF]
-
             for (int i = 0; i < link.second.wingParameters.blades; i++){
-
-                /*
-                TODO, get angular velocity + displacement
-                https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/Link.cc
-                Linear vel + offset accounts for angular? ^
-                Can skip overhead and use ecm components with id instead of link obj?
-                uses componentsData  component of ecm?? (in github file)
-                */
-
-                // const ignition::math::Vector3d velocity = worldLinVel + worldAngVel.Cross(centerPressureWorldList[i]);
-                // const auto normalizedVelocity = velocity.Normalize();
-                std::optional<ignition::math::Vector3d> optionalCenterPressureLinearVelocity = linkObj.WorldLinearVelocity(_ecm, centerPressureWorldList[i]);
-                // std::optional<ignition::math::Vector3d> optionalCenterPressureAngularVelocity = linkObj.WorldAngularVelocity(_ecm);
+                std::optional<ignition::math::Vector3d> optionalCenterPressureLinearVelocity = linkObj.WorldLinearVelocity(_ecm, link.second.centerPressureList[i]);
                 if(!optionalCenterPressureLinearVelocity.has_value()) {
                     ignerr << "Wing blade: " << i << " lin/ang velocity not found" << std::endl;
                     continue;
                 }
                 const ignition::math::Vector3d centerPressureLinVel = optionalCenterPressureLinearVelocity.value();
-                // const ignition::math::Vector3d &centerPressureAngularVelocity = optionalCenterPressureAngularVelocity.value();
-                //Linear Velocity of solely flapping motion at CP. w x r;  r = cp - jointPos
-                // ignition::math::Vector3d centerPressureLinVel = jointVelocity.Cross(centerPressureWorldList[i] - jointPose.Pos());
-                if(centerPressureLinVel.Length() != .01){ //negligible small force
-                    //A = cos(AOA) * chord * (totalSpan / #blades)
-                    double flapWingAreaApplied = std::cos(link.second.angleOfAttack) * link.second.wingParameters.bladeChordList[i] * link.second.wingParameters.wingSpan / link.second.wingParameters.blades;
+                if(centerPressureLinVel.Length() < .001){ //negligible small force
                     //F = .5 * p * Cd * v^2 * A
-                    double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * centerPressureLinVel.SquaredLength() * flapWingAreaApplied;
-                    //Orient to perpindidcular of wing: F = F_scalar * (-v / |v|) / cos(AOA)
-                    ignition::math::Vector3d flapDragForce = flapDragScalar * (-centerPressureLinVel.Normalized()) / cos(link.second.angleOfAttack);
+                    double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * pow(centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]), 2) * link.second.wingParameters.bladeAreaList[i];
+                    ignition::math::Vector3d flapDragForce = flapDragScalar * link.second.wingParameters.upVectorList[i];
+                    linkObj.AddWorldForce(_ecm, link.second.centerPressureList[i], flapDragForce);// https://github.com/gazebosim/gz-sim/blob/4ce01eab7fbba7ff3ec2f876e0289e2abdab45ae/src/Link.cc#L383
+                    ignerr << "Wing blade FORCE: " << flapDragScalar << std::endl;
+                    ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl; 
                 }
-                /*
-                Calculating regular drag from non flapping force (previous movement)
-                */
-                //Linear Velocity of non flapping motion at CP. v_l + w x r - v_f;  
-                // ignition::math::Vector3d nonFlapCenterPressureLinVel = worldLinVel + worldAngVel.Cross(centerPressureWorldList[i]) - flapCenterPressureLinVel;
-                // if(nonFlapCenterPressureLinVel.length() != .01){ //negligible small force
-                //     //A = cos(AOA) * chord * (totalSpan / #blades)
-                //     double nonFlapWingAreaApplied = std::cos(link.second.angleOfAttack) * link.second.wingParameters.bladeChordList[i] * link.second.wingParameters.wingSpan / link.second.wingParameters.blades;
-                //     //F = .5 * p * Cd * v^2 * A
-                //     double nonFlapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * nonFlapCenterPressureLinVel.SquaredLength() * nonFlapWingAreaApplied;
-                //     //Orient to perpindidcular of wing: F = F_scalar * (-v / |v|) / cos(AOA)
-                //     ignition::math::Vector3d nonFlapDragForce = nonFlapDragScalar * (-nonFlapCenterPressureLinVel.Normalize()) / cos(link.second.angleOfAttack);
-                    
-                // }
             }
-        } else if (link.second.linkType == "Generic"){
-            std::optional<ignition::math::Vector3d> optionalCenterPressureLinearVelocity = linkObj.WorldLinearVelocity(_ecm, centerPressureWorldList[0]);
+        } else if (link.second.linkType == "generic"){
+            std::optional<ignition::math::Vector3d> optionalCenterPressureLinearVelocity = linkObj.WorldLinearVelocity(_ecm, link.second.centerPressureList[0]);
             if(!optionalCenterPressureLinearVelocity.has_value()) {
                 ignerr << "Generic link: " << " lin/ang velocity not found" << std::endl;
                 continue;

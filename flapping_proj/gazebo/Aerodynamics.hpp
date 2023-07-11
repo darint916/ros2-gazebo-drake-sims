@@ -12,20 +12,26 @@ namespace aerodynamics
         <plugin filename="aerodynamics_plugin" name="aerodynamics">
             <link>
                 <link_name>link1</link_name>
-                <link_type>Wing</link_type>
+                <link_type>wing</link_type>
                 <stall_angle>15</stall_angle>
                 <fluid_density>1.293</fluid_density>
                 <drag_coefficient>1</drag_coefficient>
                 <lift_coefficient>1</lift_coefficient>
-                <jointName>joint1</jointName>
+                <control_joint>joint1</control_joint>
+                <wing_pitch_joint>joint2</wing_pitch_joint>
+                <blades>1</blades>
+                <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
+                <upward_vector_list>0,0,1</upward_vector_list>
+                <blade_area_list>1</blade_area_list>
             </link>
             <link>
                 <link_name>link2</link_name>
-                <link_type>Generic</link_type>
+                <link_type>generic</link_type>
                 <stall_angle>15</stall_angle>
                 <fluid_density>1.293</fluid_density>
                 <drag_coefficient>1</drag_coefficient>
                 <lift_coefficient>1</lift_coefficient>
+                <center_pressure_list>0,0,0</center_pressure_list>
             </link>
         </plugin>
 
@@ -38,13 +44,15 @@ namespace aerodynamics
         igz::Entity wingPitchJointEntity;
         int blades = 1; //number of blades for Blade Element method
         double wingSpan = 1; //meters (total length of wing)
-        std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
+        // std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
+        std::vector<ignition::math::Vector3d> upVectorList;
+        std::vector<double> bladeAreaList;
     };
 
     struct AerodynamicLinkParameters //Defaults added for override + allocate
     {
         igz::Entity linkEntity;
-        std::string linkType = "Generic"; //Wing, Generic, etc.
+        std::string linkType = "generic"; //wing, generic, etc.
         double stallAngle = M_PI / 2; //radians
         double angleOfAttack = 0; //radians
         double fluidDensity = 1.293; //kg*m^-3 air density at 273K
@@ -52,8 +60,6 @@ namespace aerodynamics
         double liftCoefficient = 1; //unitless + variable
         WingParameters wingParameters; //Wing specific parameters
         std::vector<ignition::math::Vector3d> centerPressureList; //try ::Zero if err //meters from COM, Center of Pressure
-        std::vector<ignition::math::Vector3d> upVectorList;
-        std::vector<ignition::math::Vector3d> 
     };
 
     struct AerodynamicsData
