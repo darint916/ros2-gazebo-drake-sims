@@ -34,6 +34,9 @@ class ControlNode : public rclcpp::Node
 		std::map<std::string, rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr> _jointControlPublishersMap;
 		std::map<std::string, double> _jointTorqueControlMap;
 
+		//Control diff drive vel 
+		rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr _diffDriveVelPublisher;
+
 		//data extraction
 		std::mutex _mutex;
 		std::string _dataHeaders;
@@ -53,6 +56,11 @@ class ControlNode : public rclcpp::Node
 			this->declare_parameter<std::string>("position_topic", "/world/world1/dynamic_pose/info");
 			this->declare_parameter<int>("control_publish_frequency", 30);
 			this->declare_parameter<std::string>("data_file_path", "../data/data.csv");
+
+			//Velocity publisher (uses diff drive plugin receiver)
+			_diffDriveVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/world/diff_drive/cmd_vel", 10);
+			this->declare_parameter<double>("amplitude", 10);
+			this->declare_parameter<double>("frequency", 10);
 
 			//creating joint publishers and mapping joints
 			std::vector<std::string> jointNames = this->get_parameter("joint_names").as_string_array();
@@ -124,21 +132,44 @@ class ControlNode : public rclcpp::Node
 			sin_torque_control();
 			
 			//Publishes joint torques
-			auto message = std_msgs::msg::Float64();
+			// auto message = std_msgs::msg::Float64();
+			int flag = 0;
+			auto msg = geometry_msgs::msg::Twist(); 
 			for (auto & joint : _jointTorqueControlMap) {
-				message.data = joint.second;
-				_jointControlPublishersMap[joint.first]->publish(message);
+				// message.data = joint.second;
+				// _jointControlPublishersMap[joint.first]->publish(message);
+				
+				
+				// msg.linear.x = joint.second; //same direction spin
+				msg.angular.z = joint.second;
+				//Execute once 
+				if(flag == 0){
+					_diffDriveVelPublisher->publish(msg);
+					flag = 1;
+				}
 			}
+
+			
 		}
 		
 		void sin_torque_control(){
 			//hardcoded params
-			double amplitude = 30;
-			double frequency = 2;
+			// double amplitude = 10;
+			// double frequency = 10;
+			double amplitude = this->get_parameter("amplitude").as_double();
+			double frequency = this->get_parameter("frequency").as_double();
 			double phase = 0;
 			// RCLCPP_INFO_STREAM(this->get_logger(), "Current time: " << _currentPoseTime);
 			for (auto & joint : _jointTorqueControlMap) {
 				joint.second = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime + phase);
+				
+				//square wave (min max)
+				if (joint.second < 0) {
+					joint.second = -amplitude;
+				} else {
+					joint.second = amplitude;
+				}
+
 			} 
 		}
 };

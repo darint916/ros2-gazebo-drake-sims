@@ -1,0 +1,13 @@
+# VENV Usage
+
+## Install venv
+`sudo apt install python3-venv`
+
+## Create venv
+`python3 -m venv <venv_name>`
+
+## Activate venv
+`source <venv_name>/bin/activate`
+
+## Install Requirements.txt
+`pip install -r requirements.txt`

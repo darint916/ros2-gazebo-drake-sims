@@ -108,6 +108,13 @@ joint_RW_J_Flap = data['joint_RW_J_Flap']
 # Create synchronized plots for joint angles
 fig2, ax2 = plt.subplots(2, 2, sharex='col')
 
+plt.subplots_adjust(left=0.1,
+                    bottom=0.1,
+                    right=0.9,
+                    top=0.9,
+                    wspace=0.4,
+                    hspace=0.4)
+
 ax2[0, 0].plot(time, joint_LW_J_Pitch, label='LW_J_Pitch')
 ax2[0, 0].set_xlabel('Time (s)')
 ax2[0, 0].set_ylabel('Angle (radians)')

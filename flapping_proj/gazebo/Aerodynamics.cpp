@@ -73,6 +73,7 @@ void Aerodynamics::Configure(const igz::Entity &_entity, const std::shared_ptr<c
         return;
     }
     this->dataPtr->sdfConfig = _sdf->Clone();
+    
 }
 
 void Aerodynamics::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm)
@@ -225,12 +226,13 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
                     ignition::math::Vector3d flapDragForce = flapDragScalar * link.second.wingParameters.upVectorList[i];
                     linkObj.AddWorldForce(_ecm, link.second.centerPressureList[i], flapDragForce);// https://github.com/gazebosim/gz-sim/blob/4ce01eab7fbba7ff3ec2f876e0289e2abdab45ae/src/Link.cc#L383
                     
-                    ignerr << "\n";
-                    ignerr << "Wing blade: " << link.first << " " << i << std::endl; 
-                    ignerr << "Wing blade proj velocity: " << centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]) << std::endl;
-                    ignerr << "Wing blade FORCE: " << flapDragScalar << std::endl;
-                    ignerr << "upVector: " << link.second.wingParameters.upVectorList[i] << std::endl;
-                    ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl;
+                    // ignerr << "\n";
+                    // ignerr << "link orientation:" << linkWorldPose.Rot() << std::endl;
+                    // ignerr << "Wing blade: " << link.first << " " << i << std::endl; 
+                    // ignerr << "Wing blade proj velocity: " << centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]) << std::endl;
+                    // ignerr << "Wing blade FORCE: " << flapDragScalar << std::endl;
+                    // ignerr << "upVector: " << link.second.wingParameters.upVectorList[i] << std::endl;
+                    // ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl;
                 }
             }
         } else if (link.second.linkType == "generic"){

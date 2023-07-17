@@ -6,7 +6,7 @@ import os
 
 def process_user_input():
     #config here, could later use config file?
-
+    #TODO: YAML CONFIG FILE FROM GUI
     ''''''''''''''''''''''''
     joint_names = ['joint_LW_J_Pitch', 'joint_RW_J_Pitch', 'joint_LW_J_Flap', 'joint_RW_J_Flap']
     model_name = 'URDF_Bodies2SLDASM'
@@ -28,7 +28,7 @@ def generate_launch_description():
 
 
     #default odom topic, then joint forces
-    bridge_args = ['/odom@geometry_msgs/msg/PoseArray[gz.msgs.Pose_V']
+    bridge_args = ['/odom@geometry_msgs/msg/PoseArray[gz.msgs.Pose_V', '/world/diff_drive/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist']
     for joint_topic in joint_control_topics:
         bridge_args.append(joint_topic + '@std_msgs/msg/Float64]gz.msgs.Double')
     
@@ -43,8 +43,10 @@ def generate_launch_description():
                 {'joint_names': joint_names},
                 {'joint_control_topics': joint_control_topics},
                 {'position_topic': position_topic},
-                {'control_publish_frequency': 3}, #not implemented yet?
+                {'control_publish_frequency': 60}, #not implemented yet?
                 {'data_file_path': data_file}, 
+                {'amplitude': 7.0},
+                {'frequency': 3.0},
             ]
         ),
         Node(
