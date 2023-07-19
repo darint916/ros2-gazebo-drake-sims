@@ -7,9 +7,9 @@ import shutil
 import numpy as np
 import sys
 import os
+import math
 # Convert quaternion to Euler angles
 def quaternion_to_euler(x, y, z, w,length=.02):
-    import math
     t0 = +2.0 * (w * x + y * z)
     t1 = +1.0 - 2.0 * (x * x + y * y)
     roll_x = math.atan2(t0, t1)
@@ -89,18 +89,18 @@ csv_dest = os.path.join(script_dir, folder_name, csv_name)
 shutil.copy2(csv_source, csv_dest)
 
 # Extract the required columns
-time = data['time']
-position_x = data['position_x']
-position_y = data['position_y']
-position_z = data['position_z']
-quaternion_x = data['quaternion_x']
-quaternion_y = data['quaternion_y']
-quaternion_z = data['quaternion_z']
-quaternion_w = data['quaternion_w']
-joint_LW_J_Pitch = data['joint_LW_J_Pitch']
-joint_RW_J_Pitch = data['joint_RW_J_Pitch']
-joint_LW_J_Flap = data['joint_LW_J_Flap']
-joint_RW_J_Flap = data['joint_RW_J_Flap']
+time = data['time'].to_numpy()
+position_x = data['position_x'].to_numpy()
+position_y = data['position_y'].to_numpy()
+position_z = data['position_z'].to_numpy()
+quaternion_x = data['quaternion_x'].to_numpy()
+quaternion_y = data['quaternion_y'].to_numpy()
+quaternion_z = data['quaternion_z'].to_numpy()
+quaternion_w = data['quaternion_w'].to_numpy()
+joint_LW_J_Pitch = data['joint_LW_J_Pitch'].to_numpy()
+joint_RW_J_Pitch = data['joint_RW_J_Pitch'].to_numpy()
+joint_LW_J_Flap = data['joint_LW_J_Flap'].to_numpy()
+joint_RW_J_Flap = data['joint_RW_J_Flap'].to_numpy()
 
 # Convert angles to degrees
 joint_LW_J_Pitch_deg = np.degrees(joint_LW_J_Pitch)
@@ -111,46 +111,79 @@ joint_RW_J_Flap_deg = np.degrees(joint_RW_J_Flap)
 # Create synchronized plots for joint angles
 fig2, ax2 = plt.subplots(2, 2)
 
-plt.subplots_adjust(left=0.1,
+plt.subplots_adjust(left=0.12,
                     bottom=0.1,
-                    right=0.9,
+                    right=0.98,
                     top=0.9,
                     wspace=0.4,
                     hspace=0.4)
 
-ax2[0, 0].plot(time, joint_LW_J_Pitch, label='LW_J_Pitch')
+major_locator = ticker.MultipleLocator(base=1)
+minor_locator = ticker.MultipleLocator(base=0.25)
+ax2[0, 0].plot(time, joint_LW_J_Pitch_deg, label='LW_J_Pitch')
 ax2[0, 0].set_xlabel('Time (s)')
 ax2[0, 0].set_ylabel('Angle (degrees)')
 ax2[0, 0].legend()
-ax2[0, 0].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
+ax2[0, 0].xaxis.set_major_locator(major_locator)
+ax2[0, 0].xaxis.set_minor_locator(minor_locator)
 # ax2[0, 0].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[0, 0].grid(True)
 
-ax2[0, 1].plot(time, joint_RW_J_Pitch, label='RW_J_Pitch')
+ax2[0, 1].plot(time, joint_RW_J_Pitch_deg, label='RW_J_Pitch')
 ax2[0, 1].set_xlabel('Time (s)')
 ax2[0, 1].set_ylabel('Angle (degrees)')
 ax2[0, 1].legend()
-ax2[0, 1].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
+ax2[0, 1].xaxis.set_major_locator(major_locator)
+ax2[0, 1].xaxis.set_minor_locator(minor_locator)
 # ax2[0, 1].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[0, 1].grid(True)
 
-ax2[1, 0].plot(time, joint_LW_J_Flap, label='LW_J_Flap')
+ax2[1, 0].plot(time, joint_LW_J_Flap_deg, label='LW_J_Flap')
 ax2[1, 0].set_xlabel('Time (s)')
 ax2[1, 0].set_ylabel('Angle (degrees)')
 ax2[1, 0].legend()
-ax2[1, 0].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
+ax2[1, 0].xaxis.set_major_locator(major_locator)
+ax2[1, 0].xaxis.set_minor_locator(minor_locator)
 # ax2[1, 0].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[1, 0].grid(True)
 
-ax2[1, 1].plot(time, joint_RW_J_Flap, label='RW_J_Flap')
+ax2[1, 1].plot(time, joint_RW_J_Flap_deg, label='RW_J_Flap')
 ax2[1, 1].set_xlabel('Time (s)')
 ax2[1, 1].set_ylabel('Angle (degrees)')
 ax2[1, 1].legend()
-ax2[1, 1].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
+ax2[1, 1].xaxis.set_major_locator(major_locator)
+ax2[1, 1].xaxis.set_minor_locator(minor_locator)
 # ax2[1, 1].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[1, 1].grid(True)
+for ax in ax2.flat:
+    ax.grid(which='minor', linestyle=':', alpha=0.75)
+    # for i, label in enumerate(ax.get_xticklabels()):
+    #     if i % 4 != 0:
+    #         label.set_visible(False)
+
 # Save the synchronized plots as an image file
+# plt.grid(which='minor', linestyle=':', alpha=0.75)
 fig2.savefig(folder_name + '/joint_angles.png')
+
+
+#big plot
+major_locator = ticker.MultipleLocator(base=.1)
+minor_locator = ticker.MultipleLocator(base=0.05)
+start_time = 3
+end_time = 3.3
+start_idx = np.argmax(time >= start_time)
+end_idx = np.argmax(time >= end_time)
+time_slice = time[start_idx:end_idx]
+angle_slice = joint_LW_J_Pitch_deg[start_idx:end_idx]
+fig = plt.figure()
+plt.plot(time_slice, angle_slice, label='Angle Data (3s to 3.3s)')
+plt.gca().xaxis.set_major_locator(major_locator)
+plt.gca().xaxis.set_minor_locator(minor_locator)
+plt.xlabel('Time (s)')
+plt.ylabel('Angle (deg)')
+plt.legend()
+fig.savefig(folder_name + '/joint_angles_zoom.png')
+plt.show()
 
 # Create the 3D figure (initialization)
 fig = plt.figure()

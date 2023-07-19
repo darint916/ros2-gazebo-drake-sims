@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.8">
-   <world name="world1">
+   <world name="world2">
       <physics name="1ms" type="ignored">
          <max_step_size>0.0001</max_step_size>
          <real_time_factor>1.0</real_time_factor>
@@ -332,6 +332,7 @@
                 <blade_area_list>0.0018</blade_area_list>
             </link>
          </plugin> -->
+
          <!-- controller/odom plugin-->
          <plugin 
             filename="aero_state_plugins" 
@@ -346,8 +347,8 @@
          </plugin>
 
          <!-- subscribes to model_name/joint/jointname/cmd_force , takes doubles -->
-         <!--wing links-->
-         <plugin  
+         <!-- joints-->
+         <!-- <plugin  
             filename="libignition-gazebo-apply-joint-force-system.so" 
             name = "ignition::gazebo::systems::ApplyJointForce">
             <joint_name>joint_LW_J_Pitch</joint_name>
@@ -356,19 +357,19 @@
             filename="libignition-gazebo-apply-joint-force-system.so" 
             name = "ignition::gazebo::systems::ApplyJointForce">
             <joint_name>joint_RW_J_Pitch</joint_name>
-         </plugin>
+         </plugin> -->
 
-         <!-- joints-->
-         <!-- <plugin  
+         <!--wing links-->
+         <plugin  
             filename="libignition-gazebo-apply-joint-force-system.so" 
             name = "ignition::gazebo::systems::ApplyJointForce">
             <joint_name>joint_LW_J_Flap</joint_name>
-         </plugin> -->
-         <!-- <plugin  
+         </plugin>
+         <plugin  
             filename="libignition-gazebo-apply-joint-force-system.so" 
             name = "ignition::gazebo::systems::ApplyJointForce">
          <joint_name>joint_RW_J_Flap</joint_name> 
-         </plugin> -->
+         </plugin>
 
          <!-- <plugin
                 filename="libignition-gazebo-diff-drive-system.so"

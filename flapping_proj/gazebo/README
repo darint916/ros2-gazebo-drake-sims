@@ -3,3 +3,6 @@ To edit + build:
 `cmake ..`
 `make`
 
+# Known issues:
+DART math transform validation error:
+Make sure world names are not the same across multiple sdf files, or else you get seg fault and program crashes.

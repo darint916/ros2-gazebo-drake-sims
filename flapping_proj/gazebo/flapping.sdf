@@ -79,7 +79,6 @@
                   <ambient>0.0 0.0 1.0 1</ambient>
                   <diffuse>0.0 0.0 1.0 1</diffuse>
                   <specular>0.0 0.0 1.0 1</specular>
-
                </material>
             </visual>
             <collision name="base_link">
@@ -90,9 +89,7 @@
                   </mesh>
                </geometry>
             </collision>
-             
          </link>
-
          <link name="RW_Flap">
             <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
             <inertial>
@@ -243,15 +240,15 @@ c
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
-                  <damping>.5</damping>
-                  <friction>1</friction>   
+                  <!-- <damping>.5</damping> -->
+                  <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <spring_stiffness>20</spring_stiffness>
                </dynamics>
-               <limit>
+               <!-- <limit>
                   <lower>-1.57</lower>
                   <upper>1.57</upper>
-               </limit> 
+               </limit>  -->
             </axis>
          </joint>
          
@@ -262,15 +259,15 @@ c
             <axis>
                <xyz>-1 0 0</xyz>
                <dynamics>
-                  <damping>.5</damping>
-                  <friction>1</friction>   
+                  <!-- <damping>.5</damping> -->
+                  <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <spring_stiffness>20</spring_stiffness>
                </dynamics>
-               <limit>
+               <!-- <limit>
                   <lower>-1.0472</lower>
                   <upper>1.0472</upper>
-               </limit>
+               </limit> -->
             </axis>
          </joint>
 
@@ -282,16 +279,16 @@ c
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <!-- <damping>.5</damping> -->
+                  <damping>.5</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1</spring_stiffness>
+                  <spring_stiffness>16</spring_stiffness>
                </dynamics>
                <limit>
                   <!-- <lower>-3.14</lower>
                   <upper>3.14</upper> -->
-                  <lower>-1.0472</lower>
-                  <upper>1.0472</upper>
+                  <!-- <lower>-1.0472</lower>
+                  <upper>1.0472</upper> -->
                </limit>
             </axis>
          </joint>
@@ -304,16 +301,16 @@ c
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <!-- <damping>.5</damping> -->
+                  <damping>.5</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1</spring_stiffness>
+                  <spring_stiffness>16</spring_stiffness>
                </dynamics>
                <limit>
                   <!-- <lower>-3.14</lower>
                   <upper>3.14</upper> -->
-                  <lower>-1.57</lower>
-                  <upper>1.57</upper>
+                  <!-- <lower>-1.57</lower>
+                  <upper>1.57</upper> -->
                </limit>
             </axis>
          </joint>
@@ -328,12 +325,11 @@ c
                <limit>
                   <lower>0</lower>
                   <upper>0</upper>
-                  
                </limit>        
             </axis>
          </joint>
 
-         <plugin filename="aero_state_plugins" name="aerodynamics">
+         <!-- <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/grasshopper/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
             <link>
                 <link_name>RW_Pitch</link_name>
@@ -345,9 +341,9 @@ c
                 <control_joint>joint_RW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_RW_J_Pitch</wing_pitch_joint>
                 <blades>1</blades>
-                <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
+                <center_pressure_list>0,0,0</center_pressure_list>
                 <upward_vector_list>0,0,1</upward_vector_list>
-                <blade_area_list>1</blade_area_list> <!-- .1688 -->
+                <blade_area_list>.4</blade_area_list> 
             </link>
             <link>
                 <link_name>LW_Pitch</link_name>
@@ -359,11 +355,11 @@ c
                 <control_joint>joint_LW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_LW_J_Pitch</wing_pitch_joint>
                 <blades>1</blades>
-                <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
+                <center_pressure_list>0,0,0</center_pressure_list>
                 <upward_vector_list>0,0,1</upward_vector_list>
-                <blade_area_list>1</blade_area_list>
+                <blade_area_list>.4</blade_area_list>
             </link>
-         </plugin>
+         </plugin> -->
          <!-- controller/odom plugin-->
          <plugin 
             filename="aero_state_plugins" 

@@ -229,7 +229,7 @@ void AerodynamicsData::Update(const igz::UpdateInfo &_info, igz::EntityComponent
                     continue;
                 }
                 const ignition::math::Vector3d centerPressureLinVel = optionalCenterPressureLinearVelocity.value();
-                if(centerPressureLinVel.Length() > .0001){ //negligible small force
+                // if(centerPressureLinVel.Length() > .0001){ //negligible small force
                     link.second.wingParameters.upVectorList[i] = linkWorldPose.Rot().RotateVector(link.second.wingParameters.upVectorList[i]); //Rotate to world frame
                     //F = .5 * p * Cd * v^2 * A
                     double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * pow(centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]), 2) * link.second.wingParameters.bladeAreaList[i];
@@ -244,7 +244,7 @@ void AerodynamicsData::Update(const igz::UpdateInfo &_info, igz::EntityComponent
                     // ignerr << "Wing blade FORCE: " << flapDragScalar << std::endl;
                     // ignerr << "upVector: " << link.second.wingParameters.upVectorList[i] << std::endl;
                     // ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl;
-                }
+                // }
             }
 
             this->_csvWriter << "\n";

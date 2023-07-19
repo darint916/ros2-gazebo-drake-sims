@@ -134,8 +134,12 @@ class ControlNode : public rclcpp::Node
 			//Publishes joint torques
 			auto message = std_msgs::msg::Float64();
 			// int flag = 0;
-			// auto msg = geometry_msgs::msg::Twist(); 
+			// auto msg = geometry_msgs::msg::Twist();
+	
 			for (auto & joint : _jointTorqueControlMap) {
+				if (joint.first == "joint_RW_J_Flap"){
+					joint.second *= -1;
+				}
 				message.data = joint.second;
 				_jointControlPublishersMap[joint.first]->publish(message);
 				
