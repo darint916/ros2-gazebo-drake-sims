@@ -2,9 +2,9 @@
 #include <sstream>
 #include <algorithm>
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <sdf/Element.hh>
 #include <ignition/plugin/RegisterMore.hh>
@@ -74,6 +74,12 @@ void Aerodynamics::Configure(const igz::Entity &_entity, const std::shared_ptr<c
     }
     this->dataPtr->sdfConfig = _sdf->Clone();
     
+    //Data publishing
+    std::string dataFilePath = _sdf->Get<std::string>("data_file_path");
+    this->dataPtr->_csvFile.open(dataFilePath);
+    this->dataPtr->_csvWriter = std::ofstream(dataFilePath, std::ios::out | std::ios::app);
+    this->dataPtr->_dataHeaders = "time,wing_name,quat_x,quat_y,quat_z,quat_w,blade_number,blade_velocity_x,blade_velocity_y,blade_velocity_z,blade_force_x,blade_force_y,blade_force_z";
+    this->dataPtr->_csvWriter << this->dataPtr->_dataHeaders << "\n";
 }
 
 void Aerodynamics::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm)
@@ -94,7 +100,7 @@ void Aerodynamics::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentM
         return;
     }
     if (this->dataPtr->initialized && this->dataPtr->validConfig){
-        this->dataPtr->Update(_ecm);
+        this->dataPtr->Update(_info, _ecm);
     }
     return;
 }
@@ -194,7 +200,7 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
 }
 
 
-void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
+void AerodynamicsData::Update(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm)
 {
     for (auto &link : this->linkMap){
         // _ecm.CreateComponent(link.second.linkEntity, igz::components::Link());
@@ -212,6 +218,10 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
         const ignition::math::Pose3<double> linkWorldPose = optionalPose.value();
         
         if (link.second.linkType == "wing"){
+
+            // this->_dataHeaders = "time,wing_name,quat_x,quat_y,quat_z,quat_w,blade_number,blade_velocity_x,blade_velocity_y,blade_velocity_z,blade_force_x,blade_force_y,blade_force_z";
+            this->_csvWriter <<std::chrono::duration<double>(_info.simTime).count() << "," << link.first << "," << linkWorldPose.Rot().X() << "," << linkWorldPose.Rot().Y() << "," << linkWorldPose.Rot().Z() << "," << linkWorldPose.Rot().W();
+            
             for (int i = 0; i < link.second.wingParameters.blades; i++){
                 std::optional<ignition::math::Vector3d> optionalCenterPressureLinearVelocity = linkObj.WorldLinearVelocity(_ecm, link.second.centerPressureList[i]);
                 if(!optionalCenterPressureLinearVelocity.has_value()) {
@@ -225,7 +235,8 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
                     double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * pow(centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]), 2) * link.second.wingParameters.bladeAreaList[i];
                     ignition::math::Vector3d flapDragForce = flapDragScalar * link.second.wingParameters.upVectorList[i];
                     linkObj.AddWorldForce(_ecm, link.second.centerPressureList[i], flapDragForce);// https://github.com/gazebosim/gz-sim/blob/4ce01eab7fbba7ff3ec2f876e0289e2abdab45ae/src/Link.cc#L383
-                    
+
+                    this->_csvWriter << "," << i << "," << centerPressureLinVel.X() << "," << centerPressureLinVel.Y() << "," << centerPressureLinVel.Z() << "," << flapDragForce.X() << "," << flapDragForce.Y() << "," << flapDragForce.Z();
                     // ignerr << "\n";
                     // ignerr << "link orientation:" << linkWorldPose.Rot() << std::endl;
                     // ignerr << "Wing blade: " << link.first << " " << i << std::endl; 
@@ -235,6 +246,9 @@ void AerodynamicsData::Update(igz::EntityComponentManager &_ecm)
                     // ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl;
                 }
             }
+
+            this->_csvWriter << "\n";
+        
         } else if (link.second.linkType == "generic"){
             std::optional<ignition::math::Vector3d> optionalCenterPressureLinearVelocity = linkObj.WorldLinearVelocity(_ecm, link.second.centerPressureList[0]);
             if(!optionalCenterPressureLinearVelocity.has_value()) {

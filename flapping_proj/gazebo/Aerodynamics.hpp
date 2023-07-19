@@ -92,7 +92,12 @@ namespace aerodynamics
         double liftCoefficient = 1; //unitless + variable
 
         void Load(igz::EntityComponentManager &_ecm, const sdf::ElementPtr &_sdf);
-        void Update(igz::EntityComponentManager &_ecm);
+        void Update(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm);
+
+        //data writer
+		std::string _dataHeaders;
+		std::ofstream _csvFile;
+        std::ofstream _csvWriter;
     };
     
     class Aerodynamics : public igz::System, public igz::ISystemConfigure, public igz:: ISystemPreUpdate

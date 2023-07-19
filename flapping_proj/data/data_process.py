@@ -102,11 +102,14 @@ joint_RW_J_Pitch = data['joint_RW_J_Pitch']
 joint_LW_J_Flap = data['joint_LW_J_Flap']
 joint_RW_J_Flap = data['joint_RW_J_Flap']
 
-#find good bin amount
-
+# Convert angles to degrees
+joint_LW_J_Pitch_deg = np.degrees(joint_LW_J_Pitch)
+joint_RW_J_Pitch_deg = np.degrees(joint_RW_J_Pitch)
+joint_LW_J_Flap_deg = np.degrees(joint_LW_J_Flap)
+joint_RW_J_Flap_deg = np.degrees(joint_RW_J_Flap)
 
 # Create synchronized plots for joint angles
-fig2, ax2 = plt.subplots(2, 2, sharex='col')
+fig2, ax2 = plt.subplots(2, 2)
 
 plt.subplots_adjust(left=0.1,
                     bottom=0.1,
@@ -117,33 +120,33 @@ plt.subplots_adjust(left=0.1,
 
 ax2[0, 0].plot(time, joint_LW_J_Pitch, label='LW_J_Pitch')
 ax2[0, 0].set_xlabel('Time (s)')
-ax2[0, 0].set_ylabel('Angle (radians)')
+ax2[0, 0].set_ylabel('Angle (degrees)')
 ax2[0, 0].legend()
-ax2[0, 0].xaxis.set_major_locator(ticker.MultipleLocator(base=1))
+ax2[0, 0].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
 # ax2[0, 0].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[0, 0].grid(True)
 
 ax2[0, 1].plot(time, joint_RW_J_Pitch, label='RW_J_Pitch')
 ax2[0, 1].set_xlabel('Time (s)')
-ax2[0, 1].set_ylabel('Angle (radians)')
+ax2[0, 1].set_ylabel('Angle (degrees)')
 ax2[0, 1].legend()
-ax2[0, 1].xaxis.set_major_locator(ticker.MultipleLocator(base=1))
+ax2[0, 1].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
 # ax2[0, 1].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[0, 1].grid(True)
 
 ax2[1, 0].plot(time, joint_LW_J_Flap, label='LW_J_Flap')
 ax2[1, 0].set_xlabel('Time (s)')
-ax2[1, 0].set_ylabel('Angle (radians)')
+ax2[1, 0].set_ylabel('Angle (degrees)')
 ax2[1, 0].legend()
-ax2[1, 0].xaxis.set_major_locator(ticker.MultipleLocator(base=1))
+ax2[1, 0].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
 # ax2[1, 0].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[1, 0].grid(True)
 
 ax2[1, 1].plot(time, joint_RW_J_Flap, label='RW_J_Flap')
 ax2[1, 1].set_xlabel('Time (s)')
-ax2[1, 1].set_ylabel('Angle (radians)')
+ax2[1, 1].set_ylabel('Angle (degrees)')
 ax2[1, 1].legend()
-ax2[1, 1].xaxis.set_major_locator(ticker.MultipleLocator(base=1))
+ax2[1, 1].xaxis.set_major_locator(ticker.MultipleLocator(base=.25))
 # ax2[1, 1].yaxis.set_major_locator(ticker.MultipleLocator(base=3.14/2))
 ax2[1, 1].grid(True)
 # Save the synchronized plots as an image file

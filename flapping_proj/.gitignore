@@ -3,5 +3,6 @@ install
 log
 __pycache__
 data.csv
+aero.csv
 venv
 *.code-workspace
