@@ -13,7 +13,7 @@
         </plugin>
       <light type="directional" name="sun">
          <cast_shadows>true</cast_shadows>
-         <pose>0 0 15 0 0 0</pose>
+         <pose>0 0 10 0 0 0</pose>
          <diffuse>0.8 0.8 0.8 1</diffuse>
          <specular>0.2 0.2 0.2 1</specular>
          <attenuation>
@@ -39,7 +39,7 @@
                <geometry>
                   <plane>
                      <normal>0 0 1</normal>
-                     <size>100 100</size>
+                     <size>3 3</size>
                   </plane>
                </geometry>
                <material>
@@ -50,68 +50,63 @@
             </visual>
          </link>
       </model>
-      
-      <model name="URDF_Bodies2SLDASM"> <!-- removed . because its used as topic name for joint force plugin-->
-         <pose relative_to="world">0 0 10 1.5708 0 0< /pose>
+      <model name="URDF_Tiny"> 
+         <pose relative_to="world">0 0 010 1.5708 0 0</pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
-               <pose>1.287E-17 -0.125 1.1123E-17 0 0 0</pose>
-               <mass>0.2513</mass>
-               <!-- <mass>10e20</mass> -->
+               <pose>2.90929190927912E-18 -0.0225 1.75308850064785E-18 0 0 0</pose>
+               <mass>0.00635649989496079</mass>
                <inertia>
-                  <ixx>0.020361</ixx>
-                  <ixy>0</ixy>
-                  <ixz>0</ixz>
-                  <iyy>0.027094</iyy>
-                  <iyz>1.1459E-18</iyz>
-                  <izz>0.045808</izz>
+                  <ixx>1.07828542773576E-06</ixx>
+                  <ixy>6.91754242672403E-24</ixy>
+                  <ixz>-2.8657332950023E-25</ixz>
+                  <iyy>1.53486567387336E-07</iyy>
+                  <iyz>6.48370505339519E-23</iyz>
+                  <izz>1.22051985420084E-06</izz>
                </inertia>
             </inertial>
             <visual name="base_link">
                <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/base_link.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/base_link.STL</uri>
                   </mesh>
                </geometry>
                <material>
                   <ambient>0.0 0.0 1.0 1</ambient>
                   <diffuse>0.0 0.0 1.0 1</diffuse>
                   <specular>0.0 0.0 1.0 1</specular>
-
                </material>
             </visual>
             <collision name="base_link">
                <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/base_link.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/base_link.STL</uri>
                   </mesh>
                </geometry>
             </collision>
-             
          </link>
-
          <link name="RW_Flap">
             <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
             <inertial>
-               <pose>0.032766 0.034001 -8.7011E-19 0 0 0</pose>
-               <mass>0.15563</mass>
+               <pose>0.00333837466497408 0.00333837466497408 2.6213145100327E-20 0 0 0</pose>
+               <mass>3.89068170490654E-05</mass>
                <inertia>
-                  <ixx>4.7427E-05</ixx>
-                  <ixy>-3.1144E-05</ixy>
-                  <ixz>-3.1293E-21</ixz>
-                  <iyy>0.00016366</iyy>
-                  <iyz>-6.839E-22</iyz>
-                  <izz>0.00017996</izz>
+                  <ixx>6.78208726623603E-11</ixx>
+                  <ixy>-8.49217730939301E-11</ixy>
+                  <ixz>-1.64845713489435E-27</ixz>
+                  <iyy>3.57554255139679E-10</iyy>
+                  <iyz>1.22977512422724E-27</iyz>
+                  <izz>4.05921719277506E-10</izz>
                </inertia>
             </inertial>
             <visual name="RW_Flap">
                <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/RW_Flap.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
                <material>
@@ -124,7 +119,7 @@
                <pose relative_to="joint_RW_J_Flap">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/RW_Flap.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
             </collision>
@@ -132,22 +127,58 @@
          <link name="RW_Pitch">
             <pose relative_to="joint_RW_J_Pitch">0 0 0 0 0 0</pose>
             <inertial>
-               <pose>0.375 -0.050083 7.3865E-18 0 0 0</pose>
-               <mass>0.3629</mass>
+               <pose>0.0375 -0.00563011555355997 3.10971969344189E-20 0 0 0</pose>
+               <mass>0.000423935026696007</mass>
                <inertia>
-                  <ixx>0.014446</ixx>
-                  <ixy>6.0467E-18</ixy>
-                  <ixz>4.4759E-19</ixz>
-                  <iyy>0.111</iyy>
-                  <iyz>7.9212E-19</iyz>
-                  <izz>0.12497</izz>
+                  <ixx>2.65235443608576E-08</ixx>
+                  <ixy>-2.93064684625566E-23</ixy>
+                  <ixz>-1.65258864845697E-24</ixz>
+                  <iyy>1.98779779728036E-07</iyy>
+                  <iyz>-3.47087198051225E-26</iyz>
+                  <izz>2.25182852160328E-07</izz>
                </inertia>
             </inertial>
             <visual name="RW_Pitch">
                <pose relative_to="joint_RW_J_Pitch">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/RW_Pitch.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/RW_Pitch.STL</uri>
+                  </mesh>
+               </geometry>
+            </visual>
+            <collision name="RW_Pitch">
+               <pose relative_to="joint_RW_J_Pitch">0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>model://URDF_Tiny/meshes/RW_Pitch.STL</uri>
+                  </mesh>
+               </geometry>
+               <material>
+                  <ambient>0.0 1.0 0.0 .8</ambient>
+                  <diffuse>0.0 1.0 0.0 .8</diffuse>
+                  <specular>0.0 1.0 0.0 .75</specular>
+               </material>
+            </collision>
+         </link>
+         <link name="LW_Flap">
+            <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
+            <inertial>
+               <pose>-0.00333837466497408 0.00333837466497408 -2.6213145100327E-20 0 0 0</pose>
+               <mass>3.89068170490654E-05</mass>
+               <inertia>
+                  <ixx>6.78208726623603E-11</ixx>
+                  <ixy>8.49217730939301E-11</ixy>
+                  <ixz>-1.64845713489435E-27</ixz>
+                  <iyy>3.57554255139679E-10</iyy>
+                  <iyz>-1.22977512422724E-27</iyz>
+                  <izz>4.05921719277506E-10</izz>
+               </inertia>
+            </inertial>
+            <visual name="LW_Flap">
+               <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
+               <geometry>
+                  <mesh>
+                     <uri>model://URDF_Tiny/meshes/LW_Flap.STL</uri>
                   </mesh>
                </geometry>
                <material>
@@ -156,164 +187,101 @@
                   <specular>0.0 1.0 0.0 .75</specular>
                </material>
             </visual>
-            <collision name="RW_Pitch">
-               <pose relative_to="joint_RW_J_Pitch">0 0 0 0 0 0</pose>
-               <geometry>
-                  <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/RW_Pitch.STL</uri>
-                  </mesh>
-               </geometry>
-            </collision>
-         </link>
-         <link name="LW_Flap">
-            <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
-            <inertial>
-               <pose>0.032766 0.034001 -8.7011E-19 0 0 0</pose>
-               <mass>0.15563</mass>
-               <inertia>
-                  <ixx>4.7427E-05</ixx>
-                  <ixy>-3.1144E-05</ixy>
-                  <ixz>-3.1293E-21</ixz>
-                  <iyy>0.00016366</iyy>
-                  <iyz>-6.839E-22</iyz>
-                  <izz>0.00017996</izz>
-               </inertia>
-            </inertial>
-            <visual name="LW_Flap">
-               <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
-               <geometry>
-                  <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/LW_Flap.STL</uri>
-                  </mesh>
-               </geometry>
-               <material>
-                  <ambient>1.0 0.0 1.0 .9</ambient>
-                  <diffuse>1.0 0.0 1.0 .9</diffuse>
-                  <specular>1.0 0.0 1.0 .9</specular>
-               </material>
-            </visual>
             <collision name="LW_Flap">
                <pose relative_to="joint_LW_J_Flap">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/LW_Flap.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/LW_Flap.STL</uri>
                   </mesh>
                </geometry>
             </collision>
          </link>
+         <joint name="joint_RW_J_Pitch" type="revolute">
+            <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0 0 0</pose>
+            <parent>RW_Flap</parent>
+            <child>RW_Pitch</child>
+            <axis>
+               <xyz>-1 0 0</xyz>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+         <joint name="joint_RW_J_Flap" type="revolute">
+            <pose relative_to="base_link">0.00666143782776616 0 0 0 0 0</pose>
+            <parent>base_link</parent>
+            <child>RW_Flap</child>
+            <axis>
+               <xyz>0 -1 0</xyz>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+         <joint name="joint_LW_J_Flap" type="revolute">
+            <pose relative_to="base_link">-0.00666143782776616 0 0 0 0 0</pose>
+            <parent>base_link</parent>
+            <child>LW_Flap</child>
+            <axis>
+               <xyz>0 -1 0</xyz>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
          <link name="LW_Pitch">
             <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
             <inertial>
-               <pose>-0.375 -0.050083 1.3712E-18 0 0 0</pose>
-               <mass>0.3629</mass>
-               <!-- <mass>100</mass> -->
+               <pose>-0.0375 -0.00563011555355997 6.26802875709381E-20 0 0 0</pose>
+               <mass>0.000423935026696007</mass>
                <inertia>
-                  <ixx>0.014446</ixx>
-                  <ixy>6.0467E-18</ixy>
-                  <ixz>4.4759E-19</ixz>
-                  <iyy>0.111</iyy>
-                  <iyz>-8.8618E-19</iyz>
-                  <izz>0.12497</izz>
+                  <ixx>2.65235443608576E-08</ixx>
+                  <ixy>-1.09267072911845E-23</ixy>
+                  <ixz>-1.65258864845697E-24</ixz>
+                  <iyy>1.98779779728037E-07</iyy>
+                  <iyz>4.05208227165849E-26</iyz>
+                  <izz>2.25182852160328E-07</izz>
                </inertia>
             </inertial>
             <visual name="LW_Pitch">
                <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/LW_Pitch.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/LW_Pitch.STL</uri>
                   </mesh>
                </geometry>
-c
+               <material>
+                  <ambient>0.0 1.0 0.0 .8</ambient>
+                  <diffuse>0.0 1.0 0.0 .8</diffuse>
+                  <specular>0.0 1.0 0.0 .75</specular>
+               </material>
             </visual>
             <collision name="LW_Pitch">
                <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_Bodies2.SLDASM/meshes/LW_Pitch.STL</uri>
+                     <uri>model://URDF_Tiny/meshes/LW_Pitch.STL</uri>
                   </mesh>
                </geometry>
+               <material>
+                  <ambient>0.0 1.0 0.0 .8</ambient>
+                  <diffuse>0.0 1.0 0.0 .8</diffuse>
+                  <specular>0.0 1.0 0.0 .75</specular>
+               </material>
             </collision>
          </link>
-
-         <!-- joints -->
          <joint name="joint_LW_J_Pitch" type="revolute">
-            <pose relative_to="LW_Flap">-0.09 0.04 0 0 0 0</pose> <!-- -0.785398 x -->
+            <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0 0 0</pose>
             <parent>LW_Flap</parent>
             <child>LW_Pitch</child>
             <axis>
                <xyz>1 0 0</xyz>
-               <dynamics>
-                  <damping>.5</damping>
-                  <friction>1</friction>   
-                  <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>20</spring_stiffness>
-               </dynamics>
                <limit>
-                  <lower>-1.57</lower>
-                  <upper>1.57</upper>
-               </limit> 
-            </axis>
-         </joint>
-         
-         <joint name="joint_RW_J_Pitch" type="revolute"> <!--positive rot for down-->
-            <pose relative_to="RW_Flap">0.09 0.04 0 0 0 0</pose> <!-- 0.785398 x -->
-            <parent>RW_Flap</parent>
-            <child>RW_Pitch</child>
-            <axis>
-               <xyz>-1 0 0</xyz>
-               <dynamics>
-                  <damping>.5</damping>
-                  <friction>1</friction>   
-                  <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>20</spring_stiffness>
-               </dynamics>
-               <limit>
-                  <lower>-1.0472</lower>
-                  <upper>1.0472</upper>
-               </limit>
-            </axis>
-         </joint>
-
-         <joint name="joint_LW_J_Flap" type="revolute">
-            <!-- <pose relative_to="base_link">-0.12329 0 0 0 0.261799 0</pose> -->
-            <pose relative_to="base_link">-0.12329 0 0 0 0 0</pose>
-            <parent>base_link</parent>
-            <child>LW_Flap</child>
-            <axis>
-               <xyz>0 -1 0</xyz>
-               <dynamics>
-                  <!-- <damping>.5</damping> -->
-                  <!-- <friction>1</friction>    -->
-                  <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1</spring_stiffness>
-               </dynamics>
-               <limit>
-                  <!-- <lower>-3.14</lower>
-                  <upper>3.14</upper> -->
-                  <lower>-1.0472</lower>
-                  <upper>1.0472</upper>
-               </limit>
-            </axis>
-         </joint>
-         
-         <joint name="joint_RW_J_Flap" type="revolute"> <!--positive rot for down-->
-            <!-- <pose relative_to="base_link">0.12329 0 0 0 -0.261799 0</pose> -->
-            <pose relative_to="base_link">0.12329 0 0 0 0 0</pose>
-            <parent>base_link</parent>
-            <child>RW_Flap</child>
-            <axis>
-               <xyz>0 -1 0</xyz>
-               <dynamics>
-                  <!-- <damping>.5</damping> -->
-                  <!-- <friction>1</friction>    -->
-                  <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1</spring_stiffness>
-               </dynamics>
-               <limit>
-                  <!-- <lower>-3.14</lower>
-                  <upper>3.14</upper> -->
-                  <lower>-1.57</lower>
-                  <upper>1.57</upper>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
                </limit>
             </axis>
          </joint>
@@ -333,7 +301,7 @@ c
             </axis>
          </joint>
 
-         <plugin filename="aero_state_plugins" name="aerodynamics">
+         <!-- <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/grasshopper/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
             <link>
                 <link_name>RW_Pitch</link_name>
@@ -345,9 +313,9 @@ c
                 <control_joint>joint_RW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_RW_J_Pitch</wing_pitch_joint>
                 <blades>1</blades>
-                <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
+                <center_pressure_list>0,0,0</center_pressure_list>
                 <upward_vector_list>0,0,1</upward_vector_list>
-                <blade_area_list>1</blade_area_list> <!-- .1688 -->
+                <blade_area_list>0.0018</blade_area_list> 
             </link>
             <link>
                 <link_name>LW_Pitch</link_name>
@@ -359,11 +327,11 @@ c
                 <control_joint>joint_LW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_LW_J_Pitch</wing_pitch_joint>
                 <blades>1</blades>
-                <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
+                <center_pressure_list>0,0,0</center_pressure_list>
                 <upward_vector_list>0,0,1</upward_vector_list>
-                <blade_area_list>1</blade_area_list>
+                <blade_area_list>0.0018</blade_area_list>
             </link>
-         </plugin>
+         </plugin> -->
          <!-- controller/odom plugin-->
          <plugin 
             filename="aero_state_plugins" 
@@ -378,42 +346,39 @@ c
          </plugin>
 
          <!-- subscribes to model_name/joint/jointname/cmd_force , takes doubles -->
-         <!-- <plugin  
+         <!--wing links-->
+         <plugin  
             filename="libignition-gazebo-apply-joint-force-system.so" 
             name = "ignition::gazebo::systems::ApplyJointForce">
             <joint_name>joint_LW_J_Pitch</joint_name>
+         </plugin>
+         <plugin  
+            filename="libignition-gazebo-apply-joint-force-system.so" 
+            name = "ignition::gazebo::systems::ApplyJointForce">
+            <joint_name>joint_RW_J_Pitch</joint_name>
+         </plugin>
+
+         <!-- joints-->
+         <!-- <plugin  
+            filename="libignition-gazebo-apply-joint-force-system.so" 
+            name = "ignition::gazebo::systems::ApplyJointForce">
+            <joint_name>joint_LW_J_Flap</joint_name>
          </plugin> -->
          <!-- <plugin  
             filename="libignition-gazebo-apply-joint-force-system.so" 
             name = "ignition::gazebo::systems::ApplyJointForce">
-            <joint_name>joint_RW_J_Pitch</joint_name>
-         </plugin> -->
-         
-         <!--flapping-->
-         <plugin  
-            filename="libignition-gazebo-apply-joint-force-system.so" 
-            name = "ignition::gazebo::systems::ApplyJointForce">
-            <joint_name>joint_LW_J_Flap</joint_name>
-         </plugin>
-         <plugin  
-            filename="libignition-gazebo-apply-joint-force-system.so" 
-            name = "ignition::gazebo::systems::ApplyJointForce">
          <joint_name>joint_RW_J_Flap</joint_name> 
-         </plugin>
+         </plugin> -->
 
-         <plugin
+         <!-- <plugin
                 filename="libignition-gazebo-diff-drive-system.so"
                 name="ignition::gazebo::systems::DiffDrive">
                 <left_joint>joint_LW_J_Flap</left_joint>
                 <right_joint>joint_RW_J_Flap</right_joint>
                 <wheel_separation>2</wheel_separation>
                 <wheel_radius>0.4</wheel_radius>
-                <!-- <odom_publish_frequency>4</odom_publish_frequency> -->
-                <!-- <odom_topic>odom</odom_topic> -->
                 <topic>/world/diff_drive/cmd_vel</topic>
-                <!-- <topic>cmd_vel</topic> -->
-         </plugin>
+         </plugin> -->
       </model>
-      <!-- <gravity>0 0 0</gravity> -->
    </world>
 </sdf>

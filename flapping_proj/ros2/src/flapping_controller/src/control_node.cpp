@@ -132,21 +132,21 @@ class ControlNode : public rclcpp::Node
 			sin_torque_control();
 			
 			//Publishes joint torques
-			// auto message = std_msgs::msg::Float64();
-			int flag = 0;
-			auto msg = geometry_msgs::msg::Twist(); 
+			auto message = std_msgs::msg::Float64();
+			// int flag = 0;
+			// auto msg = geometry_msgs::msg::Twist(); 
 			for (auto & joint : _jointTorqueControlMap) {
-				// message.data = joint.second;
-				// _jointControlPublishersMap[joint.first]->publish(message);
+				message.data = joint.second;
+				_jointControlPublishersMap[joint.first]->publish(message);
 				
 				
 				// msg.linear.x = joint.second; //same direction spin
-				msg.angular.z = joint.second;
+				// msg.angular.z = joint.second;
 				//Execute once 
-				if(flag == 0){
-					_diffDriveVelPublisher->publish(msg);
-					flag = 1;
-				}
+				// if(flag == 0){
+				// 	_diffDriveVelPublisher->publish(msg);
+				// 	flag = 1;
+				// }
 			}
 
 			
@@ -164,11 +164,11 @@ class ControlNode : public rclcpp::Node
 				joint.second = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime + phase);
 				
 				//square wave (min max)
-				if (joint.second < 0) {
-					joint.second = -amplitude;
-				} else {
-					joint.second = amplitude;
-				}
+				// if (joint.second < 0) {
+				// 	joint.second = -amplitude;
+				// } else {
+				// 	joint.second = amplitude;
+				// }
 
 			} 
 		}

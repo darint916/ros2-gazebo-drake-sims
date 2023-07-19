@@ -9,6 +9,7 @@ def process_user_input():
     #TODO: YAML CONFIG FILE FROM GUI
     ''''''''''''''''''''''''
     joint_names = ['joint_LW_J_Pitch', 'joint_RW_J_Pitch', 'joint_LW_J_Flap', 'joint_RW_J_Flap']
+    # model_name = 'URDF_Tiny'
     model_name = 'URDF_Bodies2SLDASM'
     # world_name = 'world1'
     ''''''''''''''''''''''''
@@ -17,7 +18,9 @@ def process_user_input():
 
 def generate_launch_description():
     current_dir = os.path.dirname(os.path.abspath(__file__))
+    # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flap_mini.sdf')
     sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
+
     data_file = os.path.join(current_dir, '..', 'data', 'data.csv')
 
     joint_names, model_name = process_user_input()
@@ -45,8 +48,8 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 60}, #not implemented yet?
                 {'data_file_path': data_file}, 
-                {'amplitude': 7.0},
-                {'frequency': 3.0},
+                {'amplitude': 2.0},
+                {'frequency': 5.0},
             ]
         ),
         Node(
