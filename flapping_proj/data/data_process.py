@@ -81,13 +81,18 @@ else:
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
-
 #script dir to get abs path
 script_dir = os.path.dirname(os.path.abspath(__file__))
 csv_source = os.path.join(script_dir, csv_name)
-csv_dest = os.path.join(script_dir, folder_name, csv_name)
+csv_dest = os.path.join(script_dir, folder_name, 'data', csv_name)
+
+dest_folder = os.path.dirname(csv_dest)
+if not os.path.exists(dest_folder):
+    os.makedirs(dest_folder)
+
 shutil.copy2(csv_source, csv_dest)
 
+folder_name = os.path.join(folder_name + '/aero_plots')
 # Extract the required columns
 time = data['time'].to_numpy()
 position_x = data['position_x'].to_numpy()

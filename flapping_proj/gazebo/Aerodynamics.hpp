@@ -76,7 +76,6 @@ namespace aerodynamics
         std::string linkType; //Wing, Generic, etc.
 
         double stallAngle = 0; //degrees
-
         bool reportData = false;
         bool validConfig = false;
         bool initialized = false;
@@ -95,9 +94,10 @@ namespace aerodynamics
         void Update(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm);
 
         //data writer
-		std::string _dataHeaders;
-		std::ofstream _csvFile;
-        std::ofstream _csvWriter;
+        bool onlyData = false;
+		std::string dataHeaders;
+		std::ofstream csvFile;
+        std::ofstream csvWriter;
     };
     
     class Aerodynamics : public igz::System, public igz::ISystemConfigure, public igz:: ISystemPreUpdate

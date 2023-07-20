@@ -329,8 +329,9 @@
             </axis>
          </joint>
 
-         <!-- <plugin filename="aero_state_plugins" name="aerodynamics">
+         <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/grasshopper/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
+            <only_data>true</only_data>
             <link>
                 <link_name>RW_Pitch</link_name>
                 <link_type>wing</link_type>
@@ -359,7 +360,7 @@
                 <upward_vector_list>0,0,1</upward_vector_list>
                 <blade_area_list>0.0018</blade_area_list>
             </link>
-         </plugin> -->
+         </plugin>
 
          <!-- controller/odom plugin-->
          <plugin 
