@@ -248,11 +248,13 @@
                   <!-- <damping>.5</damping> -->
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.005</spring_stiffness>
+                  <spring_stiffness>.003</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
                   <upper>1.79769e+308</upper>
+                  <!-- <lower>0</lower>
+                  <upper>0</upper> -->
                </limit>
             </axis>
          </joint>
@@ -267,11 +269,13 @@
                   <!-- <damping>.5</damping> -->
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.005</spring_stiffness>
+                  <spring_stiffness>.003</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
                   <upper>1.79769e+308</upper>
+                  <!-- <lower>0</lower>
+                  <upper>0</upper> -->
                </limit>
             </axis>
          </joint>
@@ -286,7 +290,7 @@
                   <damping>.005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.16</spring_stiffness>
+                  <spring_stiffness>.6</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -305,7 +309,7 @@
                   <damping>.005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.16</spring_stiffness>
+                  <spring_stiffness>.6</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -341,10 +345,11 @@
                 <lift_coefficient>1</lift_coefficient>
                 <control_joint>joint_RW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_RW_J_Pitch</wing_pitch_joint>
-                <blades>1</blades>
-                <center_pressure_list>0,0,0</center_pressure_list>
-                <upward_vector_list>0,0,1</upward_vector_list>
-                <blade_area_list>0.0018</blade_area_list> 
+                <blades>15</blades>
+                <center_pressure_list>-.0370,-0.007,0, -.0320,-0.007,0, -.0270,-0.007,0, -.0220,-0.007,0, -.0170,-0.007,0, -.0120,-0.007,0, -.0070,-0.007,0, -.002,-0.007,0, .0030,-0.007,0, .008,-0.007,0, .0130,-0.007,0, .0180,-0.007,0, .0230,-0.007,0, .0280,-0.007,0, .0330,-0.007,0 </center_pressure_list>
+                <upward_vector_list>0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1 </upward_vector_list>
+                <!-- <blade_area_list>0.0018</blade_area_list>  -->
+                <blade_area_list>0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012 </blade_area_list>
             </link>
             <link>
                 <link_name>LW_Pitch</link_name>
@@ -355,10 +360,14 @@
                 <lift_coefficient>1</lift_coefficient>
                 <control_joint>joint_LW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_LW_J_Pitch</wing_pitch_joint>
-                <blades>1</blades>
-                <center_pressure_list>0,0,0</center_pressure_list>
-                <upward_vector_list>0,0,1</upward_vector_list>
-                <blade_area_list>0.0018</blade_area_list>
+                <blades>15</blades>
+                <!-- <center_pressure_list>0,0,0</center_pressure_list> -->
+               <center_pressure_list>-.0370,-0.007,0, -.0320,-0.007,0, -.0270,-0.007,0, -.0220,-0.007,0, -.0170,-0.007,0, -.0120,-0.007,0, -.0070,-0.007,0, -.002,-0.007,0, .0030,-0.007,0, .008,-0.007,0, .0130,-0.007,0, .0180,-0.007,0, .0230,-0.007,0, .0280,-0.007,0, .0330,-0.007,0 </center_pressure_list>
+                <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
+               <upward_vector_list>0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1 </upward_vector_list>
+                <!-- <blade_area_list>0.0018</blade_area_list> -->
+               <blade_area_list>0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012 </blade_area_list>
+
             </link>
          </plugin>
 

@@ -28,7 +28,7 @@ def generate_launch_description():
     joint_control_topics = []
     for joint in joint_names:
         joint_control_topics.append('/model/' + model_name + '/joint/' + joint + '/cmd_force')  
-
+    
 
     #default odom topic, then joint forces
     bridge_args = ['/odom@geometry_msgs/msg/PoseArray[gz.msgs.Pose_V', '/world/diff_drive/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist']
@@ -48,7 +48,7 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 1000}, 
                 {'data_file_path': data_file}, 
-                {'amplitude': .6},
+                {'amplitude': .8},
                 {'frequency': 15.0},
             ]
         ),

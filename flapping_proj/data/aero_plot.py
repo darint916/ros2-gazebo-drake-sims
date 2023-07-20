@@ -8,7 +8,6 @@ import sys
 import shutil
 
 csv_name = sys.argv[2] if len(sys.argv) == 3 else 'aero.csv'
-df = pd.read_csv(csv_name, skiprows=range(1,2)) #skip first 2 rows (not init vel data)
 
 if len(sys.argv) < 2:
     print("Usage: python3 data_process.py <folder_name> <optional:csv_name>")
@@ -38,13 +37,41 @@ folder_name = folder_name + '/aero_plots'
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 # Step 2: Create separate plots for each blade number
+df = pd.read_csv(csv_name, skiprows=range(1,30)) #skip first wing*blade rows starting at 1
 unique_wing_names = df['wing_name'].unique()
 unique_blade_numbers = df['blade_number'].unique()
+# print(df.head(3))
+for wing_name in unique_wing_names:
+    blade_data = df[(df['wing_name'] == wing_name)]
+    blade_force_x = blade_data['blade_force_x'].to_numpy()
+    blade_force_y = blade_data['blade_force_y'].to_numpy()
+    blade_force_z = blade_data['blade_force_z'].to_numpy()
+    blade_force_magnitude = np.sqrt(blade_force_x ** 2 + blade_force_y ** 2 + blade_force_z ** 2)
+    time = blade_data['time'].to_numpy()
+    combined_f = {}
+    for t, force in zip(time, blade_force_magnitude):
+        combined_f[t] = combined_f.get(t, 0) + force 
+        if t < .001:
+            print("t", t)
+            print("force", force)
+    time = np.array(list(combined_f.keys()))
+    blade_force_magnitude = np.array(list(combined_f.values()))
+    fig = plt.figure()
+    print("force magnitudes", blade_force_magnitude[:20])
+    fig = plt.figure()
+    plt.plot(time, blade_force_magnitude)
+    plt.xlabel('Time (s)')
+    plt.ylabel('Blade Force Magnitude (Nm)')
+    plt.title(f'{wing_name}')
+    plt.grid(True)
+    fig.savefig(folder_name + '/force_mag_' + str(wing_name) + '.png')
+    plt.show()
 
 for wing_name in unique_wing_names:
     print("wing name", wing_name)
     for blade_number in unique_blade_numbers:
-        blade_data = df[(df['wing_name'] == wing_name) & (df['blade_number'] == blade_number)]
+        # blade_data = df[(df['wing_name'] == wing_name) & (df['blade_number'] == blade_number)]
+        blade_data = df[(df['wing_name'] == wing_name)]
         blade_force_x = blade_data['blade_force_x']
         blade_force_y = blade_data['blade_force_y']
         blade_force_z = blade_data['blade_force_z'].to_numpy()
@@ -52,9 +79,13 @@ for wing_name in unique_wing_names:
         blade_velocity_y = blade_data['blade_velocity_y'].to_numpy()
         blade_velocity_z = blade_data['blade_velocity_z'].to_numpy()
         blade_velocity_magnitude = np.sqrt(blade_velocity_x ** 2 + blade_velocity_y ** 2 + blade_velocity_z ** 2)
-        blade_force_magnitude = blade_force_x ** 2 + blade_force_y ** 2 + blade_force_z ** 2
-        blade_force_magnitude = np.sqrt(blade_force_magnitude).to_numpy()
+        blade_force_magnitude = np.sqrt(blade_force_x ** 2 + blade_force_y ** 2 + blade_force_z ** 2)
         time = blade_data['time'].to_numpy()
+        combined_f = {}
+        for t, force in zip(time, blade_force_magnitude):
+            combined_f[t] = combined_f.get(t, 0) + force 
+        time = np.array(list(combined_f.keys()))
+        blade_force_magnitude = np.array(list(combined_f.values()))
         # print("time first 10 rows", time[:10])
         # print("asdf", time[-1] )
         # print("asdf", len(time))
@@ -63,7 +94,7 @@ for wing_name in unique_wing_names:
         print("fft res len", len(fft_result))
         # print("z force len", len(blade_force_z))
         print("time len", int(time[-1] / .0001) - 2)
-        frequencies = np.fft.fftfreq(int(time[-1] / .0001) - 2, .0001)
+        # frequencies = np.fft.fftfreq(int(time[-1] / .0001) - 2, .0001)
         # time[-1] / .0001 - 2
         
         print("force magnitudes", blade_force_magnitude[:20])
@@ -73,7 +104,7 @@ for wing_name in unique_wing_names:
         plt.ylabel('Blade Force Magnitude (Nm)')
         plt.title(f'{wing_name} Blade Number {blade_number}')
         plt.grid(True)
-        fig.savefig(folder_name + '/force_mag_' + wing_name + "_" + str(blade_number) + '.png')
+        fig.savefig(folder_name + '/force_mag_' + str(wing_name) + "_" + str(blade_number) + '.png')
         plt.show(block=False)
 
         fig = plt.figure()
@@ -82,7 +113,7 @@ for wing_name in unique_wing_names:
         plt.ylabel('Blade Velocity Magnitude (m/s)')
         plt.title(f'{wing_name} Blade Number {blade_number}')
         plt.grid(True)
-        fig.savefig(folder_name + '/vel_mag_'+ wing_name + "_" + str(blade_number) + '.png' )
+        fig.savefig(folder_name + '/vel_mag_'+ str(wing_name) + "_" + str(blade_number) + '.png' )
         plt.show()
         # Step 3: Create a 3D plot for each blade number
         # print("mean force x", np.mean(blade_force_z))
@@ -94,14 +125,14 @@ for wing_name in unique_wing_names:
         # plt.grid(True)
         # plt.show()
 
-        fig = plt.figure()
-        plt.plot(frequencies, np.abs(fft_result))
-        plt.xlabel('Frequency (Hz)')
-        plt.ylabel('Amplitude')
-        plt.title(f'{wing_name} FFT of Blade Force Z - Blade Number {blade_number}')
-        plt.grid(True)
-        fig.savefig(folder_name + '/fft_blade'+ wing_name + "_" + str(blade_number) +'.png')
-        plt.show()
+        # fig = plt.figure()
+        # plt.plot(frequencies, np.abs(fft_result))
+        # plt.xlabel('Frequency (Hz)')
+        # plt.ylabel('Amplitude')
+        # plt.title(f'{wing_name} FFT of Blade Force Z - Blade Number {blade_number}')
+        # plt.grid(True)
+        # fig.savefig(folder_name + '/fft_blade'+ wing_name + "_" + str(blade_number) +'.png')
+        # plt.show()
 
         # Step 4: Plot the blade force vectors as arrows
         # ax.quiver(0, 0, 0, blade_force_x, blade_force_y, blade_force_z, label='Blade Force')

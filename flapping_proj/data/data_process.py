@@ -92,7 +92,9 @@ if not os.path.exists(dest_folder):
 
 shutil.copy2(csv_source, csv_dest)
 
-folder_name = os.path.join(folder_name + '/aero_plots')
+folder_name = os.path.join(folder_name, 'data_plots')
+if not os.path.exists(folder_name):
+    os.makedirs(folder_name)
 # Extract the required columns
 time = data['time'].to_numpy()
 position_x = data['position_x'].to_numpy()
@@ -191,22 +193,22 @@ fig.savefig(folder_name + '/joint_angles_zoom.png')
 plt.show()
 
 # Create the 3D figure (initialization)
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-roll, pitch, yaw = quaternion_to_euler(quaternion_x[0], quaternion_y[0], quaternion_z[0], quaternion_w[0])
-ax.plot(position_x, position_y, position_z, marker='o', markersize=2)
-fig.savefig(folder_name + '/static_traj.png')
-quivers = ax.quiver(position_x[0], position_y[0], position_z[0], roll, pitch, yaw, color='r', label='Model', alpha=0.5)
-ax.plot(position_x[0], position_y[0], position_z[0], marker='o')
+# fig = plt.figure()
+# ax = fig.add_subplot(111, projection='3d')
+# roll, pitch, yaw = quaternion_to_euler(quaternion_x[0], quaternion_y[0], quaternion_z[0], quaternion_w[0])
+# ax.plot(position_x, position_y, position_z, marker='o', markersize=2)
+# fig.savefig(folder_name + '/static_traj.png')
+# quivers = ax.quiver(position_x[0], position_y[0], position_z[0], roll, pitch, yaw, color='r', label='Model', alpha=0.5)
+# ax.plot(position_x[0], position_y[0], position_z[0], marker='o')
 
 # Create animation
-print("Creating limited animation...")
-animation = FuncAnimation(fig, update, frames=len(time), interval=100, blit=False)
-animation.save(folder_name + '/animation.gif', writer='pillow')
+# print("Creating limited animation...")
+# animation = FuncAnimation(fig, update, frames=len(time), interval=100, blit=False)
+# animation.save(folder_name + '/animation.gif', writer='pillow')
 
-print("Creating dynamic animation...")
-animation = FuncAnimation(fig, update_dynamic, frames=len(time), interval=100, blit=False)
-animation.save(folder_name + '/animation_dynamic.gif', writer='pillow')
+# print("Creating dynamic animation...")
+# animation = FuncAnimation(fig, update_dynamic, frames=len(time), interval=100, blit=False)
+# animation.save(folder_name + '/animation_dynamic.gif', writer='pillow')
 
 # Show the plots
-plt.show()
+# plt.show()
