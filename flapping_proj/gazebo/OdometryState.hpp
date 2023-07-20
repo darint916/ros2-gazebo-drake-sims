@@ -11,18 +11,18 @@ namespace odometry_state
     {
         ignition::gazebo::Model model{ignition::gazebo::kNullEntity};
         ignition::transport::Node node; //used directly for subscription, indirectly for publishing
-        ignition::transport::Node::Publisher odomPublisher; //subclass to store node.Advertise(), publishing
-        // ignition::transport::Node::Publisher jointAnglePublisher;                                                                                                                                                                                                                                                                                                                                                                               
+        ignition::transport::Node::Publisher odomPu
+        public:
+            OdometryState();
+            ~OdometryState() override = default;
 
-        std::chrono::steady_clock::duration odomPubPeriod;
-        std::chrono::steady_clock::duration prevOdomPubTime = std::chrono::steady_clock::duration::zero();
-        std::mutex mutex;
+            void Configure(const ignition::gazebo::Entity &_entity, const std::shared_ptr<const sdf::Element> &_sdf, ignition::gazebo::EntityComponentManager &_ecm, ignition::gazebo::EventManager &_eventMgr) override;
+            // void PreUpdate(const ignition::gazebo::UpdateInfo& _info, ignition::gazebo::EntityComponentManager& _ecm) override;
+            void PostUpdate(const ignition::gazebo::UpdateInfo &_info, const ignition::gazebo::EntityComponentManager &_ecm) override;            
+    };
+}
 
-        // ignition::gazebo::Entity canonicalLink;
-        
-        std::string modelName;
-        int modelPositionIndex = -1;
-        std::map<std::string, ignition::gazebo::Entity> jointMap;
+#endif // __ODOMETRY_STATE_HPP__
 
 
         void PositionCallBack(const ignition::msgs::Pose_V &_msg);

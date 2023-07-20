@@ -9,7 +9,7 @@ def process_user_input():
     #TODO: YAML CONFIG FILE FROM GUI
     ''''''''''''''''''''''''
     joint_names = ['joint_LW_J_Pitch', 'joint_RW_J_Pitch', 'joint_LW_J_Flap', 'joint_RW_J_Flap']
-    model_name = 'URDF_Tiny'
+    model_name = 'URDF_Tiny' 
     # model_name = 'URDF_Bodies2SLDASM'
     # world_name = 'world1'
     ''''''''''''''''''''''''
@@ -46,10 +46,10 @@ def generate_launch_description():
                 {'joint_names': joint_names},
                 {'joint_control_topics': joint_control_topics},
                 {'position_topic': position_topic},
-                {'control_publish_frequency': 10000}, 
+                {'control_publish_frequency': 1000}, 
                 {'data_file_path': data_file}, 
-                {'amplitude': 400.0},
-                {'frequency': 10.0},
+                {'amplitude': .6},
+                {'frequency': 15.0},
             ]
         ),
         Node(

@@ -51,7 +51,7 @@
          </link>
       </model>
       <model name="URDF_Tiny"> 
-         <pose relative_to="world">0 0 010 1.5708 0 0</pose>
+         <pose relative_to="world">0 0 1 1.5708 0 0</pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -196,42 +196,6 @@
                </geometry>
             </collision>
          </link>
-         <joint name="joint_RW_J_Pitch" type="revolute">
-            <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0 0 0</pose>
-            <parent>RW_Flap</parent>
-            <child>RW_Pitch</child>
-            <axis>
-               <xyz>-1 0 0</xyz>
-               <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit>
-            </axis>
-         </joint>
-         <joint name="joint_RW_J_Flap" type="revolute">
-            <pose relative_to="base_link">0.00666143782776616 0 0 0 0 0</pose>
-            <parent>base_link</parent>
-            <child>RW_Flap</child>
-            <axis>
-               <xyz>0 -1 0</xyz>
-               <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit>
-            </axis>
-         </joint>
-         <joint name="joint_LW_J_Flap" type="revolute">
-            <pose relative_to="base_link">-0.00666143782776616 0 0 0 0 0</pose>
-            <parent>base_link</parent>
-            <child>LW_Flap</child>
-            <axis>
-               <xyz>0 -1 0</xyz>
-               <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit>
-            </axis>
-         </joint>
          <link name="LW_Pitch">
             <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
             <inertial>
@@ -273,12 +237,76 @@
                </material>
             </collision>
          </link>
+
+         <joint name="joint_RW_J_Pitch" type="revolute">
+            <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0 0 0</pose>
+            <parent>RW_Flap</parent>
+            <child>RW_Pitch</child>
+            <axis>
+               <xyz>-1 0 0</xyz>
+               <dynamics>
+                  <!-- <damping>.5</damping> -->
+                  <!-- <friction>1</friction>    -->
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <spring_stiffness>.005</spring_stiffness>
+               </dynamics>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+
          <joint name="joint_LW_J_Pitch" type="revolute">
             <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0 0 0</pose>
             <parent>LW_Flap</parent>
             <child>LW_Pitch</child>
             <axis>
                <xyz>1 0 0</xyz>
+               <dynamics>
+                  <!-- <damping>.5</damping> -->
+                  <!-- <friction>1</friction>    -->
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <spring_stiffness>.005</spring_stiffness>
+               </dynamics>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+
+         <joint name="joint_RW_J_Flap" type="revolute">
+            <pose relative_to="base_link">0.00666143782776616 0 0 0 0 0</pose>
+            <parent>base_link</parent>
+            <child>RW_Flap</child>
+            <axis>
+               <xyz>0 -1 0</xyz>
+               <dynamics>
+                  <damping>.005</damping>
+                  <!-- <friction>1</friction>    -->
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <spring_stiffness>.16</spring_stiffness>
+               </dynamics>
+               <limit>
+                  <lower>-1.79769e+308</lower>
+                  <upper>1.79769e+308</upper>
+               </limit>
+            </axis>
+         </joint>
+
+         <joint name="joint_LW_J_Flap" type="revolute">
+            <pose relative_to="base_link">-0.00666143782776616 0 0 0 0 0</pose>
+            <parent>base_link</parent>
+            <child>LW_Flap</child>
+            <axis>
+               <xyz>0 -1 0</xyz>
+               <dynamics>
+                  <damping>.005</damping>
+                  <!-- <friction>1</friction>    -->
+                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <spring_stiffness>.16</spring_stiffness>
+               </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
                   <upper>1.79769e+308</upper>
@@ -337,7 +365,7 @@
          <plugin 
             filename="aero_state_plugins" 
             name="odometry_state">
-            <world_name>world1</world_name>
+            <world_name>world2</world_name>
             <odometry_topic>/odom</odometry_topic>
             <odom_publish_frequency>1000.0</odom_publish_frequency>
             <joint>joint_LW_J_Flap</joint> 

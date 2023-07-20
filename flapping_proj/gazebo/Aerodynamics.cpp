@@ -87,7 +87,6 @@ void Aerodynamics::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentM
     IGN_PROFILE("Aerodynamics::PreUpdate");
     // We call Load here instead of Configure because we can't be guaranteed
     // that all entities have been created when Configure is called
-    //(Should test ^)
     if (!this->dataPtr->initialized){
         this->dataPtr->initialized = true;
         this->dataPtr->Load(_ecm, this->dataPtr->sdfConfig);
