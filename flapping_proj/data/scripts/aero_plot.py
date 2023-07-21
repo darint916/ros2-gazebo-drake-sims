@@ -39,7 +39,8 @@ folder_name = folder_name + '/aero_plots'
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 # Step 2: Create separate plots for each blade number
-df = pd.read_csv(csv_name, skiprows=range(1,30)) #skip first wing*blade rows starting at 1
+# df = pd.read_csv(csv_name, skiprows=range(1,30)) #skip first wing*blade rows starting at 1
+df = pd.read_csv(csv_name, skiprows=range(1,1783405)) #.00001 sim time skips transcient
 unique_wing_names = df['wing_name'].unique()
 unique_blade_numbers = df['blade_number'].unique()
 # print(df.head(3))

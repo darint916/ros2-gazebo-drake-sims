@@ -1,4 +1,0 @@
-mean force magnitude: 0.13944979022430593
-
-amp .4
-30hz

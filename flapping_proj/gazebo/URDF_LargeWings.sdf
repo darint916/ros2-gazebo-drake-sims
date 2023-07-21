@@ -3,7 +3,7 @@
    <world name="world2">
       <physics name="1ms" type="ignored">
          <max_step_size>0.00001</max_step_size>
-         <real_time_factor>.05</real_time_factor>
+         <real_time_factor>1</real_time_factor>
       </physics>
       <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
         </plugin>
@@ -235,11 +235,11 @@
             <axis>
                <xyz>-1 0 0</xyz>
                <dynamics>
-                  <!-- <damping>.5</damping> -->
+                  <damping>.000001</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.23</spring_stiffness>
+                  <spring_stiffness>.4</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
@@ -259,11 +259,11 @@
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
-                  <!-- <damping>.5</damping> -->
+                  <damping>.000001</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.23</spring_stiffness>
+                  <spring_stiffness>.4</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
@@ -282,10 +282,10 @@
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <damping>.000001</damping>
+                  <damping>.00005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1.5</spring_stiffness>
+                  <spring_stiffness>2</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -300,10 +300,10 @@
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <damping>.000001</damping>
+                  <damping>.00005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1.5</spring_stiffness>
+                  <spring_stiffness>2</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -339,7 +339,7 @@
          </joint>
 
          <plugin filename="aero_state_plugins" name="aerodynamics">
-            <data_file_path>/home/grasshopper/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
+            <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
             <only_data>true</only_data>
             <link>
                 <link_name>RW_Pitch</link_name>
