@@ -25,8 +25,8 @@ else:
 script_dir = os.path.dirname(os.path.abspath(__file__))
 csv_source = os.path.join(script_dir, csv_name)
 csv_dest = os.path.join(script_dir, folder_name, 'data', csv_name)
-print("csv source", csv_source)
-print("csv dest", csv_dest)
+# print("csv source", csv_source)
+# print("csv dest", csv_dest)
 
 dest_folder = os.path.dirname(csv_dest)
 if not os.path.exists(dest_folder):
@@ -55,8 +55,8 @@ for wing_name in unique_wing_names:
         combined_f[t] = combined_f.get(t, 0) + force 
     time = np.array(list(combined_f.keys()))
     blade_force_magnitude = np.array(list(combined_f.values()))
-    fig = plt.figure()
-    print("force magnitudes", blade_force_magnitude[:20])
+    # fig = plt.figure()
+    # print("force magnitudes", blade_force_magnitude[:20])
     fig = plt.figure()
     plt.plot(time, blade_force_magnitude)
     plt.xlabel('Time (s)')
@@ -153,7 +153,7 @@ for wing_name in unique_wing_names:
         global quiver
         quiver.remove()
         quiver = ax.quiver(*get_arrow(t))
-    ani = FuncAnimation(fig, update, frames=100, interval=100)
+    ani = FuncAnimation(fig, update, frames=len(time)/3, interval=20)
     ani.save(folder_name + '/animation_' + str(wing_name) + '.gif', writer='pillow')
     plt.show()
 

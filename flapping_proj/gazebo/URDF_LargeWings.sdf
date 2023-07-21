@@ -2,8 +2,8 @@
 <sdf version="1.8">
    <world name="world2">
       <physics name="1ms" type="ignored">
-         <max_step_size>0.0001</max_step_size>
-         <real_time_factor>1.0</real_time_factor>
+         <max_step_size>0.00001</max_step_size>
+         <real_time_factor>.05</real_time_factor>
       </physics>
       <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
         </plugin>
@@ -228,8 +228,8 @@
             </collision>
          </link>
          <joint name="joint_RW_J_Pitch" type="revolute">
-            <!-- <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0 0 0</pose> -->
-            <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0.785398 0 0</pose>
+            <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0 0 0</pose>
+            <!-- <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0.785398 0 0</pose> -->
             <parent>RW_Flap</parent>
             <child>RW_Pitch</child>
             <axis>
@@ -239,8 +239,8 @@
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <!-- <spring_stiffness>.33</spring_stiffness> -->
-                  <spring_stiffness>10000</spring_stiffness>
+                  <spring_stiffness>.23</spring_stiffness>
+                  <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
                <limit>
@@ -252,8 +252,8 @@
             </axis>
          </joint>
          <joint name="joint_LW_J_Pitch" type="revolute">
-            <!-- <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0 0 0</pose> -->
-            <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0.785398 0 0</pose>
+            <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0 0 0</pose>
+            <!-- <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0.785398 0 0</pose> -->
             <parent>LW_Flap</parent>
             <child>LW_Pitch</child>
             <axis>
@@ -263,8 +263,8 @@
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <!-- <spring_stiffness>.33</spring_stiffness> -->
-                  <spring_stiffness>10000</spring_stiffness>
+                  <spring_stiffness>.23</spring_stiffness>
+                  <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
                <limit>
@@ -285,7 +285,7 @@
                   <damping>.000001</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1.3</spring_stiffness>
+                  <spring_stiffness>1.5</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -303,7 +303,7 @@
                   <damping>.000001</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1.3</spring_stiffness>
+                  <spring_stiffness>1.5</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
