@@ -248,7 +248,9 @@
                   <!-- <damping>.5</damping> -->
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.003</spring_stiffness>
+                  <!-- <spring_stiffness>.025</spring_stiffness> -->
+                                    <spring_stiffness>.5</spring_stiffness>
+
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -269,7 +271,9 @@
                   <!-- <damping>.5</damping> -->
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.003</spring_stiffness>
+                  <!-- <spring_stiffness>.025</spring_stiffness> -->
+                  <spring_stiffness>.5</spring_stiffness>
+
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -287,10 +291,10 @@
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <damping>.005</damping>
+                  <damping>.15</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.6</spring_stiffness>
+                  <spring_stiffness>2</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -306,10 +310,10 @@
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <damping>.005</damping>
+                  <damping>.15</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>.6</spring_stiffness>
+                  <spring_stiffness>2</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -335,7 +339,7 @@
 
          <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/grasshopper/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
-            <only_data>true</only_data>
+            <only_data>false</only_data>
             <link>
                 <link_name>RW_Pitch</link_name>
                 <link_type>wing</link_type>
@@ -349,7 +353,7 @@
                 <center_pressure_list>-.0370,-0.007,0, -.0320,-0.007,0, -.0270,-0.007,0, -.0220,-0.007,0, -.0170,-0.007,0, -.0120,-0.007,0, -.0070,-0.007,0, -.002,-0.007,0, .0030,-0.007,0, .008,-0.007,0, .0130,-0.007,0, .0180,-0.007,0, .0230,-0.007,0, .0280,-0.007,0, .0330,-0.007,0 </center_pressure_list>
                 <upward_vector_list>0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1 </upward_vector_list>
                 <!-- <blade_area_list>0.0018</blade_area_list>  -->
-                <blade_area_list>0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012 </blade_area_list>
+                <blade_area_list>0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018 </blade_area_list>
             </link>
             <link>
                 <link_name>LW_Pitch</link_name>
@@ -366,8 +370,9 @@
                 <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
                <upward_vector_list>0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1 </upward_vector_list>
                 <!-- <blade_area_list>0.0018</blade_area_list> -->
-               <blade_area_list>0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012 </blade_area_list>
-
+               <!-- <blade_area_list>0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012, 0.00012 </blade_area_list> -->
+               <!-- area increased by  50% -->
+               <blade_area_list>0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018, 0.00018 </blade_area_list>
             </link>
          </plugin>
 

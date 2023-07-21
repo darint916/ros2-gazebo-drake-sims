@@ -1,0 +1,1 @@
+mean force magnitude: 0.03221909611690978

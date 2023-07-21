@@ -67,6 +67,11 @@ for wing_name in unique_wing_names:
     fig.savefig(folder_name + '/force_mag_' + str(wing_name) + '.png')
     plt.show()
 
+    mean_val = np.mean(blade_force_magnitude)
+    with open(folder_name + "aero_data.txt", 'w') as file:
+        file.write("mean force magnitude: ")
+        file.write(str(mean_val))
+
 for wing_name in unique_wing_names:
     print("wing name", wing_name)
     for blade_number in unique_blade_numbers:

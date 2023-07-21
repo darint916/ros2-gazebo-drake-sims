@@ -95,8 +95,9 @@ void Aerodynamics::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentM
 
     if (_info.paused) return;
     
-    if(!this->dataPtr->validConfig){
+    if(!this->dataPtr->validConfig && !this->dataPtr->badConfigReported){
         ignerr << "Invalid config" << std::endl;
+        this->dataPtr->badConfigReported = true;
         return;
     }
     if (this->dataPtr->initialized && this->dataPtr->validConfig){

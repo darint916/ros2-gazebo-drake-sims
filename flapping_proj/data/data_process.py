@@ -176,8 +176,8 @@ fig2.savefig(folder_name + '/joint_angles.png')
 #big plot
 major_locator = ticker.MultipleLocator(base=.1)
 minor_locator = ticker.MultipleLocator(base=0.05)
-start_time = 3
-end_time = 3.3
+start_time = 2
+end_time = 2.3
 start_idx = np.argmax(time >= start_time)
 end_idx = np.argmax(time >= end_time)
 time_slice = time[start_idx:end_idx]

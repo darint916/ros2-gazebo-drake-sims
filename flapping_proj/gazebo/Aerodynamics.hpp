@@ -78,6 +78,7 @@ namespace aerodynamics
         double stallAngle = 0; //degrees
         bool reportData = false;
         bool validConfig = false;
+        bool badConfigReported = false;
         bool initialized = false;
         sdf::ElementPtr sdfConfig;
 
