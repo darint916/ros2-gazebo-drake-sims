@@ -50,7 +50,7 @@
             </visual>
          </link>
       </model>
-      <model name="URDF_LargeWings">
+      <model name="URDF_LargeWings"> <!-- flies in -y dir-->
          <pose relative_to="world">0 0 1 1.5708 0 0</pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
@@ -146,9 +146,9 @@
                   </mesh>
                </geometry>
                <material>
-                  <ambient>1.0 0.0 1.0 .9</ambient>
-                  <diffuse>1.0 0.0 1.0 .9</diffuse>
-                  <specular>1.0 0.0 1.0 .9</specular>
+                  <ambient>1.0 0.0 0.0 .9</ambient>
+                  <diffuse>1.0 0.0 0.0 .9</diffuse>
+                  <specular>1.0 0.0 0.0 .9</specular>
                </material>
             </visual>
             <collision name="RW_Pitch">
@@ -213,9 +213,10 @@
                   </mesh>
                </geometry>
                <material>
-                  <ambient>1.0 0.0 1.0 .9</ambient>
-                  <diffuse>1.0 0.0 1.0 .9</diffuse>
-                  <specular>1.0 0.0 1.0 .9</specular>
+                  <ambient>1.0 0.0 0.0 .9</ambient>
+                  <diffuse>1.0 0.0 0.0 .9</diffuse>
+                  <specular>1.0 0.0 0.0 .9</specular>
+
                </material>
             </visual>
             <collision name="LW_Pitch">
@@ -235,11 +236,11 @@
             <axis>
                <xyz>-1 0 0</xyz>
                <dynamics>
-                  <damping>.000001</damping>
+                  <damping>.000015</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.4</spring_stiffness>
+                  <spring_stiffness>.275</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
@@ -259,11 +260,11 @@
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
-                  <damping>.000001</damping>
+                  <damping>.000015</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.4</spring_stiffness>
+                  <spring_stiffness>.275</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
@@ -285,7 +286,7 @@
                   <damping>.00005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>2</spring_stiffness>
+                  <spring_stiffness>2.3</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -303,7 +304,7 @@
                   <damping>.00005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>2</spring_stiffness>
+                  <spring_stiffness>2.3</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -340,7 +341,7 @@
 
          <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
-            <only_data>true</only_data>
+            <only_data>false</only_data>
             <link>
                 <link_name>RW_Pitch</link_name>
                 <link_type>wing</link_type>
@@ -363,7 +364,7 @@
                 <link_type>wing</link_type>
                 <stall_angle>15</stall_angle>
                 <fluid_density>1.293</fluid_density>
-                <drag_coefficient>1</drag_coefficient>
+                <drag_coefficient>1.28</drag_coefficient>
                 <lift_coefficient>1</lift_coefficient>
                 <control_joint>joint_LW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_LW_J_Pitch</wing_pitch_joint>

@@ -22,11 +22,13 @@ else:
 
 
 # Step 1: Read the CSV file skipping the first 4 rows
-script_dir = os.path.dirname(os.path.abspath(__file__))
-csv_source = os.path.join(script_dir, csv_name)
+csv_dir =os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+script_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'processed_data')
+csv_source = os.path.join(csv_dir, csv_name)
 csv_dest = os.path.join(script_dir, folder_name, 'data', csv_name)
-# print("csv source", csv_source)
-# print("csv dest", csv_dest)
+
+print("csv source", csv_source)
+print("csv dest", csv_dest)
 
 dest_folder = os.path.dirname(csv_dest)
 if not os.path.exists(dest_folder):
@@ -34,13 +36,19 @@ if not os.path.exists(dest_folder):
 
 shutil.copy2(csv_source, csv_dest)
 # print(df.columns)
+def combine_time(time, val):
+    combined = {}
+    for t, v in zip(time, val):
+        combined[t] = combined.get(t, 0) + v
+    return np.array(list(combined.keys())), np.array(list(combined.values()))
 
-folder_name = folder_name + '/aero_plots'
+#TODO: prob dont hardcode script_dir for foldername, let user choose later
+folder_name = os.path.join(script_dir, folder_name, 'aero_plots') 
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 # Step 2: Create separate plots for each blade number
 # df = pd.read_csv(csv_name, skiprows=range(1,30)) #skip first wing*blade rows starting at 1
-df = pd.read_csv(csv_name, skiprows=range(1,1783405)) #.00001 sim time skips transcient
+df = pd.read_csv(csv_source, skiprows=range(1,1783405)) #.00001 sim time skips transcient
 unique_wing_names = df['wing_name'].unique()
 unique_blade_numbers = df['blade_number'].unique()
 # print(df.head(3))
@@ -51,17 +59,14 @@ for wing_name in unique_wing_names:
     blade_force_z = blade_data['blade_force_z'].to_numpy()
     blade_force_magnitude = np.sqrt(blade_force_x ** 2 + blade_force_y ** 2 + blade_force_z ** 2)
     time = blade_data['time'].to_numpy()
-    combined_f = {}
-    for t, force in zip(time, blade_force_magnitude):
-        combined_f[t] = combined_f.get(t, 0) + force 
-    time = np.array(list(combined_f.keys()))
-    blade_force_magnitude = np.array(list(combined_f.values()))
+    
+    time_combined, blade_force_magnitude = combine_time(time, blade_force_magnitude)
     # fig = plt.figure()
     # print("force magnitudes", blade_force_magnitude[:20])
     fig = plt.figure()
-    plt.plot(time, blade_force_magnitude)
+    plt.plot(time_combined, blade_force_magnitude)
     plt.xlabel('Time (s)')
-    plt.ylabel('Blade Force Magnitude (Nm)')
+    plt.ylabel('Blade Force Magnitude (N)')
     plt.title(f'{wing_name}')
     plt.grid(True)
     fig.savefig(folder_name + '/force_mag_' + str(wing_name) + '.png')
@@ -73,11 +78,7 @@ for wing_name in unique_wing_names:
         file.write(str(mean_val) + "\n")
     
 
-    combined_f_z = {}
-    for t, force in zip(time, blade_force_z):
-        combined_f_z[t] = combined_f_z.get(t, 0) + force
-    time = np.array(list(combined_f_z.keys()))
-    blade_force_z = np.array(list(combined_f_z.values()))
+    _, blade_force_z = combine_time(time, blade_force_z)
     
     mean_val = np.mean(blade_force_z)
     abs_mean_val = np.mean(np.abs(blade_force_z))
@@ -88,9 +89,10 @@ for wing_name in unique_wing_names:
         file.write("mean abs force z: ")
         file.write(str(abs_mean_val))
         file.write("\n")
-    
+    print("abs z force", abs_mean_val)
+    print("mean z force", mean_val)
     fig = plt.figure()
-    plt.plot(time, blade_force_z)
+    plt.plot(time_combined, blade_force_z)
     plt.xlabel('Time (s)')
     plt.ylabel('Blade Force Z (Nm)')
     plt.title(f'{wing_name}')
@@ -99,12 +101,7 @@ for wing_name in unique_wing_names:
     plt.show()
 
     #get y force 
-    combined_f_y = {}
-    for t, force in zip(time, blade_force_y):
-        combined_f_y[t] = combined_f_y.get(t, 0) + force
-    time = np.array(list(combined_f_y.keys()))
-    blade_force_y = np.array(list(combined_f_y.values()))
-
+    _, blade_force_y = combine_time(time, blade_force_y)
     mean_val = np.mean(blade_force_y)
     abs_mean_val = np.mean(np.abs(blade_force_y))
     with open(folder_name + "aero_data.txt", 'a') as file:
@@ -114,14 +111,11 @@ for wing_name in unique_wing_names:
         file.write("mean abs force y: ")
         file.write(str(abs_mean_val))
         file.write("\n")
-    
+    print("abs y force", abs_mean_val)
+    print("mean y force", mean_val)
     #get x force
-    combined_f_x = {}
-    for t, force in zip(time, blade_force_x):
-        combined_f_x[t] = combined_f_x.get(t, 0) + force
-    time = np.array(list(combined_f_x.keys()))
-    blade_force_x = np.array(list(combined_f_x.values())) 
-    
+    _, blade_force_x = combine_time(time, blade_force_x)
+
     mean_val = np.mean(blade_force_x)
     abs_mean_val = np.mean(np.abs(blade_force_x))
     with open(folder_name + "aero_data.txt", 'a') as file:
@@ -131,13 +125,14 @@ for wing_name in unique_wing_names:
         file.write("mean abs force x: ")
         file.write(str(abs_mean_val))
         file.write("\n")
-
-    
+    print("abs x force", abs_mean_val)
+    print("mean x force", mean_val)
     fig, ax = plt.subplots(subplot_kw=dict(projection="3d"))
     #create arrow for each time point
     vectors = np.array([blade_force_x, blade_force_y, blade_force_z]).T.reshape(-1, 3)
     
-    print("first 10 vectors", vectors[100:110])
+    # print("first 10 vectors", vectors[100:110])
+    #TODO: Fix animation + pathing
     def get_arrow(t):
         x = 0
         y = 0
