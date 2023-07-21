@@ -1,2 +1,0 @@
-50hz
-.5 amplitude

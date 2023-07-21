@@ -145,11 +145,6 @@
                      <uri>model://URDF_LargeWings/meshes/RW_Pitch.STL</uri>
                   </mesh>
                </geometry>
-               <material>
-                  <ambient>1.0 0.0 1.0 .9</ambient>
-                  <diffuse>1.0 0.0 1.0 .9</diffuse>
-                  <specular>1.0 0.0 1.0 .9</specular>
-               </material>
             </visual>
             <collision name="RW_Pitch">
                <pose relative_to="joint_RW_J_Pitch">0 0 0 0 0 0</pose>
@@ -212,11 +207,6 @@
                      <uri>model://URDF_LargeWings/meshes/LW_Pitch.STL</uri>
                   </mesh>
                </geometry>
-               <material>
-                  <ambient>1.0 0.0 1.0 .9</ambient>
-                  <diffuse>1.0 0.0 1.0 .9</diffuse>
-                  <specular>1.0 0.0 1.0 .9</specular>
-               </material>
             </visual>
             <collision name="LW_Pitch">
                <pose relative_to="joint_LW_J_Pitch">0 0 0 0 0 0</pose>
@@ -228,8 +218,7 @@
             </collision>
          </link>
          <joint name="joint_RW_J_Pitch" type="revolute">
-            <!-- <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0 0 0</pose> -->
-            <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0.785398 0 0</pose>
+            <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0 0 0</pose>
             <parent>RW_Flap</parent>
             <child>RW_Pitch</child>
             <axis>
@@ -239,8 +228,7 @@
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <!-- <spring_stiffness>.33</spring_stiffness> -->
-                  <spring_stiffness>10000</spring_stiffness>
+                  <spring_stiffness>.09</spring_stiffness>
 
                </dynamics>
                <limit>
@@ -252,8 +240,7 @@
             </axis>
          </joint>
          <joint name="joint_LW_J_Pitch" type="revolute">
-            <!-- <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0 0 0</pose> -->
-            <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0.785398 0 0</pose>
+            <pose relative_to="LW_Flap">-0.00899999999999999 0.004 0 0 0 0</pose>
             <parent>LW_Flap</parent>
             <child>LW_Pitch</child>
             <axis>
@@ -263,8 +250,7 @@
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <!-- <spring_stiffness>.33</spring_stiffness> -->
-                  <spring_stiffness>10000</spring_stiffness>
+                  <spring_stiffness>.09</spring_stiffness>
 
                </dynamics>
                <limit>
@@ -285,7 +271,7 @@
                   <damping>.000001</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1.3</spring_stiffness>
+                  <spring_stiffness>.77</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -303,7 +289,7 @@
                   <damping>.000001</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>1.3</spring_stiffness>
+                  <spring_stiffness>.77</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -312,18 +298,6 @@
             </axis>
          </joint>
 
-         <!-- <joint name="pole" type="prismatic">
-            <pose relative_to="base_link">0 0 0 0 0 0</pose>
-            <parent>world</parent>
-            <child>base_link</child>
-            <axis>
-               <xyz>0 1 0</xyz>
-               <limit>
-                  <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper>
-               </limit>
-            </axis>
-         </joint> -->
 
          <joint name="anchor" type="revolute"> 
             <pose relative_to="base_link">0 0 0 0 0 0</pose>
@@ -340,7 +314,7 @@
 
          <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/grasshopper/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
-            <only_data>true</only_data>
+            <only_data>false</only_data>
             <link>
                 <link_name>RW_Pitch</link_name>
                 <link_type>wing</link_type>
@@ -352,10 +326,8 @@
                 <wing_pitch_joint>joint_RW_J_Pitch</wing_pitch_joint>
                 <blades>9</blades>
                 <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
-                <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
                 <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-                <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
-                  <!-- <blade_area_list>0.0075</blade_area_list>  -->
+                <!-- <blade_area_list>0.0075</blade_area_list>  -->
                 <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
             </link>
             <link>
@@ -372,7 +344,6 @@
                 <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
                 <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
                <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-               <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
                <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
             </link>
          </plugin>
