@@ -3,7 +3,7 @@
    <world name="world2">
       <physics name="1ms" type="ignored">
          <max_step_size>0.00001</max_step_size>
-         <real_time_factor>1</real_time_factor>
+         <real_time_factor>.05</real_time_factor>
       </physics>
       <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
         </plugin>
@@ -236,11 +236,11 @@
             <axis>
                <xyz>-1 0 0</xyz>
                <dynamics>
-                  <damping>.000015</damping>
+                  <damping>.00005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.275</spring_stiffness>
+                  <spring_stiffness>.15</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
@@ -260,11 +260,11 @@
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
-                  <damping>.000015</damping>
+                  <damping>.00005</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.275</spring_stiffness>
+                  <spring_stiffness>.15</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>

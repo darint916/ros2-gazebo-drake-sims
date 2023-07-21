@@ -93,7 +93,8 @@ if not os.path.exists(dest_folder):
 
 shutil.copy2(csv_source, csv_dest)
 
-folder_name = os.path.join(folder_name, 'data_plots')
+folder_name = os.path.join(script_dir, folder_name, 'data_plots')
+print("folder: ", folder_name)
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 # Extract the required columns
@@ -115,6 +116,35 @@ joint_LW_J_Pitch_deg = np.degrees(joint_LW_J_Pitch)
 joint_RW_J_Pitch_deg = np.degrees(joint_RW_J_Pitch)
 joint_LW_J_Flap_deg = np.degrees(joint_LW_J_Flap)
 joint_RW_J_Flap_deg = np.degrees(joint_RW_J_Flap)
+
+#better colors
+soft_red = (0.8, 0.3, 0.3)   # Lighter red
+soft_blue = (0.3, 0.3, 0.8)  # Lighter blue
+
+#Create overlapping plots
+fig, ax2 = plt.subplots(2, 1, figsize=(10, 6))
+
+left_flap, = ax2[0].plot(time, joint_LW_J_Pitch_deg, color=soft_red)
+left_pitch, = ax2[0].plot(time, joint_RW_J_Pitch_deg, color=soft_blue)
+ax2[0].set_title('Left Wing Flapping Angle vs Pitch')
+ax2[0].set_xlabel('Time (s)')
+ax2[0].set_ylabel('Angle (degrees)')
+ax2[0].grid(True)
+ax2[0].legend([left_flap, left_pitch], ['Wing Flapping Angle', 'Wing Pitching (AOA) Angle'])
+
+right_flap, = ax2[1].plot(time, joint_LW_J_Flap_deg, color=soft_red)
+right_pitch, = ax2[1].plot(time, joint_RW_J_Flap_deg, color=soft_blue)
+ax2[1].set_title('Right Wing Flapping Angle vs Pitch')
+ax2[1].set_xlabel('Time (s)')
+ax2[1].set_ylabel('Angle (degrees)')
+ax2[1].grid(True)
+ax2[1].legend([right_flap, right_pitch], ['Wing Flapping Angle', 'Wing Pitching (AOA) Angle'])
+fig.savefig(folder_name + '/joint_comparison.png')
+plt.tight_layout()
+
+plt.show()
+
+
 
 # Create synchronized plots for joint angles
 fig2, ax2 = plt.subplots(2, 2)

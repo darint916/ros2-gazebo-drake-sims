@@ -43,7 +43,9 @@ def combine_time(time, val):
     return np.array(list(combined.keys())), np.array(list(combined.values()))
 
 #TODO: prob dont hardcode script_dir for foldername, let user choose later
-folder_name = os.path.join(script_dir, folder_name, 'aero_plots') 
+folder_name = os.path.join(script_dir, folder_name, 'aero_plots')
+print("folder name", folder_name)
+
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 # Step 2: Create separate plots for each blade number

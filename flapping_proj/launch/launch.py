@@ -48,7 +48,7 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 200000}, 
                 {'data_file_path': data_file}, 
-                {'amplitude': 1.4},
+                {'amplitude': 1.3},
                 {'frequency': 50.0},
             ]
         ),
