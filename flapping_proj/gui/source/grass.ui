@@ -1,0 +1,2349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainWindow</class>
+ <widget class="QMainWindow" name="mainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1079</width>
+    <height>845</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>450</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Generalized Robo-Aerial Simulation Setup</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="Top_Bar">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(204, 204, 204);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_top">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="Content">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_left_menu">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item alignment="Qt::AlignTop">
+           <widget class="QFrame" name="frame_top_menus">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btn_page_1">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255, 255, 255);
+	background-color: rgb(54, 54, 54);
+	border: 0px solid;
+}
+QPushButton:hover {
+	background-color:rgb(40, 40, 40);
+}</string>
+               </property>
+               <property name="text">
+                <string>Installation</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_page_2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255, 255, 255);
+	background-color: rgb(54, 54, 54);
+	border: 0px solid;
+}
+QPushButton:hover {
+	background-color:rgb(40, 40, 40);
+}</string>
+               </property>
+               <property name="text">
+                <string>URDF to SDF</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_page_3">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	color: rgb(255, 255, 255);
+	background-color: rgb(54, 54, 54);
+	border: 0px solid;
+}
+QPushButton:hover {
+	background-color:rgb(40, 40, 40);
+}</string>
+               </property>
+               <property name="text">
+                <string>Launching</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_pages">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QStackedWidget" name="stackedWidget">
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+            <property name="currentIndex">
+             <number>7</number>
+            </property>
+            <widget class="QWidget" name="page_1">
+             <property name="styleSheet">
+              <string notr="true">
+background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(252, 200, 155,255), stop:1 rgba(255, 95, 162, 200))</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <layout class="QGridLayout" name="gridLayout_50">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_33">
+                  <property name="font">
+                   <font>
+                    <pointsize>26</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-image: url(:/d/grassgolf.jpg);
+background-position: center bottom;
+    background-repeat: no-repeat;</string>
+                  </property>
+                  <property name="text">
+                   <string>Generalized Robo-Aerial Simulation Setup (GRASS)</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_8"/>
+            <widget class="QWidget" name="page_2">
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_9">
+                <item>
+                 <widget class="QLabel" name="label_2">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>250</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>adsfasdfasdf</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="pixmap">
+                   <pixmap>C:/Users/darin/Downloads/output-onlinepngtools (1).png</pixmap>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1000,0,0,0">
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_5">
+                    <item row="0" column="0">
+                     <widget class="QCheckBox" name="useUrdfFolderCheckBox">
+                      <property name="text">
+                       <string>Use URDF folder/package location instead of raw file</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QCheckBox" name="addToPathCheckBox">
+                      <property name="text">
+                       <string>Add package location to PATH</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QGroupBox" name="groupBox">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Find location of the URDF source file or the package folder</string>
+                      </property>
+                      <property name="title">
+                       <string>URDF Location</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_3">
+                       <item row="0" column="0">
+                        <widget class="QLineEdit" name="urdfPath">
+                         <property name="placeholderText">
+                          <string>. . .</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QPushButton" name="browseUrdfButton">
+                         <property name="toolTip">
+                          <string/>
+                         </property>
+                         <property name="text">
+                          <string>Browse File</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QGroupBox" name="groupBox_2">
+                      <property name="title">
+                       <string>Current SDF / SDF Output Location</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_2">
+                       <item row="0" column="0">
+                        <widget class="QLineEdit" name="sdfPath"/>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QPushButton" name="browseSdfButton">
+                         <property name="text">
+                          <string>Browse File</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QGroupBox" name="groupBox_4">
+                      <property name="title">
+                       <string>Template SDF Location</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_4">
+                       <item row="0" column="0">
+                        <widget class="QLineEdit" name="templateSdfPath"/>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QPushButton" name="browseTemplateSdfButton">
+                         <property name="text">
+                          <string>Browse File</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="Line" name="line">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QGridLayout" name="gridLayout_7">
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <item row="1" column="1">
+                     <widget class="QGroupBox" name="groupBox_5">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="title">
+                       <string>Parsed</string>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_10">
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_6">
+                         <property name="title">
+                          <string>Links</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_6">
+                          <item row="0" column="0">
+                           <widget class="QTextBrowser" name="parsedLinkTextBrowser">
+                            <property name="enabled">
+                             <bool>true</bool>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_7">
+                         <property name="title">
+                          <string>Joints</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_8">
+                          <item row="0" column="0">
+                           <widget class="QTextBrowser" name="parsedJointTextBrowser"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QGroupBox" name="groupBox_3">
+                      <property name="title">
+                       <string>World Name</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout">
+                       <item row="0" column="0">
+                        <widget class="QLineEdit" name="worldName"/>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <layout class="QGridLayout" name="gridLayout_9">
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item row="0" column="0">
+                       <spacer name="horizontalSpacer">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QPushButton" name="continueButton1">
+                        <property name="text">
+                         <string>continue</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_12"/>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_3">
+             <layout class="QVBoxLayout" name="verticalLayout_8">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_11" stretch="0,0,0">
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="maximumSize">
+                   <size>
+                    <width>10000</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="pixmap">
+                   <pixmap>C:/Users/darin/Downloads/output-onlinepngtools (1).png</pixmap>
+                  </property>
+                  <property name="scaledContents">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_11">
+                  <item row="2" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_6">
+                    <item>
+                     <widget class="QGroupBox" name="groupBox_8">
+                      <property name="title">
+                       <string>Collision</string>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_14">
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_9">
+                         <property name="title">
+                          <string>Link</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_14">
+                          <item row="0" column="0">
+                           <widget class="QComboBox" name="collisionLinkDropdown"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_7">
+                         <item>
+                          <widget class="QLabel" name="label_5">
+                           <property name="text">
+                            <string>Simple Geometry</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QComboBox" name="collisionGeometryDropdown">
+                           <item>
+                            <property name="text">
+                             <string>Sphere</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>Rectangle</string>
+                            </property>
+                           </item>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QGridLayout" name="gridLayout_16">
+                         <property name="bottomMargin">
+                          <number>10</number>
+                         </property>
+                         <item row="0" column="2">
+                          <widget class="QLabel" name="label_11">
+                           <property name="text">
+                            <string>Height</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="2">
+                          <widget class="QLabel" name="label_12">
+                           <property name="text">
+                            <string>Length</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QDoubleSpinBox" name="collisionGeometryRadius">
+                           <property name="maximum">
+                            <double>999999.989999999990687</double>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="1">
+                          <widget class="QDoubleSpinBox" name="collisionGeometryWidth">
+                           <property name="maximum">
+                            <double>999999.989999999990687</double>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <widget class="QLabel" name="label_9">
+                           <property name="text">
+                            <string>Width</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0">
+                          <widget class="QLabel" name="label_7">
+                           <property name="text">
+                            <string>Radius</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="3">
+                          <widget class="QDoubleSpinBox" name="collisionGeometryHeight">
+                           <property name="maximum">
+                            <double>999999.989999999990687</double>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="3">
+                          <widget class="QDoubleSpinBox" name="collisionGeometryLength">
+                           <property name="maximum">
+                            <double>999999.989999999990687</double>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QGroupBox" name="groupBox_10">
+                      <property name="title">
+                       <string>Material</string>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_15">
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_11">
+                         <property name="title">
+                          <string>Link</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_15">
+                          <item row="0" column="0">
+                           <widget class="QComboBox" name="materialLinkDropdown"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_36">
+                         <property name="title">
+                          <string>Phong Illuminiation</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_59">
+                          <item row="0" column="0">
+                           <layout class="QGridLayout" name="gridLayout_17">
+                            <item row="1" column="1">
+                             <widget class="QDoubleSpinBox" name="materialAmbientRed">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="2" column="0">
+                             <widget class="QLabel" name="label_8">
+                              <property name="text">
+                               <string>Diffuse</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="1" column="3">
+                             <widget class="QDoubleSpinBox" name="materialAmbientBlue">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="1" column="2">
+                             <widget class="QDoubleSpinBox" name="materialAmbientGreen">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="2" column="2">
+                             <widget class="QDoubleSpinBox" name="materialDiffuseGreen">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="2" column="1">
+                             <widget class="QDoubleSpinBox" name="materialDiffuseRed">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="2" column="3">
+                             <widget class="QDoubleSpinBox" name="materialDiffuseBlue">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="1" column="4">
+                             <widget class="QDoubleSpinBox" name="materialAmbientAlpha">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="1" column="0">
+                             <widget class="QLabel" name="label_10">
+                              <property name="text">
+                               <string>Ambient</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="2">
+                             <widget class="QDoubleSpinBox" name="materialSpecularGreen">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="3">
+                             <widget class="QDoubleSpinBox" name="materialSpecularBlue">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="0">
+                             <widget class="QLabel" name="label_6">
+                              <property name="text">
+                               <string>Specular</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="1">
+                             <widget class="QDoubleSpinBox" name="materialSpecularRed">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="2" column="4">
+                             <widget class="QDoubleSpinBox" name="materialDiffuseAlpha">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="4">
+                             <widget class="QDoubleSpinBox" name="materialSpecularAlpha">
+                              <property name="maximum">
+                               <double>1.000000000000000</double>
+                              </property>
+                              <property name="singleStep">
+                               <double>0.010000000000000</double>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <item>
+                     <widget class="QLabel" name="label_3">
+                      <property name="text">
+                       <string>Model/Robot</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="modelDropdown"/>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_4">
+                      <property name="text">
+                       <string>Overall Link Selector</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="overallLinkDropdown"/>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QGroupBox" name="groupBox_34">
+                    <property name="title">
+                     <string>Current SDF</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_61">
+                     <property name="leftMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>2</number>
+                     </property>
+                     <property name="horizontalSpacing">
+                      <number>7</number>
+                     </property>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="currentSdfPath1"/>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QPushButton" name="browseCurrentSdf1">
+                       <property name="text">
+                        <string>Browse File</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_10">
+                  <item row="1" column="2">
+                   <spacer name="horizontalSpacer_4">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="0" column="2">
+                   <spacer name="verticalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="1" column="3">
+                   <widget class="QPushButton" name="continueButton2">
+                    <property name="text">
+                     <string>continue</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page">
+             <layout class="QGridLayout" name="gridLayout_35">
+              <item row="3" column="0">
+               <layout class="QGridLayout" name="gridLayout_38">
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="1">
+                 <spacer name="verticalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QPushButton" name="continueButton3">
+                  <property name="text">
+                   <string>continue</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="2" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout_16">
+                <item>
+                 <widget class="QGroupBox" name="groupBox_14">
+                  <property name="title">
+                   <string>Physics</string>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_18">
+                   <item row="0" column="0">
+                    <layout class="QVBoxLayout" name="verticalLayout_17">
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QGroupBox" name="groupBox_15">
+                       <property name="title">
+                        <string>Engine Configuration</string>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_19">
+                        <item row="0" column="0">
+                         <widget class="QGroupBox" name="groupBox_16">
+                          <property name="title">
+                           <string>Dart Engine (default)</string>
+                          </property>
+                          <layout class="QGridLayout" name="gridLayout_21">
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_16">
+                             <property name="text">
+                              <string>Solver</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_13">
+                             <property name="text">
+                              <string>Collision</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QComboBox" name="physicsCollisionDropdown">
+                             <property name="currentText">
+                              <string>ODE (default)</string>
+                             </property>
+                             <item>
+                              <property name="text">
+                               <string>ODE (default)</string>
+                              </property>
+                             </item>
+                             <item>
+                              <property name="text">
+                               <string>bullet</string>
+                              </property>
+                             </item>
+                             <item>
+                              <property name="text">
+                               <string>fcl</string>
+                              </property>
+                             </item>
+                             <item>
+                              <property name="text">
+                               <string>dart</string>
+                              </property>
+                             </item>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QComboBox" name="physicsSolverDropdown">
+                             <item>
+                              <property name="text">
+                               <string>dantzig (default)</string>
+                              </property>
+                             </item>
+                             <item>
+                              <property name="text">
+                               <string>pgs</string>
+                              </property>
+                             </item>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item row="4" column="0">
+                         <widget class="QGroupBox" name="groupBox_17">
+                          <property name="title">
+                           <string>Custom Engine Path</string>
+                          </property>
+                          <layout class="QGridLayout" name="gridLayout_22">
+                           <item row="0" column="0">
+                            <widget class="QLineEdit" name="customEnginePath"/>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QPushButton" name="browseCustomEngineButton">
+                             <property name="text">
+                              <string>Browse File</string>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item row="3" column="0">
+                         <widget class="QCheckBox" name="useCustomEngineCheckBox">
+                          <property name="text">
+                           <string>Use Custom Engine</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_20">
+                       <property name="bottomMargin">
+                        <number>10</number>
+                       </property>
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="label_15">
+                         <property name="text">
+                          <string>Real Time Factor</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QDoubleSpinBox" name="physicsMaxStepSize">
+                         <property name="decimals">
+                          <number>4</number>
+                         </property>
+                         <property name="singleStep">
+                          <double>0.001000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>0.000100000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="QDoubleSpinBox" name="physicsRealTimeFactor">
+                         <property name="singleStep">
+                          <double>0.100000000000000</double>
+                         </property>
+                         <property name="value">
+                          <double>1.000000000000000</double>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_14">
+                         <property name="text">
+                          <string>Maximum Step Size</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_8"/>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_39">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap>C:/Users/darin/Downloads/output-onlinepngtools (1).png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="groupBox_33">
+                <property name="title">
+                 <string>Current SDF</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_60">
+                 <property name="leftMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>2</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="currentSdfPath2"/>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="browseCurrentSdf2">
+                   <property name="text">
+                    <string>Browse File</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_4">
+             <layout class="QGridLayout" name="gridLayout_25">
+              <item row="2" column="0">
+               <widget class="QGroupBox" name="groupBox_12">
+                <property name="title">
+                 <string>Plugins</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_23" columnstretch="0,0">
+                 <item row="0" column="0">
+                  <layout class="QVBoxLayout" name="verticalLayout_19" stretch="0">
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QGroupBox" name="jointControlGroupBox">
+                     <property name="title">
+                      <string>Joint Control</string>
+                     </property>
+                     <property name="checkable">
+                      <bool>true</bool>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_24">
+                      <item row="0" column="0">
+                       <layout class="QGridLayout" name="gridLayout_26">
+                        <item row="0" column="1">
+                         <widget class="QComboBox" name="jointControlJointDropdown"/>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_17">
+                          <property name="text">
+                           <string>Joint</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="0">
+                         <widget class="QLabel" name="label_18">
+                          <property name="text">
+                           <string>Plugin</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QComboBox" name="jointControlPluginDropdown">
+                          <item>
+                           <property name="text">
+                            <string>None</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>ApplyJointForce</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QGroupBox" name="groupBox_19">
+                        <property name="title">
+                         <string>Control Topic</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_27">
+                         <item row="0" column="0">
+                          <widget class="QLineEdit" name="jointControlTopic"/>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QListView" name="jointControlListView"/>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QGroupBox" name="odometryGroupBox">
+                   <property name="title">
+                    <string>Odometry</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_29">
+                    <item row="0" column="0">
+                     <layout class="QFormLayout" name="formLayout">
+                      <item row="1" column="0">
+                       <widget class="QLabel" name="label_19">
+                        <property name="text">
+                         <string>Publishing Frequency</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QDoubleSpinBox" name="odometryPublishingFrequency">
+                        <property name="maximum">
+                         <double>99999.990000000005239</double>
+                        </property>
+                        <property name="singleStep">
+                         <double>5.000000000000000</double>
+                        </property>
+                        <property name="value">
+                         <double>1000.000000000000000</double>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QLabel" name="label_20">
+                        <property name="text">
+                         <string>Odometry Topic</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="1">
+                       <widget class="QLineEdit" name="odometryTopic">
+                        <property name="placeholderText">
+                         <string>/odom</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QListView" name="odometryListView"/>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QGroupBox" name="groupBox_22">
+                      <property name="title">
+                       <string>Joints for Position</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_31">
+                       <item row="1" column="0">
+                        <widget class="QPushButton" name="odometryJointAdd">
+                         <property name="text">
+                          <string>add</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="QPushButton" name="odometryJointRemove">
+                         <property name="text">
+                          <string>remove</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0" colspan="2">
+                        <widget class="QComboBox" name="odometryJointDropdown"/>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <layout class="QGridLayout" name="gridLayout_39">
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="1" column="0">
+                 <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="0">
+                 <spacer name="verticalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QPushButton" name="continueButton4">
+                  <property name="text">
+                   <string>continue</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_40">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>100</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap>C:/Users/darin/Downloads/output-onlinepngtools (1).png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="groupBox_32">
+                <property name="title">
+                 <string>Current SDF</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_58">
+                 <property name="leftMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>2</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="currentSdfPath3"/>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="browseCurrentSdf3">
+                   <property name="text">
+                    <string>Browse File</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_6">
+             <layout class="QGridLayout" name="gridLayout_37">
+              <item row="4" column="0">
+               <layout class="QGridLayout" name="gridLayout_40">
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="1" column="0">
+                 <layout class="QGridLayout" name="gridLayout_56">
+                  <property name="rightMargin">
+                   <number>130</number>
+                  </property>
+                 </layout>
+                </item>
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QPushButton" name="continueButton5">
+                  <property name="text">
+                   <string>Apply</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <spacer name="verticalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item row="2" column="0">
+               <widget class="QGroupBox" name="aerodynamicsGroupBox">
+                <property name="title">
+                 <string>Aerodynamics</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_32">
+                 <item row="0" column="0" colspan="2">
+                  <layout class="QGridLayout" name="gridLayout_45">
+                   <property name="bottomMargin">
+                    <number>10</number>
+                   </property>
+                   <item row="1" column="0">
+                    <widget class="QListWidget" name="aerodynamicsGeneralComponentsListWidget">
+                     <property name="editTriggers">
+                      <set>QAbstractItemView::NoEditTriggers</set>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>body</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>rw_joint</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>lw_joint</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_21">
+                     <property name="text">
+                      <string>General Components</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <layout class="QVBoxLayout" name="verticalLayout_20">
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QToolButton" name="aerodynamicsGeneralToWingButton">
+                       <property name="text">
+                        <string>...</string>
+                       </property>
+                       <property name="arrowType">
+                        <enum>Qt::RightArrow</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QToolButton" name="aerodynamicsWingToGeneralButton">
+                       <property name="text">
+                        <string>...</string>
+                       </property>
+                       <property name="arrowType">
+                        <enum>Qt::LeftArrow</enum>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QListWidget" name="aerodynamicsWingsListWidget">
+                     <property name="editTriggers">
+                      <set>QAbstractItemView::NoEditTriggers</set>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>rw_flap</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>lw_flap</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item row="0" column="2">
+                    <widget class="QLabel" name="label_22">
+                     <property name="text">
+                      <string>Wings</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="2" column="1">
+                  <layout class="QVBoxLayout" name="verticalLayout_21">
+                   <property name="rightMargin">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_23">
+                     <property name="title">
+                      <string>Parameters</string>
+                     </property>
+                     <property name="checkable">
+                      <bool>false</bool>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_43">
+                      <item row="7" column="0">
+                       <widget class="QGroupBox" name="groupBox_13">
+                        <property name="title">
+                         <string>Upward Vector(s) &lt;x,y,z&gt; (m)</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_12">
+                         <item row="2" column="0" colspan="2">
+                          <widget class="QLabel" name="label_43">
+                           <property name="text">
+                            <string>*Vector perpindicular to wing, upside of wing, at initial orientation at COM</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0" colspan="2">
+                          <widget class="QTextEdit" name="textEdit"/>
+                         </item>
+                         <item row="1" column="0" colspan="2">
+                          <widget class="QLabel" name="label_45">
+                           <property name="text">
+                            <string>*Only one vector for overall, or one for each blade</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <widget class="QGroupBox" name="groupBox_24">
+                        <property name="title">
+                         <string/>
+                        </property>
+                        <property name="checkable">
+                         <bool>false</bool>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_44">
+                         <item row="2" column="3">
+                          <widget class="QLabel" name="label_30">
+                           <property name="text">
+                            <string>kg/m3</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="3">
+                          <widget class="QComboBox" name="aerodynamicsStallAngleUnitDropdown">
+                           <item>
+                            <property name="text">
+                             <string>Degrees</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>Radians</string>
+                            </property>
+                           </item>
+                          </widget>
+                         </item>
+                         <item row="2" column="2">
+                          <widget class="QDoubleSpinBox" name="aerodynamicsFluidDensity">
+                           <property name="decimals">
+                            <number>4</number>
+                           </property>
+                           <property name="value">
+                            <double>1.293000000000000</double>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="4" column="0">
+                          <widget class="QLabel" name="label_31">
+                           <property name="text">
+                            <string>Lift Coefficient</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="3">
+                          <widget class="QCheckBox" name="aerodynamicsUseDefaultDragCoefficient">
+                           <property name="text">
+                            <string>Use Default</string>
+                           </property>
+                           <property name="checked">
+                            <bool>true</bool>
+                           </property>
+                           <property name="tristate">
+                            <bool>false</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="2">
+                          <widget class="QDoubleSpinBox" name="aerodynamicsStallAngle"/>
+                         </item>
+                         <item row="3" column="2">
+                          <widget class="QLineEdit" name="aerodynamicsDragCoefficient">
+                           <property name="text">
+                            <string/>
+                           </property>
+                           <property name="placeholderText">
+                            <string>Enter Expression </string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="label_29">
+                           <property name="text">
+                            <string>Fluid Density</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="4" column="3">
+                          <widget class="QCheckBox" name="aerodynamicsUseDefaultLiftCoefficient">
+                           <property name="text">
+                            <string>Use Default</string>
+                           </property>
+                           <property name="checked">
+                            <bool>true</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="4" column="2">
+                          <widget class="QLineEdit" name="aerodynamicsLiftCoefficient">
+                           <property name="placeholderText">
+                            <string>Enter Expression</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="0">
+                          <widget class="QLabel" name="label_28">
+                           <property name="text">
+                            <string>Drag Coefficient</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="5" column="0" colspan="4">
+                          <widget class="QLabel" name="label_44">
+                           <property name="text">
+                            <string>Drag/Lift Coefficient Expression use phi as AOA</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <layout class="QGridLayout" name="gridLayout_55">
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="1">
+                            <widget class="QCheckBox" name="checkBox">
+                             <property name="layoutDirection">
+                              <enum>Qt::RightToLeft</enum>
+                             </property>
+                             <property name="styleSheet">
+                              <string notr="true"/>
+                             </property>
+                             <property name="text">
+                              <string/>
+                             </property>
+                             <property name="checked">
+                              <bool>true</bool>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_24">
+                             <property name="text">
+                              <string>Stall Angle</string>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QGroupBox" name="groupBox_27">
+                        <property name="title">
+                         <string>CP: Center of Pressure(s) &lt;x,y,z&gt; (m)</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_48">
+                         <item row="3" column="0" colspan="3">
+                          <widget class="QLabel" name="label_25">
+                           <property name="text">
+                            <string>*General component = 1 cp, Wing = 1 cp for each blade </string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <widget class="QTextEdit" name="aerodynamicsWingCenterPressureText"/>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="label_32">
+                           <property name="text">
+                            <string>*CP are relative of COM of component</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="8" column="0" rowspan="2">
+                       <widget class="QGroupBox" name="groupBox_31">
+                        <property name="title">
+                         <string>Current Wing Blade Settings</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_53">
+                         <item row="1" column="0" colspan="3">
+                          <widget class="QLabel" name="label_26">
+                           <property name="text">
+                            <string>*Wing multi-entry are from wing root to tip (chord, up-vector)</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QPushButton" name="pushButton_2">
+                           <property name="text">
+                            <string>Import Settings</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QPushButton" name="pushButton_3">
+                           <property name="text">
+                            <string>Export Settings</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0" colspan="3">
+                          <widget class="QTableWidget" name="tableWidget">
+                           <column>
+                            <property name="text">
+                             <string>Blade</string>
+                            </property>
+                           </column>
+                           <column>
+                            <property name="text">
+                             <string>CP&lt;x,y,z&gt;</string>
+                            </property>
+                           </column>
+                           <column>
+                            <property name="text">
+                             <string>Up&lt;x,y,z&gt;</string>
+                            </property>
+                           </column>
+                           <column>
+                            <property name="text">
+                             <string>Area</string>
+                            </property>
+                           </column>
+                          </widget>
+                         </item>
+                         <item row="2" column="2">
+                          <widget class="QPushButton" name="pushButton_4">
+                           <property name="text">
+                            <string>Clear Blades</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="0" column="1" rowspan="9">
+                       <widget class="QGroupBox" name="groupBox_26">
+                        <property name="title">
+                         <string>Blade Element</string>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_47">
+                         <item row="8" column="1">
+                          <layout class="QGridLayout" name="gridLayout_54">
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_34">
+                             <property name="text">
+                              <string>Span Length (m)</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QDoubleSpinBox" name="doubleSpinBox">
+                             <property name="maximum">
+                              <double>99999.990000000005239</double>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QGroupBox" name="groupBox_29">
+                           <property name="title">
+                            <string>Area Solver Methods</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_46">
+                            <item row="1" column="0">
+                             <widget class="QComboBox" name="comboBox">
+                              <item>
+                               <property name="text">
+                                <string>Reimann Sum (Left)</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Reimann Sum (Mid)</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Reimann Sum (Right)</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Trapezoidal </string>
+                               </property>
+                              </item>
+                             </widget>
+                            </item>
+                            <item row="0" column="0">
+                             <widget class="QComboBox" name="comboBox_3">
+                              <item>
+                               <property name="text">
+                                <string>Area List for Each Blade</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Edge Functions </string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Blade Chord List</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string/>
+                               </property>
+                              </item>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="6" column="1">
+                          <widget class="QGroupBox" name="groupBox_25">
+                           <property name="title">
+                            <string>Trailing Edge Expression</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_42">
+                            <item row="0" column="0">
+                             <widget class="QLineEdit" name="lineEdit_2">
+                              <property name="placeholderText">
+                               <string>.01 * pow(r, 2) - .1 * sqrt(r) + .1 * pi * r </string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="4" column="1">
+                          <widget class="QGroupBox" name="groupBox_30">
+                           <property name="title">
+                            <string>Area List Input (m^2)</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_52">
+                            <item row="0" column="0">
+                             <widget class="QTextEdit" name="textEdit_2"/>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="7" column="1">
+                          <widget class="QGroupBox" name="groupBox_28">
+                           <property name="title">
+                            <string>Blade Chords (meters)</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_49">
+                            <item row="1" column="0" colspan="2">
+                             <widget class="QTextEdit" name="aerodynamicsWingChordLengthText"/>
+                            </item>
+                            <item row="2" column="0" colspan="2">
+                             <widget class="QLabel" name="label_36">
+                              <property name="text">
+                               <string>*Trapezoidal method requires blade + 1 chords</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="0" colspan="2">
+                             <widget class="QLabel" name="label_38">
+                              <property name="text">
+                               <string>*Expressions use Python Eval, use 'r' as var</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="5" column="1">
+                          <widget class="QGroupBox" name="groupBox_21">
+                           <property name="title">
+                            <string>Leading Edge Expression</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_34">
+                            <item row="0" column="0">
+                             <widget class="QLineEdit" name="lineEdit">
+                              <property name="placeholderText">
+                               <string>.25</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item row="9" column="1">
+                          <widget class="QPushButton" name="pushButton">
+                           <property name="text">
+                            <string>Evalulate Area</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="1">
+                          <layout class="QGridLayout" name="gridLayout_13">
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_35">
+                             <property name="text">
+                              <string>Blades</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QSpinBox" name="aerodynamicsWingBlades">
+                             <property name="maximum">
+                              <number>99999</number>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item row="9" column="1">
+                       <layout class="QGridLayout" name="gridLayout_51">
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
+                        <item row="1" column="0">
+                         <widget class="QLabel" name="label_27">
+                          <property name="text">
+                           <string>Angle of Attack Joint</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0">
+                         <widget class="QLabel" name="label_37">
+                          <property name="text">
+                           <string>Wing Root Joint</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="1">
+                         <widget class="QComboBox" name="aerodynamicsWingRootJointDropdown"/>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QComboBox" name="comboBox_2">
+                          <item>
+                           <property name="text">
+                            <string>None</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QListWidget" name="aerodynamicsComponentsListWidget">
+                   <property name="editTriggers">
+                    <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>body</string>
+                    </property>
+                    <property name="checkState">
+                     <enum>Checked</enum>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>rw_joint</string>
+                    </property>
+                    <property name="checkState">
+                     <enum>Unchecked</enum>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>lw_joint</string>
+                    </property>
+                    <property name="checkState">
+                     <enum>Unchecked</enum>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>rw_flap</string>
+                    </property>
+                    <property name="checkState">
+                     <enum>Checked</enum>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>lw_flap</string>
+                    </property>
+                    <property name="checkState">
+                     <enum>Checked</enum>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" colspan="2">
+                  <widget class="QLabel" name="label_23">
+                   <property name="text">
+                    <string>Components To Simulate (Check applies aerodynamics)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_41">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap>C:/Users/darin/Downloads/output-onlinepngtools (1).png</pixmap>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="groupBox_18">
+                <property name="title">
+                 <string>Current SDF</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_57">
+                 <property name="leftMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>2</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="currentSdfPath4"/>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="browseCurrentSdf4">
+                   <property name="text">
+                    <string>Browse File</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_5">
+             <layout class="QGridLayout" name="gridLayout_36">
+              <item row="2" column="0">
+               <widget class="QGroupBox" name="groupBox_20">
+                <property name="title">
+                 <string>Current Settings</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_28">
+                 <item row="1" column="0">
+                  <widget class="QTabWidget" name="tabWidget">
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
+                   <widget class="QWidget" name="settingsLinkPropertiesTab">
+                    <attribute name="title">
+                     <string>Link Properties</string>
+                    </attribute>
+                    <layout class="QGridLayout" name="gridLayout_30">
+                     <item row="0" column="0">
+                      <widget class="QTableWidget" name="settingsLinkPropertiesTableWidget"/>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="settingsPluginPropertiesTab">
+                    <attribute name="title">
+                     <string>Plugin Properties</string>
+                    </attribute>
+                    <layout class="QGridLayout" name="gridLayout_33">
+                     <item row="0" column="0">
+                      <widget class="QTableWidget" name="settingsPluginPropertiesTableWidget"/>
+                     </item>
+                    </layout>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QPushButton" name="settingsApplyChangesButton">
+                   <property name="text">
+                    <string>Apply Changes</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_42">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="pixmap">
+                 <pixmap>:/d/output-onlinepngtools (1).png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <layout class="QGridLayout" name="gridLayout_41">
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QPushButton" name="convertButton">
+                  <property name="text">
+                   <string>Convert</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="groupBox_35">
+                <property name="title">
+                 <string>Current SDF</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_62">
+                 <property name="leftMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>2</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="currentSdfPath5"/>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="browseCurrentSdf5">
+                   <property name="text">
+                    <string>Browse File</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_7"/>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="C:/Users/darin/Downloads/test.qrc"/>
+ </resources>
+ <connections/>
+</ui>
