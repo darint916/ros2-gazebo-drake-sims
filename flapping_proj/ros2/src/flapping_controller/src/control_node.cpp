@@ -84,7 +84,7 @@ class ControlNode : public rclcpp::Node
 			RCLCPP_INFO_STREAM(this->get_logger(), "Subscribing to position topic: " << this->get_parameter("position_topic").as_string());
 			_poseArraySubscriber = this->create_subscription<geometry_msgs::msg::PoseArray>(
 				this->get_parameter("position_topic").as_string(),
-				10, std::bind(&ControlNode::position_topic_callback,
+				1000, std::bind(&ControlNode::position_topic_callback,
 				this, std::placeholders::_1));
 
 			//Data extraction setup

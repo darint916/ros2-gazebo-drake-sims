@@ -2,8 +2,8 @@
 <sdf version="1.8">
    <world name="world2">
       <physics name="1ms" type="ignored">
-         <max_step_size>0.00001</max_step_size>
-         <real_time_factor>.05</real_time_factor>
+         <max_step_size>0.0001</max_step_size>
+         <real_time_factor>1</real_time_factor>
       </physics>
       <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
         </plugin>
@@ -51,7 +51,8 @@
          </link>
       </model>
       <model name="URDF_LargeWings"> <!-- flies in -y dir-->
-         <pose relative_to="world">0 0 1 1.5708 0 0</pose>
+         <!-- <pose relative_to="world">0 0 1 1.5708 0 0</pose> -->
+         <pose relative_to="world">0 0 1 .5708 0 0</pose>
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -236,11 +237,12 @@
             <axis>
                <xyz>-1 0 0</xyz>
                <dynamics>
-                  <damping>.00005</damping>
+                  <damping>.0004</damping>
+                  <spring_stiffness>.18</spring_stiffness>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_reference>1</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.15</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
@@ -260,11 +262,12 @@
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
-                  <damping>.00005</damping>
+                  <damping>.0004</damping>
+                  <spring_stiffness>.18</spring_stiffness>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_reference>0.785398</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <spring_stiffness>.15</spring_stiffness>
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
 
                </dynamics>
@@ -283,10 +286,11 @@
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <damping>.00005</damping>
+                  <damping>.0001</damping>
                   <!-- <friction>1</friction>    -->
+                  <!-- <spring_reference>1</spring_reference> -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>2.3</spring_stiffness>
+                  <spring_stiffness>5</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -301,10 +305,11 @@
             <axis>
                <xyz>0 -1 0</xyz>
                <dynamics>
-                  <damping>.00005</damping>
+                  <damping>.0001</damping>
                   <!-- <friction>1</friction>    -->
+                  <!-- <spring_reference>1</spring_reference> -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
-                  <spring_stiffness>2.3</spring_stiffness>
+                  <spring_stiffness>5</spring_stiffness>
                </dynamics>
                <limit>
                   <lower>-1.79769e+308</lower>
@@ -326,7 +331,7 @@
             </axis>
          </joint> -->
 
-         <joint name="anchor" type="revolute"> 
+         <!-- <joint name="anchor" type="revolute"> 
             <pose relative_to="base_link">0 0 0 0 0 0</pose>
             <parent>world</parent>
             <child>base_link</child>
@@ -337,28 +342,12 @@
                   <upper>0</upper>
                </limit>        
             </axis>
-         </joint>
+         </joint> -->
 
          <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
             <only_data>false</only_data>
-            <link>
-                <link_name>RW_Pitch</link_name>
-                <link_type>wing</link_type>
-                <stall_angle>15</stall_angle>
-                <fluid_density>1.293</fluid_density>
-                <drag_coefficient>1.28</drag_coefficient>
-                <lift_coefficient>1</lift_coefficient>
-                <control_joint>joint_RW_J_Flap</control_joint>
-                <wing_pitch_joint>joint_RW_J_Pitch</wing_pitch_joint>
-                <blades>9</blades>
-                <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
-                <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
-                <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-                <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
-                  <!-- <blade_area_list>0.0075</blade_area_list>  -->
-                <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
-            </link>
+            
             <link>
                 <link_name>LW_Pitch</link_name>
                 <link_type>wing</link_type>
@@ -369,11 +358,34 @@
                 <control_joint>joint_LW_J_Flap</control_joint>
                 <wing_pitch_joint>joint_LW_J_Pitch</wing_pitch_joint>
                 <blades>9</blades>
-                <!-- <center_pressure_list>0,0,0</center_pressure_list> -->
+                <!-- <blades>1</blades> -->
+                <!-- <center_pressure_list>0,-.025,0</center_pressure_list> -->
                 <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
                 <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
+                <!-- <chord_direction_list>1,0,0</chord_direction_list> -->
                <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
+               <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
+
                <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
+               <!-- <blade_area_list>0.0075</blade_area_list>  -->
+               <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
+            </link>
+            <link>
+               <link_name>RW_Pitch</link_name>
+               <link_type>wing</link_type>
+               <stall_angle>15</stall_angle>
+               <fluid_density>1.293</fluid_density>
+               <drag_coefficient>1.28</drag_coefficient>
+               <lift_coefficient>1</lift_coefficient>
+               <control_joint>joint_RW_J_Flap</control_joint>
+               <wing_pitch_joint>joint_RW_J_Pitch</wing_pitch_joint>
+               <blades>9</blades>
+               <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
+               <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
+               <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
+               <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
+               <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
+               <!-- <blade_area_list>0.0075</blade_area_list>  -->
                <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
             </link>
          </plugin>
@@ -384,7 +396,7 @@
             name="odometry_state">
             <world_name>world2</world_name>
             <odometry_topic>/odom</odometry_topic>
-            <odom_publish_frequency>1000.0</odom_publish_frequency>
+            <odom_publish_frequency>10000.0</odom_publish_frequency>
             <joint>joint_LW_J_Flap</joint> 
             <joint>joint_LW_J_Pitch</joint>
             <joint>joint_RW_J_Pitch</joint>

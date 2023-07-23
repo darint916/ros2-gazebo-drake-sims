@@ -48,7 +48,7 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 200000}, 
                 {'data_file_path': data_file}, 
-                {'amplitude': 1.3},
+                {'amplitude': 4.0}, #Must have decimal, or ros wont take as a double
                 {'frequency': 50.0},
             ]
         ),
