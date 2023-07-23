@@ -1,5 +1,6 @@
-from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication
+from PyQt6 import QtWidgets
+
+from gui.ui_handler.grass_handler import GrassHandler
 
 Form, Window = uic.loadUiType("main.ui")
 
