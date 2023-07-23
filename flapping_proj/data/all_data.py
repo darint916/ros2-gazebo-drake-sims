@@ -24,4 +24,4 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         call_child_scripts(sys.argv[1])
     else:
-        call_child_scripts(sys.argv[1], arg2)
+        call_child_scripts(sys.argv[1], sys.argv[2])

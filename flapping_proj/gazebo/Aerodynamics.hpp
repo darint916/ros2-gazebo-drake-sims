@@ -22,6 +22,7 @@ namespace aerodynamics
                 <blades>1</blades>
                 <center_pressure_list>-0.1,-0.1,0</center_pressure_list>
                 <upward_vector_list>0,0,1</upward_vector_list>
+                <chord_direction_list>1,0,0</chord_direction_list>
                 <blade_area_list>1</blade_area_list>
             </link>
             <link>
@@ -45,6 +46,7 @@ namespace aerodynamics
         double wingSpan = 1; //meters (total length of wing)
         // std::vector<double> bladeChordList; //meters (chord == width), vector length = blades
         std::vector<ignition::math::Vector3d> upVectorList;
+        std::vector<ignition::math::Vector3d> chordDirectionList;
         std::vector<double> bladeAreaList;
 
     };

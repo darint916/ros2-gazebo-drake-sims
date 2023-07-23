@@ -17,9 +17,6 @@ if len(sys.argv) < 2:
     folder_name = ''
 else:
     folder_name = sys.argv[1]
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
-
 
 # Step 1: Read the CSV file skipping the first 4 rows
 csv_dir =os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -50,11 +47,15 @@ if not os.path.exists(folder_name):
     os.makedirs(folder_name)
 # Step 2: Create separate plots for each blade number
 # df = pd.read_csv(csv_name, skiprows=range(1,30)) #skip first wing*blade rows starting at 1
-df = pd.read_csv(csv_source, skiprows=range(1,1783405)) #.00001 sim time skips transcient
+df = pd.read_csv(csv_source, skiprows=range(1,1070174)) #.00001 sim time skips transcient
+#print first wing name
+# print("first wing name", df['wing_name'][0])
 unique_wing_names = df['wing_name'].unique()
+print("unique wing names: ", unique_wing_names)
 unique_blade_numbers = df['blade_number'].unique()
 # print(df.head(3))
 for wing_name in unique_wing_names:
+    print("wing name: ", wing_name)
     blade_data = df[(df['wing_name'] == wing_name)]
     blade_force_x = blade_data['blade_force_x'].to_numpy()
     blade_force_y = blade_data['blade_force_y'].to_numpy()
@@ -78,7 +79,7 @@ for wing_name in unique_wing_names:
     with open(folder_name + "aero_data.txt", 'w') as file:
         file.write("mean force magnitude: ")
         file.write(str(mean_val) + "\n")
-    
+    print("mean force magnitude", mean_val)
 
     _, blade_force_z = combine_time(time, blade_force_z)
     
@@ -129,47 +130,74 @@ for wing_name in unique_wing_names:
         file.write("\n")
     print("abs x force", abs_mean_val)
     print("mean x force", mean_val)
-    fig, ax = plt.subplots(subplot_kw=dict(projection="3d"))
+
+    # fig, ax = plt.subplots(subplot_kw=dict(projection="3d"))
     #create arrow for each time point
-    vectors = np.array([blade_force_x, blade_force_y, blade_force_z]).T.reshape(-1, 3)
+    # vectors = np.array([blade_force_x, blade_force_y, blade_force_z]).T.reshape(-1, 3)
     
     # print("first 10 vectors", vectors[100:110])
     #TODO: Fix animation + pathing
-    def get_arrow(t):
-        x = 0
-        y = 0
-        z = 0
-        u = vectors[t, 0]
-        v = vectors[t, 1]
-        w = vectors[t, 2]
-        return x, y, z, u, v, w
-    quiver = ax.quiver(*get_arrow(0))
-    ax.set_xlim(min(blade_force_x), max(blade_force_x))
-    ax.set_ylim(min(blade_force_y), max(blade_force_y))
-    ax.set_zlim(min(blade_force_z), max(blade_force_z))
-    def update(t):
-        global quiver
-        quiver.remove()
-        quiver = ax.quiver(*get_arrow(t))
-    ani = FuncAnimation(fig, update, frames=len(time)/3, interval=20)
-    ani.save(folder_name + '/animation_' + str(wing_name) + '.gif', writer='pillow')
-    plt.show()
+    # def get_arrow(t):
+    #     x = 0
+    #     y = 0
+    #     z = 0
+    #     u = vectors[t, 0]
+    #     v = vectors[t, 1]
+    #     w = vectors[t, 2]
+    #     return x, y, z, u, v, w
+    # quiver = ax.quiver(*get_arrow(0))
+    # ax.set_xlim(min(blade_force_x), max(blade_force_x))
+    # ax.set_ylim(min(blade_force_y), max(blade_force_y))
+    # ax.set_zlim(min(blade_force_z), max(blade_force_z))
+    # def update(t):
+    #     global quiver
+    #     quiver.remove()
+    #     quiver = ax.quiver(*get_arrow(t))
+    # ani = FuncAnimation(fig, update, frames=len(time)/3, interval=20)
+    # ani.save(folder_name + '/animation_' + str(wing_name) + '.gif', writer='pillow')
+    # plt.show()
 
 
-# for wing_name in unique_wing_names:
-#     print("wing name", wing_name)
-#     for blade_number in unique_blade_numbers:
+for wing_name in unique_wing_names:
+    if wing_name == 'RW_Pitch': continue
+    print("wing name", wing_name)
+    for blade_number in unique_blade_numbers:
 #         # blade_data = df[(df['wing_name'] == wing_name) & (df['blade_number'] == blade_number)]
-#         blade_data = df[(df['wing_name'] == wing_name)]
+        blade_data = df[(df['wing_name'] == wing_name)]
 #         blade_force_x = blade_data['blade_force_x']
 #         blade_force_y = blade_data['blade_force_y']
 #         blade_force_z = blade_data['blade_force_z'].to_numpy()
-#         blade_velocity_x = blade_data['blade_velocity_x'].to_numpy()
-#         blade_velocity_y = blade_data['blade_velocity_y'].to_numpy()
-#         blade_velocity_z = blade_data['blade_velocity_z'].to_numpy()
+        time = blade_data['time'].to_numpy()
+        blade_velocity_x = blade_data['blade_velocity_x'].to_numpy()
+        blade_velocity_y = blade_data['blade_velocity_y'].to_numpy()
+        blade_velocity_z = blade_data['blade_velocity_z'].to_numpy()
+        fig = plt.figure()
+        plt.plot(time, blade_velocity_x)
+        plt.xlabel('Time (s)')
+        plt.ylabel('Blade Vel X (Nm)')
+        plt.title(f'{wing_name}')
+        plt.grid(True)
+        fig.savefig(folder_name + '/force_z_' + str(wing_name) + '.png')
+        plt.show(block=False)
+        fig = plt.figure()
+        plt.plot(time, blade_velocity_y)
+        plt.xlabel('Time (s)')
+        plt.ylabel('Blade Vel Y (Nm)')
+        plt.title(f'{wing_name}')
+        plt.grid(True)
+        fig.savefig(folder_name + '/force_z_' + str(wing_name) + '.png')
+        plt.show(block=False)
+        fig = plt.figure()
+        plt.plot(time, blade_velocity_z)
+        plt.xlabel('Time (s)')
+        plt.ylabel('Blade Vel Z (Nm)')
+        plt.title(f'{wing_name}')
+        plt.grid(True)
+        fig.savefig(folder_name + '/force_z_' + str(wing_name) + '.png')
+        plt.show()
+
 #         blade_velocity_magnitude = np.sqrt(blade_velocity_x ** 2 + blade_velocity_y ** 2 + blade_velocity_z ** 2)
 #         blade_force_magnitude = np.sqrt(blade_force_x ** 2 + blade_force_y ** 2 + blade_force_z ** 2)
-#         time = blade_data['time'].to_numpy()
 #         combined_f = {}
 #         for t, force in zip(time, blade_force_magnitude):
 #             combined_f[t] = combined_f.get(t, 0) + force 

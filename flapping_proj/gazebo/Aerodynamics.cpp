@@ -192,6 +192,22 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
                 this->validConfig = false;
                 return;
             }
+
+            //Potential optimization using 90 deg rotation of upVector
+            std::stringstream ss5(linkElement->GetElement("chord_direction_list")->Get<std::string>());
+            parsedList = ParseStringStringToVector(ss5);
+            for(int i = 0; i < parsedList.size(); i+= 3){
+                ignition::math::Vector3d chordDirection(parsedList[i], parsedList[i+1], parsedList[i+2]);
+                // ignerr << "pasred list: " << parsedList[i] << " " << parsedList[i+1] << " " << parsedList[i+2] << std::endl;
+                this->linkMap[linkName].wingParameters.chordDirectionList.push_back(chordDirection.Normalized());
+            }
+            if (this->linkMap[linkName].wingParameters.chordDirectionList.size() != 1 && this->linkMap[linkName].wingParameters.chordDirectionList.size() != this->linkMap[linkName].wingParameters.blades){
+                ignerr << "chordDirection is not singular or does not match blades" << std::endl;
+                ignerr << "Parsed Chord" << this->linkMap[linkName].wingParameters.chordDirectionList.size() << std::endl;
+                this->validConfig = false;
+                return;
+            }
+
         } else if (linkType == "generic"){
             this->linkMap[linkName].centerPressureList.push_back(linkElement->GetElement("center_pressure")->Get<ignition::math::Vector3d>());
         }
@@ -231,22 +247,38 @@ void AerodynamicsData::Update(const igz::UpdateInfo &_info, igz::EntityComponent
                 }
                 const ignition::math::Vector3d centerPressureLinVel = optionalCenterPressureLinearVelocity.value();
                 // if(centerPressureLinVel.Length() > .0001){ //negligible small force
-                    link.second.wingParameters.upVectorList[i] = linkWorldPose.Rot().RotateVector(link.second.wingParameters.upVectorList[i]); //Rotate to world frame
+                //TODO: CLEANUP CODE
+                    ignition::math::Vector3d upVector = linkWorldPose.Rot().RotateVector(link.second.wingParameters.upVectorList[i]); //Rotate to world frame
+                    
+                    // ignition::math::Vector3d chordDir = linkWorldPose.Rot().RotateVector(link.second.wingParameters.chordDirectionList[i]);
                     //F = .5 * p * Cd * v^2 * A
-                    double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * pow(centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]), 2) * link.second.wingParameters.bladeAreaList[i];
-                    ignition::math::Vector3d flapDragForce = flapDragScalar * link.second.wingParameters.upVectorList[i];
 
+                    // ignerr << "euler angle: " << linkWorldPose.Rot().Euler() << std::endl;
+                    // ignerr << "chord vector: " << chordDir << std::endl;
+                    // ignerr << "up vector: " << upVector << std::endl;
+
+                    double velDotUp = (centerPressureLinVel).Dot(upVector); //project velocity onto upVector 
+                    ignition::math::Vector3d flapDragForce = ignition::math::Vector3d(0,0,0);
+                    double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * pow(velDotUp, 2) * link.second.wingParameters.bladeAreaList[i];
+                    if (velDotUp < 0){
+                        flapDragForce = flapDragScalar * (upVector);
+                    } else if (velDotUp > 0){
+                        flapDragForce = flapDragScalar * (-upVector);
+                    }
                     this->csvFile <<std::chrono::duration<double>(_info.simTime).count() << "," << link.first << "," << linkWorldPose.Rot().X() << "," << linkWorldPose.Rot().Y() << "," << linkWorldPose.Rot().Z() << "," << linkWorldPose.Rot().W();
                     this->csvFile << "," << i << "," << centerPressureLinVel.X() << "," << centerPressureLinVel.Y() << "," << centerPressureLinVel.Z() << "," << flapDragForce.X() << "," << flapDragForce.Y() << "," << flapDragForce.Z();
                     this->csvFile << "\n";
                     
-                    if(!this->onlyData)linkObj.AddWorldForce(_ecm, link.second.centerPressureList[i], flapDragForce);// https://github.com/gazebosim/gz-sim/blob/4ce01eab7fbba7ff3ec2f876e0289e2abdab45ae/src/Link.cc#L383
+                    if(!this->onlyData && velDotUp != 0){
+                        linkObj.AddWorldForce(_ecm, flapDragForce, link.second.centerPressureList[i] );// https://github.com/gazebosim/gz-sim/blob/4ce01eab7fbba7ff3ec2f876e0289e2abdab45ae/src/Link.cc#L383
+                        // ignerr << "Applying: " << flapDragForce << std::endl;
+                    }
                     // ignerr << "\n";
                     // ignerr << "link orientation:" << linkWorldPose.Rot() << std::endl;
                     // ignerr << "Wing blade: " << link.first << " " << i << std::endl; 
-                    // ignerr << "Wing blade proj velocity: " << centerPressureLinVel.Dot(link.second.wingParameters.upVectorList[i]) << std::endl;
+                    // ignerr << "Wing blade proj velocity: " << centerPressureLinVel.Dot(upVector) << std::endl;
                     // ignerr << "Wing blade FORCE: " << flapDragScalar << std::endl;
-                    // ignerr << "upVector: " << link.second.wingParameters.upVectorList[i] << std::endl;
+                    // ignerr << "upVector: " << upVector << std::endl;
                     // ignerr << "Wing blade FORCE Vector:" << flapDragForce << std::endl;
                 // }
             }

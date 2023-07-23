@@ -78,8 +78,6 @@ if len(sys.argv) < 2:
     folder_name = ''
 else:
     folder_name = sys.argv[1]
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
 
 #script dir to get abs path
 csv_dir =os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -124,7 +122,9 @@ soft_blue = (0.3, 0.3, 0.8)  # Lighter blue
 #Create overlapping plots
 fig, ax2 = plt.subplots(2, 1, figsize=(10, 6))
 
+# ax2[0].scatter(time, joint_LW_J_Pitch_deg, color=soft_red)
 left_flap, = ax2[0].plot(time, joint_LW_J_Pitch_deg, color=soft_red)
+# ax2[0].scatter(time, joint_RW_J_Pitch_deg, color=soft_blue)
 left_pitch, = ax2[0].plot(time, joint_RW_J_Pitch_deg, color=soft_blue)
 ax2[0].set_title('Left Wing Flapping Angle vs Pitch')
 ax2[0].set_xlabel('Time (s)')
