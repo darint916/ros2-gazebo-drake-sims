@@ -4,7 +4,7 @@ from datetime import datetime
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QMessageBox
 
-from Scraper.libs.cfgBuilder import ConfigurationBuilder
+# from Scraper.libs.cfgBuilder import ConfigurationBuilder
 
 
 class UI_TYPE:
@@ -111,7 +111,7 @@ class UiConfigurationHelper:
                 continue
 
             if element_type == UI_TYPE.CHECK_BOX:
-                e[1].setChecked(ConfigurationBuilder.boolean(source_config[e[0].lower()]))
+                # e[1].setChecked(ConfigurationBuilder.boolean(source_config[e[0].lower()]))
                 continue
 
             if element_type == UI_TYPE.DROPDOWN:
