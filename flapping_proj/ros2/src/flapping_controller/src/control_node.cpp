@@ -52,6 +52,9 @@ class ControlNode : public rclcpp::Node
 		rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr _altitude_subscriber;
 		double _altitude_target;
 		int _error_buffer;
+		std::string _dataHeadersPID;
+		std::ofstream _csvFilePID;
+        std::ofstream _csvWriterPID;
 	public:
 		ControlNode() : Node("control_node")
 		{
@@ -109,6 +112,8 @@ class ControlNode : public rclcpp::Node
 
 			//Altitude PID controller
 			this->declare_parameter<bool>("altitude_pid_enabled", false);
+			this->declare_parameter<bool>("pid_data_enabled", false);
+			this->declare_parameter<std::string>("pid_data_file_path", "../data/pid_data.csv");
 			this->declare_parameter<double>("altitude_kp", 0.0);
 			this->declare_parameter<double>("altitude_ki", 0.0);
 			this->declare_parameter<double>("altitude_kd", 0.0);
@@ -129,6 +134,8 @@ class ControlNode : public rclcpp::Node
 				1000, std::bind(&ControlNode::altitude_topic_callback,
 				this, std::placeholders::_1));
 			//static altitude
+
+			this->declare_parameter<double>("static_altitude", 4.0);
 			if(this->has_parameter("static_altitude")){
 				_altitude_target = this->get_parameter("static_altitude").as_double();
 			} else {
@@ -136,6 +143,12 @@ class ControlNode : public rclcpp::Node
 				_altitude_target = 4.0;
 			}	
 			_error_buffer = 0;
+
+			std::string pidDataFilePath = this->get_parameter("pid_data_file_path").as_string();
+			_csvFilePID.open(pidDataFilePath);
+			_csvWriterPID = std::ofstream(pidDataFilePath, std::ios::out | std::ios::app);
+			_dataHeadersPID = "time,altitude_target,altitude_error,altitude_output";
+			_csvWriterPID << _dataHeadersPID << "\n";
 		}
 
 	private:
@@ -224,14 +237,23 @@ class ControlNode : public rclcpp::Node
 			double dt = _currentPoseTime - _previousPoseTime;
 			double output = _altitude_pid.calculate(error, dt);
 			// _error_buffer += 1;
-			// if (_error_buffer > 20){
-				// RCLCPP_INFO_STREAM(this->get_logger(), "Altitude PID error: " << error);
-				// RCLCPP_ERROR_STREAM(this->get_logger(), "Altitude PID output: " << output);
-				// _error_buffer = 0;
+			// if (_error_buffer > 10000){
+			// 	RCLCPP_INFO_STREAM(this->get_logger(), "Altitude PID error: " << error);
+			// 	RCLCPP_ERROR_STREAM(this->get_logger(), "Altitude PID output: " << output);
+			// 	_error_buffer = 0;
 			// }
+
 			//Adds onto base amplitude from sin signal
+			double amplitude = this->get_parameter("amplitude").as_double();
 			for (auto & joint : _jointTorqueControlMap) {
-				joint.second += output;
+				if(amplitude + output <= 0){
+					joint.second = amplitude * .3; //allows for negative pid to map to minimal (but visible) force (lets spring dampening kill altitude)
+				} else if(amplitude != 0){ //Applies amplitude to output properly (keeps sin)
+					joint.second = (joint.second / amplitude) * (amplitude + output);
+				}
+			}
+			if(this->get_parameter("pid_data_enabled").as_bool()){
+				_csvWriterPID << _currentPoseTime << "," << _altitude_target << "," << error << "," << output << "\n";
 			}
 		}
 

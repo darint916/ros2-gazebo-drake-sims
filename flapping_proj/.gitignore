@@ -4,5 +4,6 @@ log
 __pycache__
 data.csv
 aero.csv
+pid_data.csv
 venv
 *.code-workspace

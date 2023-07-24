@@ -22,7 +22,7 @@ def generate_launch_description():
     # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
 
     data_file = os.path.join(current_dir, '..', 'data', 'data.csv')
-
+    pid_data_file = os.path.join(current_dir, '..', 'data', 'pid_data.csv')
     joint_names, model_name = process_user_input()
     position_topic = '/odom'  #from sdf plugin
     joint_control_topics = []
@@ -48,14 +48,17 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 200000}, 
                 {'data_file_path': data_file}, 
-                {'amplitude': 4.0}, #Must have decimal, or ros wont take as a double
-                {'frequency': 50.0},
-                {'altitude_pid_enabled': True},
-                {'altitude_kp': 1.0},
-                {'altitude_ki': 1.0},
-                {'altitude_kd': 1.0},
-                {'altitude_max_pid_output': 3.0},
+                {'amplitude': 2.758}, #2.73 best lift, Must have decimal, or ros wont take as a double
+                {'frequency': 50.0}, 
+                {'altitude_pid_enabled': False},
+                {'altitude_kp': 0.023},
+                {'altitude_ki': 0.010},
+                {'altitude_kd': 0.0044},
+                {'altitude_max_pid_output': 6.27},
                 {'altitude_max_integral': 3.0},
+                {'static_altitude': 10.0},
+                {'pid_data_enabled': True},
+                {'pid_data_file_path': pid_data_file},
             ]
         ),
         Node(
