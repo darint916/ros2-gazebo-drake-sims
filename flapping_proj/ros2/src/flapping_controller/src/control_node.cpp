@@ -5,16 +5,19 @@
 #include <fstream>
 
 #include "rclcpp/rclcpp.hpp"
+#include "rcl_interfaces/msg/parameter_descriptor.hpp"
 //Go into ros2 install -> pkg -> include folder to find exact file names
 #include "geometry_msgs/msg/twist.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "std_msgs/msg/float64.hpp"
 
+#include "flapping_controller/pid_controller.hpp"
 /*
 TODO: 
 Be able to extract parameters from gazebo plugin to input as headers,
 parameter joints should be ordered properly?
+Add launchfile params here somewhere
 */
 
 
@@ -43,6 +46,12 @@ class ControlNode : public rclcpp::Node
 		std::ofstream _csvFile;
         std::ofstream _csvWriter;
         // int _csv_writer_buffer; //Buffer if data comes in too fast, not fully implemented yet
+	
+		//Altitude PID controller
+		PIDController _altitude_pid;
+		rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr _altitude_subscriber;
+		double _altitude_target;
+		int _error_buffer;
 	public:
 		ControlNode() : Node("control_node")
 		{
@@ -97,6 +106,36 @@ class ControlNode : public rclcpp::Node
 			}
 			_csvWriter << _dataHeaders << "\n";
             // _csv_writer_buffer = 0;
+
+			//Altitude PID controller
+			this->declare_parameter<bool>("altitude_pid_enabled", false);
+			this->declare_parameter<double>("altitude_kp", 0.0);
+			this->declare_parameter<double>("altitude_ki", 0.0);
+			this->declare_parameter<double>("altitude_kd", 0.0);
+			rcl_interfaces::msg::ParameterDescriptor altitude_max_pid_output_desc;
+			altitude_max_pid_output_desc.description = "Max output of PID controller, will be added to base signal";
+			this->declare_parameter<double>("altitude_max_pid_output", 0.0, altitude_max_pid_output_desc);
+			this->declare_parameter<double>("altitude_max_integral", 0.0);
+			_altitude_pid = PIDController(
+				this->get_parameter("altitude_kp").as_double(),
+				this->get_parameter("altitude_ki").as_double(),
+				this->get_parameter("altitude_kd").as_double(),
+				this->get_parameter("altitude_max_pid_output").as_double(),
+				this->get_parameter("altitude_max_integral").as_double()
+			);
+			//subscriber to dynamic altitude topic
+			_altitude_subscriber = this->create_subscription<std_msgs::msg::Float64>(
+				"/control/altitude",
+				1000, std::bind(&ControlNode::altitude_topic_callback,
+				this, std::placeholders::_1));
+			//static altitude
+			if(this->has_parameter("static_altitude")){
+				_altitude_target = this->get_parameter("static_altitude").as_double();
+			} else {
+				RCLCPP_INFO_STREAM(this->get_logger(), "No static altitude parameter found, using default: 4");
+				_altitude_target = 4.0;
+			}	
+			_error_buffer = 0;
 		}
 
 	private:
@@ -128,14 +167,17 @@ class ControlNode : public rclcpp::Node
 		}
 
 		void timer_callback(){ 
-			//Control loop
+			//Control loop for choosing what type of control
 			sin_torque_control();
-			
+			if(this->get_parameter("altitude_pid_enabled").as_bool()){
+				altitude_pid_control();
+			} 
 			//Publishes joint torques
 			auto message = std_msgs::msg::Float64();
 			// int flag = 0;
 			// auto msg = geometry_msgs::msg::Twist();
-	
+
+			//Switch joint axis? instead of flipping torque
 			for (auto & joint : _jointTorqueControlMap) {
 				if (joint.first == "joint_RW_J_Flap"){
 					joint.second *= -1;
@@ -155,7 +197,7 @@ class ControlNode : public rclcpp::Node
 
 			
 		}
-		
+
 		void sin_torque_control(){
 			//hardcoded params
 			// double amplitude = 10;
@@ -175,6 +217,27 @@ class ControlNode : public rclcpp::Node
 				// }
 
 			} 
+		}
+		
+		void altitude_pid_control(){
+			double error = _altitude_target - _currentPose.position.z;
+			double dt = _currentPoseTime - _previousPoseTime;
+			double output = _altitude_pid.calculate(error, dt);
+			// _error_buffer += 1;
+			// if (_error_buffer > 20){
+				// RCLCPP_INFO_STREAM(this->get_logger(), "Altitude PID error: " << error);
+				// RCLCPP_ERROR_STREAM(this->get_logger(), "Altitude PID output: " << output);
+				// _error_buffer = 0;
+			// }
+			//Adds onto base amplitude from sin signal
+			for (auto & joint : _jointTorqueControlMap) {
+				joint.second += output;
+			}
+		}
+
+		void altitude_topic_callback(const std_msgs::msg::Float64::SharedPtr msg)
+		{
+			_altitude_target = msg->data;
 		}
 };
 

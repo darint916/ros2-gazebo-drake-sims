@@ -11,8 +11,9 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
+# include_directories(${PROJECT_SOURCE_DIR}/include) # for the header files (pid.h, etc.)
 
-add_executable(control_node src/control_node.cpp)
+add_executable(control_node src/control_node.cpp src/pid_controller.cpp)
 ament_target_dependencies(control_node rclcpp std_msgs geometry_msgs)
 
 target_include_directories(control_node PUBLIC

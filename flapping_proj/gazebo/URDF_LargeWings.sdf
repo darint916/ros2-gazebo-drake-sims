@@ -2,7 +2,7 @@
 <sdf version="1.8">
    <world name="world2">
       <physics name="1ms" type="ignored">
-         <max_step_size>0.0001</max_step_size>
+         <max_step_size>0.00001</max_step_size>
          <real_time_factor>1</real_time_factor>
       </physics>
       <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
@@ -51,8 +51,8 @@
          </link>
       </model>
       <model name="URDF_LargeWings"> <!-- flies in -y dir-->
-         <!-- <pose relative_to="world">0 0 1 1.5708 0 0</pose> -->
-         <pose relative_to="world">0 0 1 .5708 0 0</pose>
+         <pose relative_to="world">0 0 1 1.5708 0 0</pose>
+         <!-- <pose relative_to="world">0 0 1 .5708 0 0</pose> -->
          <link name="base_link">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -318,7 +318,7 @@
             </axis>
          </joint>
 
-         <!-- <joint name="pole" type="prismatic">
+         <joint name="pole" type="prismatic">
             <pose relative_to="base_link">0 0 0 0 0 0</pose>
             <parent>world</parent>
             <child>base_link</child>
@@ -329,7 +329,7 @@
                   <upper>1.79769e+308</upper>
                </limit>
             </axis>
-         </joint> -->
+         </joint>
 
          <!-- <joint name="anchor" type="revolute"> 
             <pose relative_to="base_link">0 0 0 0 0 0</pose>

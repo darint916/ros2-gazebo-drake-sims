@@ -50,6 +50,12 @@ def generate_launch_description():
                 {'data_file_path': data_file}, 
                 {'amplitude': 4.0}, #Must have decimal, or ros wont take as a double
                 {'frequency': 50.0},
+                {'altitude_pid_enabled': True},
+                {'altitude_kp': 1.0},
+                {'altitude_ki': 1.0},
+                {'altitude_kd': 1.0},
+                {'altitude_max_pid_output': 3.0},
+                {'altitude_max_integral': 3.0},
             ]
         ),
         Node(
