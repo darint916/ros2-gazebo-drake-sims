@@ -90,7 +90,7 @@ if not os.path.exists(dest_folder):
     os.makedirs(dest_folder)
 
 shutil.copy2(csv_source, csv_dest)
-
+shutil.copy2('/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/gazebo/URDF_LargeWings.sdf', os.path.join(script_dir, folder_name, 'data', 'URDF_LargeWings.sdf'))
 folder_name = os.path.join(script_dir, folder_name, 'data_plots')
 print("folder: ", folder_name)
 if not os.path.exists(folder_name):
