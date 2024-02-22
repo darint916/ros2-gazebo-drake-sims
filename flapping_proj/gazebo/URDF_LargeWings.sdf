@@ -238,7 +238,7 @@
                <xyz>-1 0 0</xyz>
                <dynamics>
                   <damping>.0004</damping>
-                  <spring_stiffness>.18</spring_stiffness>
+                  <spring_stiffness>.07</spring_stiffness>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
                   <!-- <spring_reference>1</spring_reference> -->

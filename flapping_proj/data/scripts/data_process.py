@@ -146,6 +146,7 @@ plt.show()
 
 
 
+
 # Create synchronized plots for joint angles
 fig2, ax2 = plt.subplots(2, 2)
 
