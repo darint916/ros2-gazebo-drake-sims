@@ -1,0 +1,9 @@
+#TODO:
+
+Finish Cost update
+Do top level (figure out if multithread possible)
+configure sdf properly for common point inertia tensor calc
+verification
+parse aero properly
+test sdf file sim
+test aero
