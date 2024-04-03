@@ -10,3 +10,4 @@
 # power is just torque * omega
 # tbh just apply a sinusoidal torque for now, and can calculate power from input and measured omega
 # for instantanious power, need the root mean square average over the last .2 seconds, for lift need the straight average over the last .2 seconds
+

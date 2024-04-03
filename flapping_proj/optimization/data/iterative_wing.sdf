@@ -52,12 +52,12 @@
       </model>
             <model name="URDF_LargeWings"> <!-- flies in -y dir-->
          <!-- <pose relative_to="world">0 0 .5 1.5708 0 0</pose> -->
-         <pose relative_to="world">0 0 .5 0 0 0</pose>
+         <pose relative_to="world">0 0 .5 1.5708 0 0</pose>
          <!-- <pose relative_to="world">0 0 1 .5708 0 0</pose> -->
          <link name="body">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
-               <pose>2.96269786051038E-18 -0.0225 1.73852292297301E-18 0 0 0</pose>
+               <pose>2.96269786051038E-18 -0.0225 1.73852292297301E-18 1.5708 0 0</pose>
                <!-- <mass>06.35649989496079</mass> -->
                <mass>0.00635649989496079</mass>
                <inertia>
@@ -74,7 +74,7 @@
                <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <box>
-                        <size>0.025 0.025 0.05</size>
+                        <size>0.025 0.025 0.01</size>
                     </box>
                </geometry>
                <material>
@@ -87,7 +87,7 @@
                <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_LargeWings/meshes/base_link.obj</uri>
+                     <uri>model://URDF_LargeWings/meshes/base_link.STL</uri>
                   </mesh>
                </geometry>
             </collision> -->
@@ -111,7 +111,7 @@
                <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_LargeWings/meshes/RW_Flap.obj</uri>
+                     <uri>model://URDF_LargeWings/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
                <material>
@@ -124,7 +124,7 @@
                <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_LargeWings/meshes/RW_Flap.obj</uri>
+                     <uri>model://URDF_LargeWings/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
             </collision>
@@ -150,7 +150,7 @@
                <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_LargeWings/meshes/RW_Pitch.obj</uri>
+                     <uri>model://URDF_LargeWings/meshes/RW_Pitch.STL</uri>
                   </mesh>
                </geometry>
                <material>
@@ -163,7 +163,7 @@
                <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
-                     <uri>model://URDF_LargeWings/meshes/RW_Pitch.obj</uri>
+                     <uri>model://URDF_LargeWings/meshes/RW_Pitch.STL</uri>
                   </mesh>
                </geometry>
             </collision>
@@ -239,10 +239,8 @@
          </joint>
 
          
-      </model>
       <!-- <gravity> 0 0 0 </gravity> -->
-   </world>
-</sdf>
+
 
          <plugin filename="aero_state_plugins" name="aerodynamics">
             <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/optimization/data/aero.csv</data_file_path>
