@@ -11,3 +11,12 @@
 # tbh just apply a sinusoidal torque for now, and can calculate power from input and measured omega
 # for instantanious power, need the root mean square average over the last .2 seconds, for lift need the straight average over the last .2 seconds
 
+#data parse
+import os
+curr_dir = os.path.dirname(os.path.abspath(__file__))
+def parse_data(time_start, time_end, iteration:int):
+    with open(os.path.join(curr_dir, 'data', f'iter_{iteration}', 'aero.csv'), 'r') as file:
+        #read files from time_start to time_end
+        data = file.readlines()
+        aero = data[time_start:time_end]
+        for 
