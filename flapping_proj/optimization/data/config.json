@@ -1,5 +1,12 @@
 {
-    "max_step_size": "0.0001",
+    "inputs" : {
+		"motor_torque_calc_enabled": false,
+        "frequency": 1.0,
+        "max_voltage": 6.0,
+		"motor_resistance": 0.5,
+		"motor_torque_constant": 0.1
+    },
+    "max_step_size": "0.0001", 
     "link_names": [
       "body",
       "hinge",
