@@ -17,8 +17,8 @@ import os
 import numpy as np
 import pandas as pd
 curr_dir = os.path.dirname(os.path.abspath(__file__))
-flap_freq = 20 #from config, float
-wing_mass = .1 #from config, float
+flap_freq = 20 #from config, float Hz
+wing_mass = .1 #from config, float kg
 interest_duration = 4 / flap_freq #duration of time steps to evaluate for
 t_start = 0.5 #seconds
 
