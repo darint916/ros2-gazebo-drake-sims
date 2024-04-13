@@ -149,6 +149,13 @@ class ControlNode : public rclcpp::Node
 			_csvWriterPID = std::ofstream(pidDataFilePath, std::ios::out | std::ios::app);
 			_dataHeadersPID = "time,altitude_target,altitude_error,altitude_output";
 			_csvWriterPID << _dataHeadersPID << "\n";
+
+
+			//optimization sector
+			this->declare_parameter<bool>("motor_torque_calc_enabled", false);
+			this->declare_parameter<double>("max_voltage", 6.0);
+			this->declare_parameter<double>("motor_resistance", 1.0);
+			this->declare_parameter<double>("motor_torque_constant", 1.0);
 		}
 
 	private:
@@ -185,6 +192,9 @@ class ControlNode : public rclcpp::Node
 			if(this->get_parameter("altitude_pid_enabled").as_bool()){
 				altitude_pid_control();
 			} 
+			if(this->get_parameter("motor_torque_calc_enabled").as_bool()){
+				motor_torque_output();
+			}
 			//Publishes joint torques
 			auto message = std_msgs::msg::Float64();
 			// int flag = 0;
@@ -192,7 +202,7 @@ class ControlNode : public rclcpp::Node
 
 			//Switch joint axis? instead of flipping torque
 			for (auto & joint : _jointTorqueControlMap) {
-				if (joint.first == "joint_RW_J_Flap"){
+				if (joint.first == "joint_RW_J_Flap"){ //edit to change dir later?
 					joint.second *= -1;
 				}
 				message.data = joint.second;
@@ -260,6 +270,20 @@ class ControlNode : public rclcpp::Node
 		void altitude_topic_callback(const std_msgs::msg::Float64::SharedPtr msg)
 		{
 			_altitude_target = msg->data;
+		}
+
+		void motor_torque_output (){
+			double amplitude = this->get_parameter("max_voltage").as_double();
+			double frequency = this->get_parameter("frequency").as_double();
+			double voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
+			double motor_resistance = this->get_parameter("motor_resistance").as_double();
+			double motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
+			for (auto & joint : _jointTorqueControlMap) {
+				//torque = (u - k_a * omega) * k_a / r_a
+				joint.second = (voltage - motor_torque_constant * 2) * motor_torque_constant / motor_resistance;
+				// joint.second = 1; //test
+
+			} 
 		}
 };
 

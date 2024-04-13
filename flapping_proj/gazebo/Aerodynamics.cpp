@@ -262,7 +262,7 @@ void AerodynamicsData::Update(const igz::UpdateInfo &_info, igz::EntityComponent
                     double flapDragScalar = .5 * link.second.fluidDensity  *  link.second.dragCoefficient * pow(velDotUp, 2) * link.second.wingParameters.bladeAreaList[i];
                     if (velDotUp < 0){
                         flapDragForce = flapDragScalar * (upVector);
-                    } else if (velDotUp > 0){
+                    } else if (velDotUp >= 0){
                         flapDragForce = flapDragScalar * (-upVector);
                     }
                     this->csvFile <<std::chrono::duration<double>(_info.simTime).count() << "," << link.first << "," << linkWorldPose.Rot().X() << "," << linkWorldPose.Rot().Y() << "," << linkWorldPose.Rot().Z() << "," << linkWorldPose.Rot().W();

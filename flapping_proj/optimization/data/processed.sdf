@@ -172,8 +172,8 @@
                 <axis>
                     <xyz>-1 0 0</xyz>
                     <dynamics>
-                        <damping>0</damping>
-                        <spring_stiffness>.18</spring_stiffness>
+                        <damping>0.001</damping>
+                        <spring_stiffness>10.18</spring_stiffness>
                     </dynamics>
                     <limit>
                         <effort>0</effort>
@@ -227,9 +227,9 @@
             <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
                 <joint_name>stroke_joint</joint_name>
             </plugin>
-            <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
+            <!-- <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
                 <joint_name>pitch_joint</joint_name>
-            </plugin>
+            </plugin> -->
         </model>
     </world>
 </sdf>

@@ -2,7 +2,8 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument, ExecuteProcess
 import os
-
+import json
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 def process_user_input():
     #config here, could later use config file?
@@ -15,15 +16,28 @@ def process_user_input():
     ''''''''''''''''''''''''
     return joint_names, model_name
 
+def parse_opt_config():
+    with open(os.path.join(current_dir, '..', 'optimization', 'data', 'config.json'), 'r') as json_file:
+        config = json.load(json_file)
+        motor_torque_calc_enabled = config['inputs']['motor_torque_calc_enabled']
+        frequency = config['inputs']['frequency']
+        max_voltage = config['inputs']['max_voltage']
+        motor_resistance = 0.01
+        motor_torque_constant = 0.01 #arbituary val
+        if motor_torque_calc_enabled:
+            motor_resistance = config['inputs']['motor_resistance']
+            motor_torque_constant = config['inputs']['motor_torque_constant']
+    return motor_torque_calc_enabled, frequency, max_voltage, motor_resistance, motor_torque_constant
 
 def generate_launch_description():
-    current_dir = os.path.dirname(os.path.abspath(__file__))
     sdf_file = os.path.join(current_dir, '..', 'optimization', 'data', 'processed.sdf')
     # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
 
     data_file = os.path.join(current_dir, '..', 'optimization', 'data','data.csv')
     pid_data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'pid_data.csv')
     joint_names, model_name = process_user_input()
+    motor_torque_calc_enabled, frequency, max_voltage, motor_resistance, motor_torque_constant = parse_opt_config()
+
     position_topic = '/odom'  #from sdf plugin
     joint_control_topics = []
     for joint in joint_names:
@@ -48,8 +62,8 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 20000}, 
                 {'data_file_path': data_file}, 
-                {'amplitude': 8.758}, #2.73 best lift, Must have decimal, or ros wont take as a double
-                {'frequency': 3.0}, 
+                {'amplitude': 1.78}, 
+                {'frequency': frequency}, 
                 {'altitude_pid_enabled': True},
                 {'altitude_kp': 0.3},
                 {'altitude_ki': 0.001},
@@ -59,6 +73,10 @@ def generate_launch_description():
                 {'static_altitude': 10.0},
                 {'pid_data_enabled': False},
                 {'pid_data_file_path': pid_data_file},
+                {'motor_torque_calc_enabled': motor_torque_calc_enabled},
+                {'max_voltage': max_voltage}, #AC voltage sin wave typically 6 V
+                {'motor_resistance': motor_resistance},
+                {'motor_torque_constant': motor_torque_constant},
             ]
         ),
         Node(

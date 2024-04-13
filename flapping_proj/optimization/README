@@ -7,3 +7,13 @@ verification
 parse aero properly
 test sdf file sim
 test aero
+
+
+Guide edits: 
+swappable motor torque output calc or pure sine wave
+match data.csv publish freq to aero freq
+
+In ros node, publish motor torques and voltages? compare with gazebo to time publish and compare values to check for  desynch?>
+changes to ros require colcon build!
+
+check if gazebo aerodynmaics inconsistent lift sign on different blades. Could be due to overshoot
