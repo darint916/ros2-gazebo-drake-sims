@@ -95,7 +95,7 @@ def wing_mass(curve):
     t2 = curve.z1**2 - curve.z1 * curve.z2 - curve.z1 * curve.z3 + curve.z0 * curve.z3 + curve.z2**2 - curve.z0 * curve.z2 
     t3 = 3 * curve.z1 - curve.z0 - 3 * curve.z2 + curve.z3 
 
-    t_max = 0.5 if abs(t3) < 1e-6 else t1 + np.sqrt(t2) / t
+    t_max = 0.5 if abs(t3) < 1e-6 else t1 + np.sqrt(t2) / t3
 
     m_te = sc.integrate.quad(lambda t: dm_te(curve, t), 0, t_max)
 
