@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import json
 import os
+import numpy as np
 from xml.dom.minidom import parseString
 # Load and parse the SDF file
 curr_path = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +15,8 @@ json_config_path = os.path.join(curr_path,'data','config.json')
 with open(json_config_path, 'r') as json_file:
     config = json.load(json_file)
 inertia_key = ['ixx', 'ixy', 'ixz', 'iyy', 'iyz', 'izz']
-def generate_sdf(output_path:str=None):
+
+def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.array= None, blade_area:np.array=None):
     link_names = config['link_names']
     existing_links = {link_name: False for link_name in link_names}
     existing_joints = {joint_name: False for joint_name in config['joint_names']}
@@ -44,12 +46,27 @@ def generate_sdf(output_path:str=None):
                     joint.find('damping').text = str(config[joint_name]['damping'])
                 if config[joint_name]['spring_stiffness'] is not None and joint.find('spring_stiffness') is not None:
                     joint.find('spring_stiffness').text = str(config[joint_name]['spring_stiffness'])
+        if chord_cps is not None and spar_cps is not None:
+            for plugin in model.findall('plugin'):
+                if plugin.get('name') == 'aerodynamics':
+                    link = plugin.find('link')
+                    if link is not None:
+                        cp_list = link.find('center_pressure_list')
+                        if cp_list is not None:
+                            cp_in = []
+                            for i, spar_cp in enumerate(spar_cps):
+                                cp_in.append(spar_cp, chord_cps[i])
+
+
     for joint_name, exists in existing_joints.items():
         if not exists:
             print(f"Joint {joint_name} does not exist in the SDF file")
     for link_name, exists in existing_links.items():
         if not exists:
             print(f"Link {link_name} does not exist in the SDF file")
+
+    # Add the center of pressure and blade area to the SDF file gazebo extension
+    
     if output_path is not None:
         tree.write(output_path)
     else:

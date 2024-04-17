@@ -46,7 +46,7 @@ class BezierCurve():
         self.y3 = y_3
         self.z3 = z_3
 
-def wing_I(curve):
+def wing_I(curve) -> np.array:
     #leading edge
     I_LE = np.array([1/3 * rho_le * curve.y3 * (3 * (D_LE / 2)**2 + curve.y3**2), .5 * rho_le * (D_LE / 2)**3, 1/3 * rho_le * curve.y3 * (3 * (D_LE / 2)**2 + curve.y3**2), 0, 0, 0])
     #hinge
@@ -86,7 +86,7 @@ def wing_I(curve):
 def dm_te(curve, t):
         return rho_te * np.sqrt(curve.dB_z(t)**2 + curve.dB_y(t)**2)
 
-def wing_mass(curve):
+def wing_mass(curve) -> float:
     m_LE = curve.y3 * rho_le
     m_h = (curve.y3 - (curve.y0 + D_H + D_TE)) * rho_h
     m_film = sc.integrate.quad(lambda t: curve.B_z(t) * curve.dB_y(t), 0, 1)

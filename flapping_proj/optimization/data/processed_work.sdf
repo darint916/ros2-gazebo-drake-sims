@@ -55,7 +55,7 @@
             <link name="body">
                 <pose>0 0 0 0 0 0</pose>
                 <inertial>
-                    <pose>0 0 0 0 0 0</pose>
+                    <pose>2.96269786051038E-18 -0.0225 1.73852292297301E-18 1.5708 0 0</pose>
                     <mass>1.0</mass>
                     <inertia>
                         <ixx>0.1</ixx>
@@ -83,6 +83,7 @@
             <link name="hinge">
                 <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
                 <inertial>
+                    <pose>0.00335273645464822 0.00332401287529993 -9.5470568989951E-21 0 0 0</pose>
                     <mass>0.5</mass>
                     <inertia>
                         <ixx>0.05</ixx>
@@ -96,9 +97,9 @@
                 <visual name="hinge">
                     <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
                     <geometry>
-                        <sphere>
-                            <radius>0.0025</radius>
-                        </sphere>
+                        <mesh>
+                            <uri>model://URDF_LargeWings/meshes/RW_Flap.STL</uri>
+                        </mesh>
                     </geometry>
                     <material>
                         <ambient>1.0 0.0 1.0 .9</ambient>
@@ -106,10 +107,19 @@
                         <specular>1.0 0.0 1.0 .9</specular>
                     </material>
                 </visual>
+                <collision name="hinge">
+                    <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
+                    <geometry>
+                        <mesh>
+                            <uri>model://URDF_LargeWings/meshes/RW_Flap.STL</uri>
+                        </mesh>
+                    </geometry>
+                </collision>
             </link>
             <link name="wing">
                 <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
                 <inertial>
+                    <pose>0.075 -0.0217919871250799 3.00461767003954E-20 0 0 0</pose>
                     <mass>0.2</mass>
                     <inertia>
                         <ixx>0.02</ixx>
@@ -156,14 +166,14 @@
                 </axis>
             </joint>
             <joint name="pitch_joint" type="revolute">
-                <pose relative_to="hinge">0 0 0 0 0 0</pose>
+                <pose relative_to="hinge">0.00899999999999999 0.004 0 0 0 0</pose>
                 <parent>hinge</parent>
                 <child>wing</child>
                 <axis>
-                    <xyz>1 0 0</xyz>
+                    <xyz>-1 0 0</xyz>
                     <dynamics>
-                        <damping>0.002</damping>
-                        <spring_stiffness>.18</spring_stiffness>
+                        <damping>0.001</damping>
+                        <spring_stiffness>10.18</spring_stiffness>
                     </dynamics>
                     <limit>
                         <effort>0</effort>
@@ -173,11 +183,11 @@
                 </axis>
             </joint>
             <joint name="stroke_joint" type="revolute">
-                <pose relative_to="body">0.0125 0.0125 0 0 0 0</pose>
+                <pose relative_to="body">0.00666143782776616 0 0 0 0 0</pose>
                 <parent>body</parent>
                 <child>hinge</child>
                 <axis>
-                    <xyz>0 1 0</xyz>
+                    <xyz>0 -1 0</xyz>
                     <dynamics>
                         <damping>.001</damping>
                         <spring_stiffness>5</spring_stiffness>
@@ -200,7 +210,7 @@
                     <lift_coefficient>1</lift_coefficient>
                     <control_joint>stroke_joint</control_joint>
                     <wing_pitch_joint>pitch_joint</wing_pitch_joint>
-                    <blades>15</blades>
+                    <blades>9</blades>
                     <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
                     <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
                     <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
@@ -217,9 +227,9 @@
             <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
                 <joint_name>stroke_joint</joint_name>
             </plugin>
-            <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
+            <!-- <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
                 <joint_name>pitch_joint</joint_name>
-            </plugin>
+            </plugin> -->
         </model>
     </world>
 </sdf>

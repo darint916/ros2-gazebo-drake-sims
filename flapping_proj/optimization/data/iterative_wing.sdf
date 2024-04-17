@@ -57,16 +57,16 @@
          <link name="body">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
-               <pose>2.96269786051038E-18 -0.0225 1.73852292297301E-18 1.5708 0 0</pose>
+               <pose>0 0 0 0 0 0</pose>
                <!-- <mass>06.35649989496079</mass> -->
-               <mass>0.00635649989496079</mass>
+               <mass>0.0</mass>
                <inertia>
-                  <ixx>1.07828542773576E-06</ixx>
-                  <ixy>6.91754242672403E-24</ixy>
-                  <ixz>-2.8657332950023E-25</ixz>
-                  <iyy>1.53486567387336E-07</iyy>
-                  <iyz>6.48370505339519E-23</iyz>
-                  <izz>1.22051985420084E-06</izz>
+                  <ixx>0</ixx>
+                  <ixy>0</ixy>
+                  <ixz>0</ixz>
+                  <iyy>0</iyy>
+                  <iyz>0</iyz>
+                  <izz>0</izz>
                </inertia>
             </inertial>
 
@@ -74,8 +74,8 @@
                <pose>0 0 0 0 0 0</pose>
                <geometry>
                   <box>
-                        <size>0.025 0.025 0.01</size>
-                    </box>
+                     <size>0.025 0.025 0.01</size>
+                  </box>
                </geometry>
                <material>
                   <ambient>0.0 0.0 1.0 1</ambient>
@@ -95,24 +95,23 @@
          <link name="hinge">
             <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
             <inertial>
-               <pose>0.00335273645464822 0.00332401287529993 -9.5470568989951E-21 0 0 0</pose>
-               <mass>1.17693121573423E-05</mass>
+               <mass>0</mass>
                <!-- <mass>1.17693121573423E-02</mass> -->
                <inertia>
-                  <ixx>1.69338330378992E-11</ixx>
-                  <ixy>-2.61983490684792E-11</ixy>
-                  <ixz>1.63242107039253E-28</ixz>
-                  <iyy>1.04518429929419E-10</iyy>
-                  <iyz>-5.79055068765945E-29</iyz>
-                  <izz>1.1967215450352E-10</izz>
+                  <ixx>0</ixx>
+                  <ixy>0</ixy>
+                  <ixz>0</ixz>
+                  <iyy>0</iyy>
+                  <iyz>0</iyz>
+                  <izz>0</izz>
                </inertia>
             </inertial>
             <visual name="hinge">
                <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
                <geometry>
-                  <mesh>
-                     <uri>model://URDF_LargeWings/meshes/RW_Flap.STL</uri>
-                  </mesh>
+                  <sphere>
+                     <radius>0.0025</radius>
+                  </sphere>
                </geometry>
                <material>
                   <ambient>1.0 0.0 1.0 .9</ambient>
@@ -120,20 +119,19 @@
                   <specular>1.0 0.0 1.0 .9</specular>
                </material>
             </visual>
-            <collision name="hinge">
+            <!-- <collision name="hinge">
                <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
                <geometry>
                   <mesh>
                      <uri>model://URDF_LargeWings/meshes/RW_Flap.STL</uri>
                   </mesh>
                </geometry>
-            </collision>
+            </collision> -->
          </link>
 
          <link name="wing">
             <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
             <inertial>
-               <pose>0.075 -0.0217919871250799 3.00461767003954E-20 0 0 0</pose>
                <!-- <mass>0.877528688193489</mass> -->
                <mass>0.000877528688193489</mass>
                <!-- <mass>0.000877528688193489</mass> -->
@@ -184,14 +182,14 @@
          </joint>
       
          <joint name="pitch_joint" type="revolute">
-            <pose relative_to="hinge">0.00899999999999999 0.004 0 0 0 0</pose>
+            <pose relative_to="hinge">0 0 0 0 0 0</pose>
             <!-- <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0.785398 0 0</pose> -->
             <parent>hinge</parent>
             <child>wing</child>
             <axis>
-               <xyz>-1 0 0</xyz>
+               <xyz>1 0 0</xyz>
                <dynamics>
-                  <damping>0</damping>
+                  <damping>0.002</damping>
                   <!-- <spring_stiffness>0.0000018</spring_stiffness> -->
                   <spring_stiffness>.18</spring_stiffness>
                   <!-- <friction>1</friction>    -->
@@ -214,11 +212,11 @@
 
          <!-- passive-->
          <joint name="stroke_joint" type="revolute">
-            <pose relative_to="body">0.00666143782776616 0 0 0 0 0</pose>
+            <pose relative_to="body">0.0125 0.0125 0 0 0 0</pose>
             <parent>body</parent>
             <child>hinge</child>
             <axis>
-               <xyz>0 -1 0</xyz>
+               <xyz>0 1 0</xyz>
                <dynamics>
                   <!-- <damping>.0001</damping> -->
                   <damping>.001</damping>
@@ -255,7 +253,7 @@
                <lift_coefficient>1</lift_coefficient>
                <control_joint>stroke_joint</control_joint>
                <wing_pitch_joint>pitch_joint</wing_pitch_joint>
-               <blades>9</blades>
+               <blades>15</blades>
                <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
                <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
                <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>

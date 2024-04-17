@@ -18,11 +18,15 @@
 import os
 import numpy as np
 import pandas as pd
+import json
 curr_dir = os.path.dirname(os.path.abspath(__file__))
-flap_freq = 20 #from config, float Hz
-wing_mass = .1 #from config, float kg
+json_config_path = os.path.join(curr_dir,'data','config.json')
+with open(json_config_path, 'r') as json_file:
+    config = json.load(json_file)
+flap_freq = config["inputs"]["frequency"] #float Hz
+wing_mass = config["wing"]["mass"] #from config, float kg
 interest_duration = 4 / flap_freq #duration of time steps to evaluate for
-t_start = 0.5 #seconds
+t_start = config["sim_length"] / 2 #seconds
 
 #returns float of the current iteration cost function evaluation
 def parse_data(iteration:int): 
@@ -59,7 +63,7 @@ def parse_data(iteration:int):
     power_rms = np.sqrt(np.sum(instant_power ** 2) / len(instant_power))
     print(power_rms)
 
-    return(lift_avg / power_rms / wing_mass)
+    return -(lift_avg / power_rms / wing_mass)
 
 if __name__ == "__main__":
     print(parse_data(0))

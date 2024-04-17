@@ -17,3 +17,20 @@ In ros node, publish motor torques and voltages? compare with gazebo to time pub
 changes to ros require colcon build!
 
 check if gazebo aerodynmaics inconsistent lift sign on different blades. Could be due to overshoot
+
+Implement integral for single cp blade area implementation every opt step
+
+
+TODO:
+4/18
+Implement Blade # parsing Generate sdf - eneter cp, enter area
+check config adding, spring stiffnesses
+
+AFter generate, run simulation (through launch file)
+Figure out how to time 2 seconds - through ros, track time, from ros, kill gazebo process, 
+Primitive implementation, poll data time to 2 seconds, then kill process,
+copy data over, parse data, gets value of cost function (parse_data func)
+
+LATER:
+setup bounds
+non linear constraints
