@@ -8,6 +8,9 @@ import os
 import shutil
 import csv
 import json
+import subprocess
+import time
+import signal
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 json_config_path = os.path.join(DIR_PATH,'data','config.json')
 with open(json_config_path, 'r') as json_file:
@@ -55,7 +58,7 @@ def sim_start(opt_params):
     
 
     generate_sdf(chord_cp=chord_cp, spar_cp=spar_cp, blade_area=blade_areas) #write to default location: (data/processed.sdf)
-    
+    sim_launch
     #end of sim, save parameters and such
 
 def opt_callback(intermediate_result: OptimizeResult):
@@ -73,7 +76,40 @@ def opt_callback(intermediate_result: OptimizeResult):
     return False 
 
 
-
+def sim_launch(): #Note that ign gui does not get killed by SIGTERM (or any signal), requires PID kill process
+    launch_path = os.path.join(DIR_PATH, '..', 'launch', 'opt_launch.py')
+    ros2_process = subprocess.Popen(['ros2', 'launch', launch_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    sim_time = config["sim_length"]
+    kill_file_path = os.path.join(DIR_PATH, '_kill_me.txt') #Path mirrored from opt_launch.py
+    try:
+        time.sleep(sim_time)
+        while(ros2_process.poll() is None): #most scuffed polling process
+            time.sleep(.5)
+            if os.path.isfile(kill_file_path):
+                print("kill signal received")
+                break
+    finally: #check processes with `ps aux | grep 'ign|gz', '^(?!.*signal).*ign.*|.*gz.*'
+        if os.path.isfile(kill_file_path):
+            os.remove(kill_file_path)
+        ros2_process.send_signal(signal.SIGINT)
+        print("kill wait")
+        # time.sleep(1)
+        # ros2_process.send_signal(signal.SIGINT)
+        ros2_process.wait()  
+        for line in ros2_process.stdout: #terminal output for sim
+            print(line.decode(), end='')
+        print("ros2 done")
+        ros2_process.terminate()
+    try: # Neg lookahead does ot work for pkill, manual pid filter
+        # subprocess.run("pkill -f '^(?!.*signal).*ign.*|.*gz.*'", shell=True, check=True) 
+        proc = subprocess.run(['pgrep', '-af', 'ign|gz'], text=True, capture_output=True)
+        processes = proc.stdout.splitlines()
+        targeted_processes = [p.split()[0] for p in processes if 'signal' not in p]
+        for pid in targeted_processes:
+            subprocess.run(['kill', '-9', pid])
+    except subprocess.CalledProcessError as e:
+        print("termination fail:", e)
 if __name__ == '__main__':
     # top_start(1)
-    generate_sdf()
+    # generate_sdf()
+    sim_launch()

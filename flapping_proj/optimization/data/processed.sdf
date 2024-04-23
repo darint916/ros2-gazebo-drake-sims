@@ -200,7 +200,7 @@
                     <lift_coefficient>1</lift_coefficient>
                     <control_joint>stroke_joint</control_joint>
                     <wing_pitch_joint>pitch_joint</wing_pitch_joint>
-                    <blades>15</blades>
+                    <blades>9</blades>
                     <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
                     <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
                     <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
