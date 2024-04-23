@@ -46,12 +46,17 @@ class BezierCurve():
         self.y3 = y_3
         self.z3 = z_3
 
-def wing_I(curve) -> np.array:
+def wing_I(curve, debug = False) -> np.array:
     #leading edge
-    I_LE = np.array([1/3 * rho_le * curve.y3 * (3 * (D_LE / 2)**2 + curve.y3**2), .5 * rho_le * (D_LE / 2)**3, 1/3 * rho_le * curve.y3 * (3 * (D_LE / 2)**2 + curve.y3**2), 0, 0, 0])
+    I_LE = np.array([1/3 * rho_le * curve.y3 * (3 * (D_LE / 2)**2 + curve.y3**2), 
+                     .5 * rho_le * (D_LE / 2)**3, 
+                     1/3 * rho_le * curve.y3 * (3 * (D_LE / 2)**2 + curve.y3**2), 
+                     0, 
+                     0, 
+                     0])
     #hinge
     I_H = np.array([rho_h * (1/3 * curve.y3**3 + curve.z0**2 * curve.y3 - (1/3 * (curve.y0 + D_TE + D_H)**3 + curve.z0**2 * (curve.y0  + D_TE + D_H))), 
-                    rho_h * curve.z0 * (curve.y3 - (curve.y0 + D_TE + D_H)), 
+                    rho_h * curve.z0**2 * (curve.y3 - (curve.y0 + D_TE + D_H)), 
                     1/3 * rho_h * (curve.y3**3 - (curve.y0 + D_TE + D_H)**3),
                     0, 
                     0, 
@@ -66,21 +71,27 @@ def wing_I(curve) -> np.array:
     t_max = 0.5 if abs(t3) < 1e-6 else t1 + np.sqrt(t2) / t3
 
     #trailing edge
-    I_TE = np.array([sc.integrate.quad(lambda t: (curve.B_y(t)**2 + curve.B_z(t)**2) * dm_te(curve, t), 0, t_max)[0],
-                     sc.integrate.quad(lambda t: (curve.B_z(t)**2) * dm_te(curve, t), 0, t_max)[0],
-                     sc.integrate.quad(lambda t: (curve.B_y(t)**2) * dm_te(curve, t), 0, t_max)[0],
+    I_TE = np.array([sc.integrate.quad(lambda t: (curve.B_y(t)**2 + curve.B_z(t)**2) * dm_te(t), 0, t_max)[0],
+                     sc.integrate.quad(lambda t: (curve.B_z(t)**2) * dm_te(t), 0, t_max)[0],
+                     sc.integrate.quad(lambda t: (curve.B_y(t)**2) * dm_te(t), 0, t_max)[0],
                      0,
                      0,
-                     sc.integrate.quad(lambda t: (curve.B_y(t) * curve.B_z(t)) * dm_te(curve, t), 0, t_max)[0]])
+                     sc.integrate.quad(lambda t: (curve.B_y(t) * curve.B_z(t)) * dm_te(t), 0, t_max)[0]])
     
     #membrane
-    I_film = np.array([rho_mem * sc.integrate.quad(lambda t: (curve.B_z(t)*curve.B_y(t)**2 + 1/3 * curve.B_z(t)**3) * curve.dB_y(t), 0, 1)[0],
-                       1/3 * rho_mem * sc.integrate.quad(lambda t: curve.B_z(t)**3 * curve.dB_y(t), 0, 1)[0],
-                       rho_mem * sc.integrate.quad(lambda t: curve.B_y(t)**2 * curve.B_z(t) * curve.dB_y(t), 0, 1)[0],
+    I_film = np.array([-rho_mem * sc.integrate.quad(lambda t: (curve.B_z(t)*curve.B_y(t)**2 + 1/3 * curve.B_z(t)**3) * curve.dB_y(t), 0, 1)[0],
+                       -1/3 * rho_mem * sc.integrate.quad(lambda t: curve.B_z(t)**3 * curve.dB_y(t), 0, 1)[0],
+                       -rho_mem * sc.integrate.quad(lambda t: curve.B_y(t)**2 * curve.B_z(t) * curve.dB_y(t), 0, 1)[0],
                        0,
                        0,
-                       0.5 * rho_mem * sc.integrate.quad(lambda t: curve.B_y(t) * curve.B_z(t)**2 * curve.dB_y(t), 0, 1)[0]])
+                       -0.5 * rho_mem * sc.integrate.quad(lambda t: curve.B_y(t) * curve.B_z(t)**2 * curve.dB_y(t), 0, 1)[0]])
     
+    if debug:
+        print(I_LE)
+        print(I_H)
+        print(I_TE)
+        print(I_film)
+
     return I_LE + I_H + I_TE + I_film
     
 def dm_te(curve, t):
