@@ -93,6 +93,7 @@ def generate_launch_description():
     ])
 
     launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', '-r', sdf_file]))
+    # launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', sdf_file]))
 
     return launch_description
 

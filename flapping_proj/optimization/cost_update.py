@@ -29,7 +29,7 @@ interest_duration = 4 / flap_freq #duration of time steps to evaluate for
 t_start = config["sim_length"] / 2 #seconds
 
 #returns float of the current iteration cost function evaluation
-def parse_data(iteration:int): 
+def parse_data(): 
     dataname = open(os.path.join(curr_dir, 'data', 'data.csv'), 'r')
     aeroname = open(os.path.join(curr_dir, 'data', 'aero.csv'), 'r')
     #read files from time_start to time_end
@@ -66,4 +66,4 @@ def parse_data(iteration:int):
     return -(lift_avg / power_rms / wing_mass)
 
 if __name__ == "__main__":
-    print(parse_data(0))
+    print(parse_data())

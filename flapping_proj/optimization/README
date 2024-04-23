@@ -31,6 +31,9 @@ Figure out how to time 2 seconds - through ros, track time, from ros, kill gazeb
 Primitive implementation, poll data time to 2 seconds, then kill process,
 copy data over, parse data, gets value of cost function (parse_data func)
 
-LATER:
+4/23 TODO:
 setup bounds
+Check math, need velocity somewhere for voltage checking
+Implement Blade # parsing Generate sdf - eneter cp, enter area
+check config adding, spring stiffnesses
 non linear constraints

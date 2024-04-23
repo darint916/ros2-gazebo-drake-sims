@@ -22,7 +22,8 @@ def top_start(iterations:int,title:str = "beta_test"):
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
     
-    # sc.optimize.differential_evolution(sim_cost, 
+    sc.optimize.differential_evolution(sim_start, 
+            strategy='best1bin', maxiter=iterations, callback=opt_callback)
     # for i in range(iterations):
     #     sim_start(i, folder_path)
     
@@ -37,8 +38,6 @@ def pitch_stiffness_calc(length:float, width:float) ->float: #lw of hinge
     wing_thickness = 12e-6 #m 
     return youngs_modulus * width * wing_thickness**3 / 4.0 / (length**2) #Nm/rad
      
-
-
 def sim_start(opt_params):
     #opt_params: y0, z0, y1, z1,.. y3, z3, stroke_stiffness, 
     b_curve = inertial_properties.BezierCurve(opt_params[0], opt_params[1], opt_params[2], opt_params[3], opt_params[4], opt_params[5], opt_params[6], opt_params[7])
@@ -58,7 +57,9 @@ def sim_start(opt_params):
     
 
     generate_sdf(chord_cp=chord_cp, spar_cp=spar_cp, blade_area=blade_areas) #write to default location: (data/processed.sdf)
-    sim_launch
+    sim_launch()
+    print("sim finished, parsing data")
+    return parse_data()
     #end of sim, save parameters and such
 
 def opt_callback(intermediate_result: OptimizeResult):
@@ -92,13 +93,9 @@ def sim_launch(): #Note that ign gui does not get killed by SIGTERM (or any sign
         if os.path.isfile(kill_file_path):
             os.remove(kill_file_path)
         ros2_process.send_signal(signal.SIGINT)
-        print("kill wait")
-        # time.sleep(1)
-        # ros2_process.send_signal(signal.SIGINT)
         ros2_process.wait()  
         for line in ros2_process.stdout: #terminal output for sim
             print(line.decode(), end='')
-        print("ros2 done")
         ros2_process.terminate()
     try: # Neg lookahead does ot work for pkill, manual pid filter
         # subprocess.run("pkill -f '^(?!.*signal).*ign.*|.*gz.*'", shell=True, check=True) 
@@ -107,9 +104,10 @@ def sim_launch(): #Note that ign gui does not get killed by SIGTERM (or any sign
         targeted_processes = [p.split()[0] for p in processes if 'signal' not in p]
         for pid in targeted_processes:
             subprocess.run(['kill', '-9', pid])
+        print("ignition kill success")
     except subprocess.CalledProcessError as e:
         print("termination fail:", e)
 if __name__ == '__main__':
-    # top_start(1)
+    top_start(3)
     # generate_sdf()
-    sim_launch()
+    # sim_launch()
