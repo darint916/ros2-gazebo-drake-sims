@@ -27,7 +27,8 @@ def parse_opt_config():
         if motor_torque_calc_enabled:
             motor_resistance = config['inputs']['motor_resistance']
             motor_torque_constant = config['inputs']['motor_torque_constant']
-    return motor_torque_calc_enabled, frequency, max_voltage, motor_resistance, motor_torque_constant
+        sim_length = config['sim_length']
+    return motor_torque_calc_enabled, frequency, max_voltage, motor_resistance, motor_torque_constant, sim_length
 
 def generate_launch_description():
     sdf_file = os.path.join(current_dir, '..', 'optimization', 'data', 'processed.sdf')
@@ -35,8 +36,11 @@ def generate_launch_description():
 
     data_file = os.path.join(current_dir, '..', 'optimization', 'data','data.csv')
     pid_data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'pid_data.csv')
+    
+    kill_flag_path = os.path.join(current_dir, '..', 'optimization', '_kill_me.txt') #synchronized with top_level poll
+
     joint_names, model_name = process_user_input()
-    motor_torque_calc_enabled, frequency, max_voltage, motor_resistance, motor_torque_constant = parse_opt_config()
+    motor_torque_calc_enabled, frequency, max_voltage, motor_resistance, motor_torque_constant, sim_length = parse_opt_config()
 
     position_topic = '/odom'  #from sdf plugin
     joint_control_topics = []
@@ -77,6 +81,8 @@ def generate_launch_description():
                 {'max_voltage': max_voltage}, #AC voltage sin wave typically 6 V
                 {'motor_resistance': motor_resistance},
                 {'motor_torque_constant': motor_torque_constant},
+                {'sim_length': sim_length}, #duration before kill poll
+                {'kill_flag_path': kill_flag_path}
             ]
         ),
         Node(
@@ -86,7 +92,8 @@ def generate_launch_description():
         )
     ])
 
-    launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', sdf_file]))
+    launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', '-r', sdf_file]))
+    # launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', sdf_file]))
 
     return launch_description
 

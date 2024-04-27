@@ -55,6 +55,14 @@ class ControlNode : public rclcpp::Node
 		std::string _dataHeadersPID;
 		std::ofstream _csvFilePID;
         std::ofstream _csvWriterPID;
+
+		bool _motor_torque_calc_enabled;
+		double _max_voltage;
+		double _motor_resistance;
+		double _motor_torque_constant;
+		double _sim_length;
+		std::string _kill_flag_file_path;
+
 	public:
 		ControlNode() : Node("control_node")
 		{
@@ -156,6 +164,15 @@ class ControlNode : public rclcpp::Node
 			this->declare_parameter<double>("max_voltage", 6.0);
 			this->declare_parameter<double>("motor_resistance", 1.0);
 			this->declare_parameter<double>("motor_torque_constant", 1.0);
+			this->declare_parameter<double>("sim_length", 5.0);
+			this->declare_parameter<std::string>("kill_flag_path", "../optimization/kill_flag.txt");
+			_motor_torque_calc_enabled = this->get_parameter("motor_torque_calc_enabled").as_bool();
+			_max_voltage = this->get_parameter("max_voltage").as_double();
+			_motor_resistance = this->get_parameter("motor_resistance").as_double();
+			_motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
+			_sim_length = this->get_parameter("sim_length").as_double();
+			_kill_flag_file_path = this->get_parameter("kill_flag_path").as_string();
+			
 		}
 
 	private:
@@ -168,7 +185,13 @@ class ControlNode : public rclcpp::Node
 
 			//Time updates
 			_previousPoseTime = _currentPoseTime;
-
+			if (_currentPoseTime == _sim_length) {
+				std::ofstream kill_flag_file(_kill_flag_file_path);
+				kill_flag_file << 1;
+				kill_flag_file.close();
+				RCLCPP_INFO_STREAM(this->get_logger(), "Data written to file");
+				rclcpp::shutdown();
+			}
 			_currentPoseTime = msg->poses[pose_size - 1].position.x; //Time is stored as last pose obj in plugin, due to missing header
 			_csvWriter << _currentPoseTime << "," << _currentPose.position.x << "," << _currentPose.position.y << "," << _currentPose.position.z << ","
 						<< _currentPose.orientation.x << "," << _currentPose.orientation.y << "," << _currentPose.orientation.z << "," << _currentPose.orientation.w;
