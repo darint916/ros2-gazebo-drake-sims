@@ -1,7 +1,7 @@
 from optimization.sdf_generate import generate_sdf
 from optimization.cost_update import parse_data
 from optimization.aero_properties import aero_properties
-import inertial_properties
+import wing_classes
 import scipy as sc
 from scipy.optimize import OptimizeResult
 import os
@@ -11,6 +11,7 @@ import json
 import subprocess
 import time
 import signal
+import numpy as np
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 json_config_path = os.path.join(DIR_PATH,'data','config.json')
 with open(json_config_path, 'r') as json_file:
@@ -22,7 +23,28 @@ def top_start(iterations:int,title:str = "beta_test"):
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
     
-    sc.optimize.differential_evolution(sim_start, 
+    #lower and upper bounds for [y0, z0, y1, z1, y2, z2, k_phi]
+    param_lb = np.array([1, -3, 1, -np.inf, 1, -np.inf, .01]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
+    param_ub = np.array([30, -1, 150, -1, 150, -1, 10]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
+    bounds = sc.optimize.Bounds(param_lb, param_ub)
+    
+    #products of A and opt_params gives a constaint on variables
+    #in order, 
+    #y1 - y0 >= 0
+    #y2 - y0 >= 0
+    #y2 - y1 >= 0
+    #z2 - z1  = 0
+    #z0 - z1 >= 0
+    A = np.array([[-1,  0,  1,  0, 0, 0, 0],
+                  [-1,  0,  0,  0, 1, 0, 0],
+                  [ 0,  0, -1,  0, 1, 0, 0],
+                  [ 0, -1,  0,  0, 0, 1, 0], 
+                  [ 0,  1,  0, -1, 0, 0, 0]])
+    constraint_lb = np.array([     0,      0,      0, 0,      0])
+    constraint_ub = np.array([np.inf, np.inf, np.inf, 0, np.inf])
+    constraints = sc.optimize.LinearConstraint(A, constraint_lb, constraint_ub)
+
+    sc.optimize.differential_evolution(sim_start, bounds, contraints = constraints,
             strategy='best1bin', maxiter=iterations, callback=opt_callback)
     # for i in range(iterations):
     #     sim_start(i, folder_path)
@@ -40,20 +62,18 @@ def pitch_stiffness_calc(length:float, width:float) ->float: #lw of hinge
      
 def sim_start(opt_params):
     #opt_params: y0, z0, y1, z1,.. y3, z3, stroke_stiffness, 
-    b_curve = inertial_properties.BezierCurve(opt_params[0], opt_params[1], opt_params[2], opt_params[3], opt_params[4], opt_params[5], opt_params[6], opt_params[7])
-    wing_inertia = inertial_properties.wing_I(b_curve)
-    wing_mass = inertial_properties.wing_mass(b_curve)
-    config["wing"]["inertia"]["ixx"] = wing_inertia[0]
-    config["wing"]["inertia"]["iyy"] = wing_inertia[1]
-    config["wing"]["inertia"]["izz"] = wing_inertia[2]
-    config["wing"]["inertia"]["ixy"] = wing_inertia[3]
-    config["wing"]["inertia"]["ixz"] = wing_inertia[4]
-    config["wing"]["inertia"]["iyz"] = wing_inertia[5]
-    config["wing"]["mass"] = wing_mass
-    config["stroke_joint"]["spring_stiffness"] = opt_params[8]
-    chord_cp, spar_cp, blade_areas = aero_properties(b_curve, config["blade_count"])
+    tri_wing = wing_classes.TriWing(opt_params[0], opt_params[1], opt_params[2], opt_params[3], opt_params[4], opt_params[5])
+    config["wing"]["inertia"]["ixx"] = tri_wing.I[0]
+    config["wing"]["inertia"]["iyy"] = tri_wing.I[1]
+    config["wing"]["inertia"]["izz"] = tri_wing.I[2]
+    config["wing"]["inertia"]["ixy"] = tri_wing.I[3]
+    config["wing"]["inertia"]["ixz"] = tri_wing.I[4]
+    config["wing"]["inertia"]["iyz"] = tri_wing.I[5]
+    config["wing"]["mass"] = tri_wing.m
+    config["stroke_joint"]["spring_stiffness"] = opt_params[6]
+    chord_cp, spar_cp, blade_areas = aero_properties(tri_wing, config["blade_count"])
     #length = |z0|, width = y3 - y0
-    config["pitch_joint"]["spring_stiffness"] = pitch_stiffness_calc(abs(opt_params[1]), opt_params[6] - opt_params[0])
+    config["pitch_joint"]["spring_stiffness"] = pitch_stiffness_calc(abs(opt_params[1]), opt_params[4] - opt_params[0])
     
 
     generate_sdf(chord_cp=chord_cp, spar_cp=spar_cp, blade_area=blade_areas) #write to default location: (data/processed.sdf)
