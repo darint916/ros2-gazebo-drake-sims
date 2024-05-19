@@ -7,10 +7,10 @@ import numpy as np
 def aero_properties(curve, n) -> Tuple[np.array, np.array]:
     start = .5/n
     t = np.linspace(start, 1-start, n)
-    chord_cp = .25 * curve.B_z(t) #up/down, width, chord of wing
-    spar_cp =  curve.B_y(t) #along leading edge of wing
+    chord_cp = .25 * curve.z(t) #up/down, width, chord of wing
+    spar_cp =  curve.y(t) #along leading edge of wing
     #x 0 into wing
-    blade_area = abs(curve.B_z(t)) * (curve.B_y(t + start) - curve.B_y(t-start))
+    blade_area = abs(curve.z(t)) * (curve.y(t + start) - curve.y(t-start))
     return chord_cp, spar_cp, blade_area
 
 
