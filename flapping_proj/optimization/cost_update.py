@@ -21,15 +21,15 @@ import pandas as pd
 import json
 curr_dir = os.path.dirname(os.path.abspath(__file__))
 json_config_path = os.path.join(curr_dir,'data','config.json')
-with open(json_config_path, 'r') as json_file:
-    config = json.load(json_file)
-flap_freq = config["inputs"]["frequency"] #float Hz
-wing_mass = config["wing"]["mass"] #from config, float kg
-interest_duration = 4 / flap_freq #duration of time steps to evaluate for
-t_start = config["sim_length"] / 2 #seconds
 
 #returns float of the current iteration cost function evaluation
-def parse_data(): 
+def parse_data() -> float: 
+    with open(json_config_path, 'r') as json_file:
+        config = json.load(json_file)
+    flap_freq = config["inputs"]["frequency"] #float Hz
+    wing_mass = config["wing"]["mass"] #from config, float kg
+    interest_duration = 4 / flap_freq #duration of time steps to evaluate for
+    t_start = config["sim_length"] / 2
     dataname = open(os.path.join(curr_dir, 'data', 'data.csv'), 'r')
     aeroname = open(os.path.join(curr_dir, 'data', 'aero.csv'), 'r')
     #read files from time_start to time_end
@@ -58,11 +58,22 @@ def parse_data():
         lift_force[j] += aero_interval.blade_force_z.iloc[i]
         i += 1
     lift_avg = np.average(lift_force)
-
+    #instant power = angular velocity about stroke axis * torque
     instant_power = data_interval.time * data_interval.position_z #needs to be changed to motor torque and stroke velocity
     power_rms = np.sqrt(np.sum(instant_power ** 2) / len(instant_power))
+    print("power_rms printing: ")
     print(power_rms)
+    print("lift_avg printing: ")
+    print(lift_avg)
+    print("wing_mass printing: ")
+    print(wing_mass)
 
+    lift_avg = float(lift_avg)
+    power_rms = float(power_rms)
+    wing_mass = float(wing_mass)
+
+    # if lift_avg == 0 or power_rms == 0 or wing_mass == 0:
+    #     return 
     return -(lift_avg / power_rms / wing_mass)
 
 if __name__ == "__main__":
