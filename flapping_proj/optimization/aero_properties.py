@@ -13,8 +13,6 @@ def aero_properties(curve, n) -> Tuple[np.array, np.array]:
     blade_area = abs(curve.z(t)) * (curve.y(t + start) - curve.y(t-start))
     return chord_cp, spar_cp, blade_area
 
-
-
 if __name__ == "__main__":
     from inertial_properties import BezierCurve
 

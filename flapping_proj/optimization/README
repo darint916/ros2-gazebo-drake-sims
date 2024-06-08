@@ -23,17 +23,22 @@ Implement integral for single cp blade area implementation every opt step
 
 TODO:
 4/18
-Implement Blade # parsing Generate sdf - eneter cp, enter area
+xxx Implement Blade # parsing Generate sdf - eneter cp, enter area
 check config adding, spring stiffnesses
 
-After generate, run simulation (through launch file)
-Figure out how to time 2 seconds - through ros, track time, from ros, kill gazebo process, 
-Primitive implementation, poll data time to 2 seconds, then kill process,
-copy data over, parse data, gets value of cost function (parse_data func)
+xxx After generate, run simulation (through launch file)
+xxx Figure out how to time 2 seconds - through ros, track time, from ros, kill gazebo process, 
+xxx Primitive implementation, poll data time to 2 seconds, then kill process,
+xxx copy data over, parse data, gets value of cost function (parse_data func)
 
 4/23 TODO:
 setup bounds
-Check math, need velocity somewhere for voltage checking
-Implement Blade # parsing Generate sdf - eneter cp, enter area
+xxx Check math, need velocity somewhere for voltage checking
+xxx Implement Blade # parsing Generate sdf - eneter cp, enter area
 check config adding, spring stiffnesses
-non linear constraints
+xxx linear constraints
+
+6/2 TODO:
+Problems:
+1. Ros2 Control get angular frequency from ign gaz
+2. Need torque applied to wing to get RMS power

@@ -3,10 +3,11 @@ import json
 import os
 import numpy as np
 from xml.dom.minidom import parseString
+from utils.message import Message
 # Load and parse the SDF file
 curr_path = os.path.dirname(os.path.abspath(__file__))
 sdf_file_path = os.path.join(curr_path,'data','iterative_wing.sdf')
-print("SDF_Generate: sdf source path: ", sdf_file_path)
+Message.info("SDF_Generate: sdf source path: " + sdf_file_path)
 tree = ET.parse(sdf_file_path)
 root = tree.getroot()
 
@@ -80,10 +81,10 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
                             blades.text = str(len(spar_cps))
     for joint_name, exists in existing_joints.items():
         if not exists:
-            print(f"Joint {joint_name} does not exist in the SDF file")
+            Message.error(f"Joint {joint_name} does not exist in the SDF file")
     for link_name, exists in existing_links.items():
         if not exists:
-            print(f"Link {link_name} does not exist in the SDF file")
+            Message.error(f"Link {link_name} does not exist in the SDF file")
 
     # Add the center of pressure and blade area to the SDF file gazebo extension
     
@@ -98,7 +99,7 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
         formatted_xml = '\n'.join(filtered_lines)
         with open(os.path.join(curr_path, 'data', "processed.sdf"), "w") as f:
             f.write(formatted_xml)
-        print("SDF_Generate: sdf written to default location: ", os.path.join(curr_path,'data','processed.sdf'))
+        Message.info("SDF_Generate: sdf written to default location: " + os.path.join(curr_path,'data','processed.sdf'))
     return root
 
 

@@ -16,6 +16,7 @@
 
 #data parse
 import os
+from utils.message import Message
 import numpy as np
 import pandas as pd
 import json
@@ -58,19 +59,17 @@ def parse_data() -> float:
         lift_force[j] += aero_interval.blade_force_z.iloc[i]
         i += 1
     lift_avg = np.average(lift_force)
-    #instant power = angular velocity about stroke axis * torque
+    #instant power = angular velocity about stroke axis * torque applied on stroke axis
     instant_power = data_interval.time * data_interval.position_z #needs to be changed to motor torque and stroke velocity
     power_rms = np.sqrt(np.sum(instant_power ** 2) / len(instant_power))
-    print("power_rms printing: ")
-    print(power_rms)
-    print("lift_avg printing: ")
-    print(lift_avg)
-    print("wing_mass printing: ")
-    print(wing_mass)
 
     lift_avg = float(lift_avg)
     power_rms = float(power_rms)
     wing_mass = float(wing_mass)
+
+    Message.data("power_rms printing: "+ str(power_rms))
+    Message.data("lift_avg printing: "+ str(lift_avg))
+    Message.data("wing_mass printing: " + str(wing_mass))
 
     # if lift_avg == 0 or power_rms == 0 or wing_mass == 0:
     #     return 

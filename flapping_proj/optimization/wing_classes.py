@@ -89,8 +89,8 @@ class TriWing():
         self.y2 = y2
         self.z2 = z2
 
-        self.I = line_I(y0, 0, y1, 0, diameter=self.D_LE) + line_I(y0, z0, y1, z1, diameter=self.D_TE) + line_I(y1, z0, y1, z1, diameter=self.D_S) + film_I(self)
-        self.m = line_m(y0, 0, y1, 0, diameter=self.D_LE) + line_m(y0, z0, y1, z1, diameter=self.D_TE) + line_m(y1, z0, y1, z1, diameter=self.D_S) + film_m(self)
+        self.I = line_I(y0, 0, y2, 0, diameter=self.D_LE) + line_I(y0, z0, y1, z1, diameter=self.D_TE) + line_I(y1, z0, y1, z1, diameter=self.D_S) + film_I(self)
+        self.m = line_m(y0, 0, y2, 0, diameter=self.D_LE) + line_m(y0, z0, y1, z1, diameter=self.D_TE) + line_m(y1, z0, y1, z1, diameter=self.D_S) + film_m(self)
         
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
