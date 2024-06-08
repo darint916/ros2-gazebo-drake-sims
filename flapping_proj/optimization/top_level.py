@@ -18,6 +18,8 @@ json_config_path = os.path.join(DIR_PATH,'data','config.json')
 
 # iterator_counter = 0
 global folder_path
+global counter
+counter = 0
 def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
@@ -57,7 +59,7 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     constraints = sc.optimize.LinearConstraint(A, constraint_lower_bound, constraint_upper_bound)
 
     sc.optimize.differential_evolution(sim_start, bounds, constraints = constraints,
-            strategy='best1bin', maxiter=iterations, callback=opt_callback, popsize = popsize)
+            strategy='best1bin', maxiter=iterations, popsize = 1, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
     # It will return the fitness value of the simulation
     # The simulation will be started with the given parameters
@@ -89,18 +91,23 @@ def sim_start(opt_params):
     chord_cp, spar_cp, blade_areas = aero_properties(tri_wing, config["blade_count"])
     #length = |z0|, width = y3 - y0
     config["pitch_joint"]["spring_stiffness"] = pitch_stiffness_calc(abs(opt_params[1]), opt_params[4] - opt_params[0])
-    with open(json_config_path, 'w') as file:
-        json.dump(config, file, indent=4)
+    # with open(json_config_path, 'w') as file: #comment out to not update
+    #     json.dump(config, file, indent=4)
     Message.info("config updated")
     generate_sdf(chord_cps=chord_cp, spar_cps=spar_cp, blade_area=blade_areas) #write to default location: (data/processed.sdf)
     Message.success("sdf generated, now launching sim")
     sim_launch(config["sim_length"])
     Message.success("sim finished, parsing data")
+    global counter
+    counter += 1 
+    Message.debug("Simulation Generation Total: " + counter)
     return parse_data()
     #end of sim, save parameters and such
 
 #copies generated data files to a new folder for each iteration
 def opt_callback(intermediate_result: OptimizeResult) -> bool:
+    print("callback")
+    return True
     iter_path = os.path.join(folder_path, f'iter_{intermediate_result.nit}') #nit = number iterations
     Message.debug("iter Path: ", iter_path)
     if not os.path.exists(iter_path):
@@ -162,6 +169,6 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
     
 if __name__ == '__main__':
-    top_start(3, popsize=1)
+    top_start(1, popsize=1)
     # generate_sdf()
     # sim_launch()
