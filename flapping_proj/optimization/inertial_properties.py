@@ -42,6 +42,17 @@ def line_m(y0, z0, y1, z1, diameter = D_LE) -> float:
     line_length = np.sqrt(del_y**2 + del_z**2)
     return rho * line_length
 
+# returns the center of mass of a cylindral rod multiplied by 
+# the rod mass so it can be divided by the overall system mass
+# to get a system center of mass
+# [y, z]
+def line_com(y0, z0, y1, z1, diameter = D_LE) -> np.array:
+    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
+    del_y = y1 - y0
+    del_z = z1 - z0
+
+    line_length = np.sqrt(del_y**2 + del_z**2)
+    return np.array([y0 + del_y/2, z0+del_z/2]) * line_length*rho
 
 #calculates the moments of inertia for a slender rod in the yz plane that follows a curve
 def curve_I(curve, diameter = D_TE, t_max = 1) -> np.array:
@@ -59,7 +70,17 @@ def curve_I(curve, diameter = D_TE, t_max = 1) -> np.array:
 def curve_m(curve, diameter = D_TE, t_max = 1) -> float:
     rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
     return sc.integrate.quad(lambda t: dm_curve(curve, t, rho), 0, t_max)[0]
-     
+
+# returns the center of mass of a cylindral rod following 
+# a curve multiplied by the curve mass so it can be divided 
+# by the overall system mass to get a system center of mass    
+# [y, z]
+def curve_com(curve, diameter = D_TE, t_max = 1) -> np.array:
+    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
+    mass = curve_m(curve, diameter=diameter, t_max=t_max)
+
+    return np.array([sc.integrate.quad(lambda t: curve.y(t) * dm_curve(curve, t, rho), 0, t_max)[0],
+                     sc.integrate.quad(lambda t: curve.z(t) * dm_curve(curve, t, rho), 0, t_max)[0]])
 
 #calculates the moment of inertia for a planar film bounded by a curve in the yz plane.
 #Assumes the curve is below the y axis
@@ -77,7 +98,15 @@ def film_I(curve, rho = rho_mem) -> np.array:
 def film_m(curve, rho = rho_mem) -> float:
     return rho * sc.integrate.quad(lambda t: np.abs(curve.z(t) * curve.dy(t)), 0, 1)[0]
 
-def bez_wing_I(curve, d_le = D_LE, d_h = D_H, d_te = D_TE, debug = False) -> np.array:
+# returns the center of mass of a thin film rod following 
+# a curve multiplied by the curve mass so it can be divided 
+# by the overall system mass to get a system center of mass 
+# [y, z]
+def film_com(curve, rho = rho_mem) -> np.array:
+    return np.array([-rho*sc.integrate.quad(lambda t: (curve.z(t) - curve.z0)*curve.y(t) * curve.dy(t), 0, 1)[0],
+                     -rho/2*sc.integrate.quad(lambda t: (curve.z(t)**2 - curve.z0**2)*curve.y(t)*curve.dy(t), 0, 1)[0]])
+
+def bez_wing_I(curve, mass, d_le = D_LE, d_h = D_H, d_te = D_TE, debug = False) -> np.array:
     #leading edge
     I_LE = line_I(0, 0, curve.y3, 0, diameter=d_le)
     #hinge
@@ -102,8 +131,13 @@ def bez_wing_I(curve, d_le = D_LE, d_h = D_H, d_te = D_TE, debug = False) -> np.
         print(I_H)
         print(I_TE)
         print(I_film)
+    
+    I_origin = I_LE + I_H + I_TE + I_film
 
-    return I_LE + I_H + I_TE + I_film
+    com = (line_com(0, 0, curve.y3, 0, diameter=d_le) + line_com(curve.y0, curve.z0, curve.y3 - d_h - d_te) + curve_com(curve, diameter=d_te, t_max = t_max) + film_com(curve))/mass
+    com_r_sqr = com[0]**2 + com[1]**2
+
+    return I_origin - mass * np.array([com_r_sqr, com_r_sqr - com[0]**2, com_r_sqr - com[1]**2, 0, 0, -com[0]*com[1]])
     
 def dm_curve(curve, t, rho):
         return rho * np.sqrt(curve.dz(t)**2 + curve.dy(t)**2)

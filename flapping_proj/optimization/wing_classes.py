@@ -45,8 +45,10 @@ class BezierWing():
         self.y3 = y_3
         self.z3 = z_3
 
-        self.I = bez_wing_I(self, d_le = self.D_LE, d_h = self.D_H, d_te = self.D_TE)
         self.m = bez_wing_mass(self, d_le = self.D_LE, d_h = self.D_H, d_te = self.D_TE)
+
+        self.I = bez_wing_I(self, self.m, d_le = self.D_LE, d_h = self.D_H, d_te = self.D_TE)
+        
 
 class TriWing():
     y0 = None
@@ -88,15 +90,27 @@ class TriWing():
         self.z1 = z1
         self.y2 = y2
         self.z2 = z2
-
-        self.I = line_I(y0, 0, y1, 0, diameter=self.D_LE) + line_I(y0, z0, y1, z1, diameter=self.D_TE) + line_I(y1, z0, y1, z1, diameter=self.D_S) + film_I(self)
+        
         self.m = line_m(y0, 0, y1, 0, diameter=self.D_LE) + line_m(y0, z0, y1, z1, diameter=self.D_TE) + line_m(y1, z0, y1, z1, diameter=self.D_S) + film_m(self)
+        com = (line_com(y0, 0, y1, 0, diameter=self.D_LE) + line_com(y0, z0, y1, z1, diameter=self.D_TE) + line_com(y1, z0, y1, z1, diameter=self.D_S) + film_com(self)) / self.m
+        com_r_sqr = com[0]**2 + com[1]**2
+
+        I_origin = line_I(y0, 0, y1, 0, diameter=self.D_LE) + line_I(y0, z0, y1, z1, diameter=self.D_TE) + line_I(y1, z0, y1, z1, diameter=self.D_S) + film_I(self)
+        self.I = I_origin - self.m * np.array([com_r_sqr, com_r_sqr - com[0]**2, com_r_sqr - com[1]**2, 0, 0, -com[0]*com[1]])
+        
         
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    tri_wing = TriWing(0, 0, .005, -.01, .01, -.005)
-    t = np.linspace(0, 1)
-    plt.plot(tri_wing.dy(t), tri_wing.dz(t), marker = "o")
 
+    tri_wing = TriWing(0, 0, .005, -.01, .01, -.005)
+    # mass1 = film_m(tri_wing)
+    # print(film_com(tri_wing) / mass1)
+
+    # t = np.linspace(0, 1)
+    # plt.plot(tri_wing.dy(t), tri_wing.dz(t), marker = "o")
+    
     print(tri_wing.I)
+    print(tri_wing.I[0] + tri_wing.I[1] - tri_wing.I[2])
+    print(tri_wing.I[0] + tri_wing.I[2] - tri_wing.I[1])
+    print(tri_wing.I[2] + tri_wing.I[1] - tri_wing.I[0])
