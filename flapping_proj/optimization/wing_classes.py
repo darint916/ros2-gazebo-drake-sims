@@ -90,14 +90,14 @@ class TriWing():
         self.z1 = z1
         self.y2 = y2
         self.z2 = z2
-        
+       
         self.m = line_m(y0, 0, y1, 0, diameter=self.D_LE) + line_m(y0, z0, y1, z1, diameter=self.D_TE) + line_m(y1, z0, y1, z1, diameter=self.D_S) + film_m(self)
         com = (line_com(y0, 0, y1, 0, diameter=self.D_LE) + line_com(y0, z0, y1, z1, diameter=self.D_TE) + line_com(y1, z0, y1, z1, diameter=self.D_S) + film_com(self)) / self.m
         com_r_sqr = com[0]**2 + com[1]**2
 
         I_origin = line_I(y0, 0, y1, 0, diameter=self.D_LE) + line_I(y0, z0, y1, z1, diameter=self.D_TE) + line_I(y1, z0, y1, z1, diameter=self.D_S) + film_I(self)
         self.I = I_origin - self.m * np.array([com_r_sqr, com_r_sqr - com[0]**2, com_r_sqr - com[1]**2, 0, 0, -com[0]*com[1]])
-        
+
         
 if __name__ == "__main__":
     import matplotlib.pyplot as plt

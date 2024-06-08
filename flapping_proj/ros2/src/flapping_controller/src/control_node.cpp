@@ -296,6 +296,8 @@ class ControlNode : public rclcpp::Node
 		}
 
 		void motor_torque_output (){
+			//TODO 
+			// GET OMEGA VALUE
 			double amplitude = this->get_parameter("max_voltage").as_double();
 			double frequency = this->get_parameter("frequency").as_double();
 			double voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);

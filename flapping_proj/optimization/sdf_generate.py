@@ -3,10 +3,11 @@ import json
 import os
 import numpy as np
 from xml.dom.minidom import parseString
+from utils.message import Message
 # Load and parse the SDF file
 curr_path = os.path.dirname(os.path.abspath(__file__))
 sdf_file_path = os.path.join(curr_path,'data','iterative_wing.sdf')
-print("SDF_Generate: sdf source path: ", sdf_file_path)
+Message.info("SDF_Generate: sdf source path: " + sdf_file_path)
 tree = ET.parse(sdf_file_path)
 root = tree.getroot()
 
@@ -46,6 +47,10 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
                     joint.find('damping').text = str(config[joint_name]['damping'])
                 if config[joint_name]['spring_stiffness'] is not None and joint.find('spring_stiffness') is not None:
                     joint.find('spring_stiffness').text = str(config[joint_name]['spring_stiffness'])
+        
+        # print(chord_cps)
+        # print("chord above spar below")
+        # print( spar_cps)
         if chord_cps is not None and spar_cps is not None:
             for plugin in model.findall('plugin'):
                 if plugin.get('name') == 'aerodynamics':
@@ -55,15 +60,31 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
                         if cp_list is not None:
                             cp_in = []
                             for i, spar_cp in enumerate(spar_cps):
-                                cp_in.append(spar_cp, chord_cps[i])
-
-
+                                cp_in.append(spar_cp)
+                                cp_in.append(chord_cps[i])
+                                cp_in.append(0)
+                            cp_list.text = ', '.join(map(str, cp_in))
+                        blade_area_element = link.find('blade_area_list')
+                        if blade_area_element is not None:
+                            blade_area_element.text = ', '.join(map(str, blade_area))
+                            # blade_area_element.text = blade_area_element.text[:-2]
+                        upward_vector_list = link.find('upward_vector_list')
+                        if upward_vector_list is not None:
+                            upward_vector_list.text = '0,0,1, ' * len(spar_cps)
+                            upward_vector_list.text = upward_vector_list.text[:-2]
+                        chord_direction_list = link.find('chord_direction_list')
+                        if chord_direction_list is not None:
+                            chord_direction_list.text = '0,0,1, ' * len(spar_cps)
+                            chord_direction_list.text = chord_direction_list.text[:-2]
+                        blades = link.find('blades')
+                        if blades is not None:
+                            blades.text = str(len(spar_cps))
     for joint_name, exists in existing_joints.items():
         if not exists:
-            print(f"Joint {joint_name} does not exist in the SDF file")
+            Message.error(f"Joint {joint_name} does not exist in the SDF file")
     for link_name, exists in existing_links.items():
         if not exists:
-            print(f"Link {link_name} does not exist in the SDF file")
+            Message.error(f"Link {link_name} does not exist in the SDF file")
 
     # Add the center of pressure and blade area to the SDF file gazebo extension
     
@@ -78,7 +99,7 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
         formatted_xml = '\n'.join(filtered_lines)
         with open(os.path.join(curr_path, 'data', "processed.sdf"), "w") as f:
             f.write(formatted_xml)
-        print("SDF_Generate: sdf written to default location: ", os.path.join(curr_path,'data','processed.sdf'))
+        Message.info("SDF_Generate: sdf written to default location: " + os.path.join(curr_path,'data','processed.sdf'))
     return root
 
 
