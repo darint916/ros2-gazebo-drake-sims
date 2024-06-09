@@ -28,7 +28,6 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     Message.debug("TESTING: " + title, True)
     Message.info("folder path: " + folder_path)
     
-
     #lower and upper bounds for [y0, z0, y1, z1, y2, z2, k_phi]
     # parameter_lower_bound = np.array([1, -3, 1, -np.inf, 1, -np.inf, .01]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
     #bounds converted to si by the /1000
@@ -50,10 +49,10 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     #y2 - y0 >= 0.001
     #y2 - y1 >= 0.001
     #z0 - z1 >= 0
-    A = np.array([[-1,  0,  1,  0, 0, 0, 0], #represents linear constraints
-                  [-1,  0,  0,  0, 1, 0, 0],
-                  [ 0,  0, -1,  0, 1, 0, 0],
-                  [ 0,  1,  0, -1, 0, 0, 0]])
+    A = np.array([[-1, 0, 1, 0, 0, 0, 0], #represents linear constraints
+                  [-1, 0, 0, 0, 1, 0, 0],
+                  [ 0, 0,-1, 0, 1, 0, 0],
+                  [ 0, 1, 0,-1, 0, 0, 0]])
     constraint_lower_bound = np.array([0.001, 0.001, 0.001, 0])
     constraint_upper_bound = np.array([np.inf, np.inf, np.inf, np.inf])
     constraints = sc.optimize.LinearConstraint(A, constraint_lower_bound, constraint_upper_bound)

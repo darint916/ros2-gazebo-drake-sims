@@ -68,12 +68,12 @@ class TriWing():
         self.mass = line_m(y0, 0, y2, 0, self.leading_edge_rod_diameter) + line_m(y0, z0, y1, z1, diameter=self.trailing_edge_rod_diameter) + line_m(y1, z0, y1, z1, self.spar_rod_diameter) + film_m(self)
         
         #center of mass each component * mass of component / overall mass = COM coordinates
-        com = (line_com(y0, 0, y2, 0, self.leading_edge_rod_diameter) + line_com(y0, z0, y1, z1, self.trailing_edge_rod_diameter) + line_com(y1, z0, y1, z1, self.spar_rod_diameter) + film_com(self)) / self.mass
-        com_magnitude_sqr = com[0]**2 + com[1]**2
+        self.com = (line_com(y0, 0, y2, 0, self.leading_edge_rod_diameter) + line_com(y0, z0, y1, z1, self.trailing_edge_rod_diameter) + line_com(y1, z0, y1, z1, self.spar_rod_diameter) + film_com(self)) / self.mass
+        com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
 
-        I_origin = line_I(y0, 0, y2, 0, self.leading_edge_rod_diameter) + line_I(y0, z0, y1, z1, self.trailing_edge_rod_diameter) + line_I(y1, z0, y1, z1, self.spar_rod_diameter) + film_I(self)
+        self.I_origin = line_I(y0, 0, y2, 0, self.leading_edge_rod_diameter) + line_I(y0, z0, y1, z1, self.trailing_edge_rod_diameter) + line_I(y1, z0, y1, z1, self.spar_rod_diameter) + film_I(self)
         #1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
-        self.I = I_origin - self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - com[0]**2, com_magnitude_sqr - com[1]**2, 0, 0, -com[0] * com[1]])
+        self.I = self.I_origin - self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2, com_magnitude_sqr - self.com[1]**2, 0, 0, -self.com[0] * self.com[1]])
 
 
     #Coordinates along wing given parametric value t
@@ -97,7 +97,7 @@ class TriWing():
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    tri_wing = TriWing(0, 0, .005, -.01, .01, -.005)
+    tri_wing = TriWing(0.001, -0.001, .05, -.025, .1, -.00025)
     # mass1 = film_m(tri_wing)
     # print(film_com(tri_wing) / mass1)
 
