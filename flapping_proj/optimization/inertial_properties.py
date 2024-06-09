@@ -34,7 +34,7 @@ def line_I(y0, z0, y1, z1, diameter = D_LE) -> np.array:
     return I
 
 #calculates the mass of a rod in the yz plane
-def line_m(y0, z0, y1, z1, diameter = D_LE) -> float:
+def line_m(y0, z0, y1, z1, diameter = D_LE) -> float: #value tested
     rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
     del_y = y1 - y0
     del_z = z1 - z0
@@ -77,7 +77,6 @@ def curve_m(curve, diameter = D_TE, t_max = 1) -> float:
 # [y, z]
 def curve_com(curve, diameter = D_TE, t_max = 1) -> np.array:
     rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
-    mass = curve_m(curve, diameter=diameter, t_max=t_max)
 
     return np.array([sc.integrate.quad(lambda t: curve.y(t) * dm_curve(curve, t, rho), 0, t_max)[0],
                      sc.integrate.quad(lambda t: curve.z(t) * dm_curve(curve, t, rho), 0, t_max)[0]])
@@ -102,9 +101,9 @@ def film_m(curve, rho = rho_mem) -> float:
 # a curve multiplied by the curve mass so it can be divided 
 # by the overall system mass to get a system center of mass 
 # [y, z]
-def film_com(curve, rho = rho_mem) -> np.array:
-    return np.array([-rho*sc.integrate.quad(lambda t: (curve.z(t) - curve.z0)*curve.y(t) * curve.dy(t), 0, 1)[0],
-                     -rho/2*sc.integrate.quad(lambda t: (curve.z(t)**2 - curve.z0**2)*curve.y(t)*curve.dy(t), 0, 1)[0]])
+def film_com(curve, rho = rho_mem) -> np.array: #value tested
+    return np.array([-rho * sc.integrate.quad(lambda t: (curve.z(t) - curve.z0) * curve.y(t) * curve.dy(t), 0, 1)[0],
+                     -rho / 2 * sc.integrate.quad(lambda t: (curve.z(t)**2 - curve.z0**2) * curve.y(t) * curve.dy(t), 0, 1)[0]])
 
 def bez_wing_I(curve, mass, d_le = D_LE, d_h = D_H, d_te = D_TE, debug = False) -> np.array:
     #leading edge
@@ -140,7 +139,7 @@ def bez_wing_I(curve, mass, d_le = D_LE, d_h = D_H, d_te = D_TE, debug = False) 
     return I_origin - mass * np.array([com_r_sqr, com_r_sqr - com[0]**2, com_r_sqr - com[1]**2, 0, 0, -com[0]*com[1]])
     
 def dm_curve(curve, t, rho):
-        return rho * np.sqrt(curve.dz(t)**2 + curve.dy(t)**2)
+    return rho * np.sqrt(curve.dz(t)**2 + curve.dy(t)**2)
 
 def bez_wing_mass(curve, d_le = D_LE, d_h = D_H, d_te = D_TE) -> float:
     rho_le = np.pi / 4 * d_le**2 * 1854.55 #kg/m

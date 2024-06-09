@@ -91,8 +91,8 @@ def sim_start(opt_params):
     chord_cp, spar_cp, blade_areas = aero_properties(tri_wing, config["blade_count"])
     #length = |z0|, width = y3 - y0
     config["pitch_joint"]["spring_stiffness"] = pitch_stiffness_calc(abs(opt_params[1]), opt_params[4] - opt_params[0])
-    # with open(json_config_path, 'w') as file: #comment out to not update
-    #     json.dump(config, file, indent=4)
+    with open(json_config_path, 'w') as file: #comment out to not update
+        json.dump(config, file, indent=4)
     Message.info("config updated")
     generate_sdf(chord_cps=chord_cp, spar_cps=spar_cp, blade_area=blade_areas) #write to default location: (data/processed.sdf)
     Message.success("sdf generated, now launching sim")
@@ -100,14 +100,13 @@ def sim_start(opt_params):
     Message.success("sim finished, parsing data")
     global counter
     counter += 1 
-    Message.debug("Simulation Generation Total: " + counter)
+    Message.debug("Simulation Generation Total: " + str(counter))
     return parse_data()
     #end of sim, save parameters and such
 
 #copies generated data files to a new folder for each iteration
 def opt_callback(intermediate_result: OptimizeResult) -> bool:
     print("callback")
-    return True
     iter_path = os.path.join(folder_path, f'iter_{intermediate_result.nit}') #nit = number iterations
     Message.debug("iter Path: ", iter_path)
     if not os.path.exists(iter_path):
