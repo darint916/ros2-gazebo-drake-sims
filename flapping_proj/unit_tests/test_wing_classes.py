@@ -7,7 +7,6 @@ def check_triangle_inequalities(Ixx, Iyy, Izz):
     return (Ixx + Iyy >= Izz) and (Iyy + Izz >= Ixx) and (Izz + Ixx >= Iyy)
 
 class TestTriangleInequalities(unittest.TestCase):
-
     def test_valid_triangle_inequalities(self):
         self.assertTrue(check_triangle_inequalities(1, 1, 1))
         self.assertTrue(check_triangle_inequalities(2, 3, 4))
@@ -19,7 +18,6 @@ class TestTriangleInequalities(unittest.TestCase):
         self.assertFalse(check_triangle_inequalities(0, 0, 1))
 
     def test_tri_wing(self):
-        
         tri_wing = TriWing(0.001, -0.001, .05, -.025, .1, -.00025)
         #.i = [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
         result = check_triangle_inequalities(tri_wing.I[0], tri_wing.I[1], tri_wing.I[2])
@@ -42,7 +40,6 @@ class TestTriangleInequalities(unittest.TestCase):
         self.assertTrue(tri_wing.I[0] > 0)
         self.assertTrue(tri_wing.I[1] > 0)
         self.assertTrue(tri_wing.I[2] > 0)
-        #[Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
  
 if __name__ == "__main__":
     unittest.main()
