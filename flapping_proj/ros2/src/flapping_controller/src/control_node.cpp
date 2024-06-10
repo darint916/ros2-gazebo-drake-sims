@@ -78,7 +78,7 @@ class ControlNode : public rclcpp::Node
 			this->declare_parameter<std::string>("data_file_path", "../data/data.csv");
 
 			//Velocity publisher (uses diff drive plugin receiver)
-			_diffDriveVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/world/diff_drive/cmd_vel", 10);
+			// _diffDriveVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/world/diff_drive/cmd_vel", 10);
 			this->declare_parameter<double>("amplitude", 10);
 			this->declare_parameter<double>("frequency", 10);
 
@@ -158,7 +158,6 @@ class ControlNode : public rclcpp::Node
 			_dataHeadersPID = "time,altitude_target,altitude_error,altitude_output";
 			_csvWriterPID << _dataHeadersPID << "\n";
 
-
 			//optimization sector
 			this->declare_parameter<bool>("motor_torque_calc_enabled", false);
 			this->declare_parameter<double>("max_voltage", 6.0);
@@ -172,7 +171,6 @@ class ControlNode : public rclcpp::Node
 			_motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
 			_sim_length = this->get_parameter("sim_length").as_double();
 			_kill_flag_file_path = this->get_parameter("kill_flag_path").as_string();
-			
 		}
 
 	private:

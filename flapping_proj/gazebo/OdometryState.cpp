@@ -63,9 +63,30 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
         } else {
             this->dataPtr->jointMap[jointName] = jointEntity;
         }
-        _ecm.CreateComponent(jointEntity, igz::components::JointPosition());
+        if (nullptr == _ecm.Component<igz::components::JointPosition()>(jointEntity)) {
+            _ecm.CreateComponent(jointEntity, igz::components::JointPosition());
+        }
         jointElem = jointElem->GetNextElement("joint");
     }
+
+    //input torque joint map. TODO: refactor and combine with above to remove redundancy
+    //currently redundancy negligble as one time config run.
+    sdf::ElementPtr inputTorqueJointElem = sdf_ptr->GetElement("input_joint");
+    while (inputTorqueJointElem != nullptr) {
+        std::string jointName = inputTorqueJointElem->Get<std::string>();
+        igz::Entity jointEntity = this->dataPtr->model.JointByName(_ecm, jointName);
+        if (jointEntity == igz::kNullEntity) {
+            ignerr << "Joint [" << jointName << "] not found" << std::endl;
+        } else {
+            this->dataPtr->inputJointMap[jointName] = jointEntity;
+        }
+        if (nullptr == _ecm.Component<igz::components::JointVelocity()>(jointEntity)) {
+            _ecm.CreateComponent(jointEntity, igz::components::JointVelocity());
+        }
+        jointElem = jointElem->GetNextElement("input_joint");
+    }
+    //input joint topics map
+    
 
     //position sub
     //future TODO: query for world name for dynamic pose
@@ -81,8 +102,16 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
     if(odometryFreq > 0.0){
         std::chrono::duration<double> odomPeriod(1 / odometryFreq);
         this->dataPtr->odomPubPeriod = std::chrono::duration_cast<std::chrono::steady_clock::duration>(odomPeriod);
-    }    
+    }
+
+    //ros2 control input stroke torque subscribers
+    for (auto const& joint : this->dataPtr->jointMap){
+        std::string jointTorqueTopic = "/joint/" + joint.first + "/torque";
+    this->dataPtr->node.Subscribe(jointTorqueTopic, &OdometryStateData::TorqueCallBack, this->dataPtr.get());
+    }
+    
 }
+
 
 // void OdometryState::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm)
 // {
