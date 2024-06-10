@@ -34,23 +34,26 @@ class TestSlenderRodInertialproperties(unittest.TestCase):
         truth_mass[i] = rod_linear_density * line_length(coords)
 
     def test_rod_mass(self):
-        Message.warning("Checking Rod Mass Calculation", bold=True)
+        # Message.warning("Checking Rod Mass Calculation", bold=True)
         for i in range(len(self.test_coordinates)):
             coords = self.test_coordinates[i]
             calc_mass = line_m(coords[0], coords[1], coords[2], coords[3], diameter = self.rod_diameter, density = self.rod_density)
-            Message.info(f"Analysing rod with endpoints (y, z) at ({coords[0]}, {coords[1]}) and ({coords[2]}, {coords[3]})")
+
+            self.assertTrue(almost_equal(self.truth_mass[i], calc_mass, self.error_tol), 
+                            f"Mass case failed: {coords}. Expected {self.truth_mass[i]} but output was {calc_mass}")
+
+            # Message.info(f"Analysing rod with endpoints (y, z) at ({coords[0]}, {coords[1]}) and ({coords[2]}, {coords[3]})")
+            # if almost_equal(self.truth_mass[i], calc_mass, self.error_tol):
+            #     Message.success("Passed Case")
+            # else:
+            #     Message.error("Failed case")
             
-            if almost_equal(self.truth_mass[i], calc_mass, self.error_tol):
-                Message.success("Passed Case")
-            else:
-                Message.error("Failed case")
-            
-            Message.debug(f"Truth Mass:      {self.truth_mass[i]}")
-            Message.debug(f"Calculated Mass: {calc_mass}")
-            print("")
+            # Message.debug(f"Truth Mass:      {self.truth_mass[i]}")
+            # Message.debug(f"Calculated Mass: {calc_mass}")
+            # print("")
 
     def test_rod_com(self):
-        Message.warning("Checking Center of Mass Calculations", bold=True)
+        # Message.warning("Checking Center of Mass Calculations", bold=True)
         #center of mass truths
         truth_com = np.array([[  0,   0],
                               [  0,   0],
@@ -65,19 +68,22 @@ class TestSlenderRodInertialproperties(unittest.TestCase):
             coords = self.test_coordinates[i]
             calc_com = line_com(coords[0], coords[1], coords[2], coords[3], diameter=self.rod_diameter, density = self.rod_density)
             calc_com = calc_com / self.truth_mass[i]
-            Message.info(f"Analysing rod with endpoints (y, z) at ({coords[0]}, {coords[1]}) and ({coords[2]}, {coords[3]})")
-            
-            if almost_equal(truth_com[i][0], calc_com[0], self.error_tol) and almost_equal(truth_com[i][1], calc_com[1], self.error_tol):
-                Message.success("Passed Case")
-            else:
-                Message.error("Failed case")
+            self.assertTrue(almost_equal(truth_com[i][0], calc_com[0], self.error_tol) and almost_equal(truth_com[i][1], calc_com[1], self.error_tol),
+                            f"Center of Mass case failed: {coords}. Expected {truth_com[i]} but output was {calc_com}")
 
-            Message.debug(f"Truth Center of Mass:      ({truth_com[i][0]:9.4f}, {truth_com[i][1]:9.4f})")
-            Message.debug(f"Calculated Center of Mass: ({calc_com[0]:9.4f}, {calc_com[1]:9.4f})")
-        print("")
+        #     Message.info(f"Analysing rod with endpoints (y, z) at ({coords[0]}, {coords[1]}) and ({coords[2]}, {coords[3]})")
+            
+        #     if almost_equal(truth_com[i][0], calc_com[0], self.error_tol) and almost_equal(truth_com[i][1], calc_com[1], self.error_tol):
+        #         Message.success("Passed Case")
+        #     else:
+        #         Message.error("Failed case")
+
+        #     Message.debug(f"Truth Center of Mass:      ({truth_com[i][0]:9.4f}, {truth_com[i][1]:9.4f})")
+        #     Message.debug(f"Calculated Center of Mass: ({calc_com[0]:9.4f}, {calc_com[1]:9.4f})")
+        # print("")
 
     def test_rod_inertia(self):
-        Message.warning("Checking Inertia Tensor Calculations")
+        # Message.warning("Checking Inertia Tensor Calculations")
         # suffering
         truth_inertia = np.array([[1/3,   0, 1/3, 0, 0,   0],
                                   [1/3, 1/3,   0, 0, 0,   0],
@@ -94,21 +100,21 @@ class TestSlenderRodInertialproperties(unittest.TestCase):
         for i in range(len(self.test_coordinates)):
             coords = self.test_coordinates[i]
             calc_i = line_I(coords[0], coords[1], coords[2], coords[3], diameter=self.rod_diameter, density = self.rod_density)
-            Message.info(f"Analysing rod with endpoints (y, z) at ({coords[0]}, {coords[1]}) and ({coords[2]}, {coords[3]})")
+            # Message.info(f"Analysing rod with endpoints (y, z) at ({coords[0]}, {coords[1]}) and ({coords[2]}, {coords[3]})")
             
             passed = True
             for j in range(6):
                 if not almost_equal(truth_inertia[i][j], calc_i[j], self.error_tol):
                     passed = False
-                
-            if passed:
-                Message.success("Passed Case")
-            else:
-                Message.error("Failed case")
-                self.assert_
-            Message.debug(f"Truth Inertia Tensor:      {truth_inertia[i]}")
-            Message.debug(f"Calculated Inertia Tensor: {calc_i}")  
-        print("")  
+
+            self.assertTrue(passed, f"Failed inertia case: {coords}. Expected {truth_inertia[i]} but output was {calc_i}")    
+        #     if passed:
+        #         Message.success("Passed Case")
+        #     else:
+        #         Message.error("Failed case")
+        #     Message.debug(f"Truth Inertia Tensor:      {truth_inertia[i]}")
+        #     Message.debug(f"Calculated Inertia Tensor: {calc_i}")  
+        # print("")  
 
 if __name__ == "__main__":
     unittest.main()
