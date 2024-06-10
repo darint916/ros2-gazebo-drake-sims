@@ -6,10 +6,10 @@ from utils.message import Message
 # finds if two values are almost equal within a range based on
 # a range defined by error_percent (in decimal form) times a
 def almost_equal(a, b, error_percent):
-    return abs(a-b) <= a*error_percent
+    return abs(a - b) <= a*error_percent
 
 def line_length(coords):
-    return np.sqrt((coords[2]-coords[0])**2 + (coords[3]-coords[1])**2)
+    return np.sqrt((coords[2] - coords[0])**2 + (coords[3] - coords[1])**2)
 
 class TestSlenderRodInertialproperties(unittest.TestCase):
     error_tol = 0.001 #allowed percent error as a decimal
