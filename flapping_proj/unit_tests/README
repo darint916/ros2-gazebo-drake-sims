@@ -1,0 +1,4 @@
+Python Unit tests are writting with `unittest`, make class inheriting from `unittest.TestCase`, methods that start with `test_` will get called upon test for assertion
+Make sure to start files with `test`
+
+Run `python -m unittest discover -s unit_tests`

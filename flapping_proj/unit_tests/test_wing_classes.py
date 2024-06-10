@@ -36,10 +36,13 @@ class TestTriangleInequalities(unittest.TestCase):
 
         Message.debug(f"tensor_origin_truth: {tensor_origin_truth}")
         self.assertTrue(result, (f"Triangle Inequalities are not satisfied: {tri_wing.I[0]}, {tri_wing.I[1]}, {tri_wing.I[2]}"))
-        self.assertTrue(tri_wing.mass > 0)
+        self.assertTrue(tri_wing.m > 0)
         self.assertTrue(tri_wing.I[0] > 0)
         self.assertTrue(tri_wing.I[1] > 0)
         self.assertTrue(tri_wing.I[2] > 0)
- 
+        #[Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
+        
+
+        
 if __name__ == "__main__":
     unittest.main()

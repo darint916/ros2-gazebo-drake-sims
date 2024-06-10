@@ -18,6 +18,8 @@ json_config_path = os.path.join(DIR_PATH,'data','config.json')
 
 # iterator_counter = 0
 global folder_path
+global counter
+counter = 0
 def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
@@ -26,7 +28,6 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     Message.debug("TESTING: " + title, True)
     Message.info("folder path: " + folder_path)
     
-
     #lower and upper bounds for [y0, z0, y1, z1, y2, z2, k_phi]
     # parameter_lower_bound = np.array([1, -3, 1, -np.inf, 1, -np.inf, .01]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
     #bounds converted to si by the /1000
@@ -48,16 +49,16 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     #y2 - y0 >= 0.001
     #y2 - y1 >= 0.001
     #z0 - z1 >= 0
-    A = np.array([[-1,  0,  1,  0, 0, 0, 0], #represents linear constraints
-                  [-1,  0,  0,  0, 1, 0, 0],
-                  [ 0,  0, -1,  0, 1, 0, 0],
-                  [ 0,  1,  0, -1, 0, 0, 0]])
+    A = np.array([[-1, 0, 1, 0, 0, 0, 0], #represents linear constraints
+                  [-1, 0, 0, 0, 1, 0, 0],
+                  [ 0, 0,-1, 0, 1, 0, 0],
+                  [ 0, 1, 0,-1, 0, 0, 0]])
     constraint_lower_bound = np.array([0.001, 0.001, 0.001, 0])
     constraint_upper_bound = np.array([np.inf, np.inf, np.inf, np.inf])
     constraints = sc.optimize.LinearConstraint(A, constraint_lower_bound, constraint_upper_bound)
 
     sc.optimize.differential_evolution(sim_start, bounds, constraints = constraints,
-            strategy='best1bin', maxiter=iterations, callback=opt_callback, popsize = popsize)
+            strategy='best1bin', maxiter=iterations, popsize = 1, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
     # It will return the fitness value of the simulation
     # The simulation will be started with the given parameters
@@ -89,18 +90,22 @@ def sim_start(opt_params):
     chord_cp, spar_cp, blade_areas = aero_properties(tri_wing, config["blade_count"])
     #length = |z0|, width = y3 - y0
     config["pitch_joint"]["spring_stiffness"] = pitch_stiffness_calc(abs(opt_params[1]), opt_params[4] - opt_params[0])
-    with open(json_config_path, 'w') as file:
+    with open(json_config_path, 'w') as file: #comment out to not update
         json.dump(config, file, indent=4)
     Message.info("config updated")
     generate_sdf(chord_cps=chord_cp, spar_cps=spar_cp, blade_area=blade_areas) #write to default location: (data/processed.sdf)
     Message.success("sdf generated, now launching sim")
     sim_launch(config["sim_length"])
     Message.success("sim finished, parsing data")
+    global counter
+    counter += 1 
+    Message.debug("Simulation Generation Total: " + str(counter))
     return parse_data()
     #end of sim, save parameters and such
 
 #copies generated data files to a new folder for each iteration
 def opt_callback(intermediate_result: OptimizeResult) -> bool:
+    print("callback")
     iter_path = os.path.join(folder_path, f'iter_{intermediate_result.nit}') #nit = number iterations
     Message.debug("iter Path: ", iter_path)
     if not os.path.exists(iter_path):
@@ -162,6 +167,6 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
     
 if __name__ == '__main__':
-    top_start(3, popsize=1)
+    top_start(1, popsize=1)
     # generate_sdf()
     # sim_launch()

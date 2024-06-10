@@ -1,0 +1,15 @@
+﻿"leading_edge_rod_diameter"= 1mm
+"spar_rod_diameter"= .5mm
+"trailing_edge_rod_diameter"= .5mm
+"y0"= 1mm
+"z0"= - 1mm
+"y1"= 50mm
+"z1"= - 25mm
+"y2"= 100mm
+"z2"= - 0.25mm
+"D1@Sketch1"="y0"
+"D2@Sketch1"="y2"
+"D3@Sketch1"=-"z0"
+"D4@Sketch1"=-"z1"
+"D5@Sketch1"="y1"
+"D1@Sketch2"=-"z2"
