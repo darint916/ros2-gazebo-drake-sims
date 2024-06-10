@@ -15,8 +15,8 @@ rho_h = np.pi / 4 * D_H * 1854.55 #kg/m
 rho_mem = 0.05 * 0.0005 / 0.00254**2 / 2.2 #kg/m**2
 
 #calculates moments of inertia for a slender rod in the yz plane
-def line_I(y0, z0, y1, z1, diameter = D_LE) -> np.array:
-    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
+def line_I(y0, z0, y1, z1, diameter = D_LE, density = 1854.55) -> np.array:
+    rho = np.pi / 4 * diameter**2 * density #kg/m
     del_y = y1 - y0
     del_z = z1 - z0
 
@@ -27,15 +27,15 @@ def line_I(y0, z0, y1, z1, diameter = D_LE) -> np.array:
 
     I = np.array([y_integrated + z_integrated, 
                   z_integrated, 
-                  line_length * y_integrated, 
+                  y_integrated, 
                   0, 
                   0, 
                   (del_y*del_z/3 + (del_z*y0 + del_y*z0)/2 + y0*z0)]) * rho * line_length
     return I
 
 #calculates the mass of a rod in the yz plane
-def line_m(y0, z0, y1, z1, diameter = D_LE) -> float:
-    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
+def line_m(y0, z0, y1, z1, diameter = D_LE, density = 1854.55) -> float: #value tested
+    rho = np.pi / 4 * diameter**2 * density #kg/m
     del_y = y1 - y0
     del_z = z1 - z0
 
@@ -46,8 +46,8 @@ def line_m(y0, z0, y1, z1, diameter = D_LE) -> float:
 # the rod mass so it can be divided by the overall system mass
 # to get a system center of mass
 # [y, z]
-def line_com(y0, z0, y1, z1, diameter = D_LE) -> np.array:
-    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
+def line_com(y0, z0, y1, z1, diameter = D_LE, density = 1854.55) -> np.array:
+    rho = np.pi / 4 * diameter**2 * density #kg/m
     del_y = y1 - y0
     del_z = z1 - z0
 
@@ -55,8 +55,8 @@ def line_com(y0, z0, y1, z1, diameter = D_LE) -> np.array:
     return np.array([y0 + del_y/2, z0+del_z/2]) * line_length*rho
 
 #calculates the moments of inertia for a slender rod in the yz plane that follows a curve
-def curve_I(curve, diameter = D_TE, t_max = 1) -> np.array:
-    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
+def curve_I(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
+    rho = np.pi / 4 * diameter**2 * density #kg/m
     I = np.array([sc.integrate.quad(lambda t: (curve.y(t)**2 + curve.z(t)**2) * dm_curve(curve, t, rho), 0, t_max)[0],
                   sc.integrate.quad(lambda t: (curve.z(t)**2) * dm_curve(curve, t, rho), 0, t_max)[0],
                   sc.integrate.quad(lambda t: (curve.y(t)**2) * dm_curve(curve, t, rho), 0, t_max)[0],
@@ -67,17 +67,16 @@ def curve_I(curve, diameter = D_TE, t_max = 1) -> np.array:
     return I
 
 #calculates the mass of a rod following a curve in the yz plane
-def curve_m(curve, diameter = D_TE, t_max = 1) -> float:
-    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
+def curve_m(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> float:
+    rho = np.pi / 4 * diameter**2 * density #kg/m
     return sc.integrate.quad(lambda t: dm_curve(curve, t, rho), 0, t_max)[0]
 
 # returns the center of mass of a cylindral rod following 
 # a curve multiplied by the curve mass so it can be divided 
 # by the overall system mass to get a system center of mass    
 # [y, z]
-def curve_com(curve, diameter = D_TE, t_max = 1) -> np.array:
-    rho = np.pi / 4 * diameter**2 * 1854.55 #kg/m
-    mass = curve_m(curve, diameter=diameter, t_max=t_max)
+def curve_com(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
+    rho = np.pi / 4 * diameter**2 * density #kg/m
 
     return np.array([sc.integrate.quad(lambda t: curve.y(t) * dm_curve(curve, t, rho), 0, t_max)[0],
                      sc.integrate.quad(lambda t: curve.z(t) * dm_curve(curve, t, rho), 0, t_max)[0]])
