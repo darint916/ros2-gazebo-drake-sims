@@ -85,8 +85,10 @@ def sim_start(opt_params):
     config["wing"]["inertia"]["ixy"] = tri_wing.I[3]
     config["wing"]["inertia"]["ixz"] = tri_wing.I[4]
     config["wing"]["inertia"]["iyz"] = tri_wing.I[5]
-    config["wing"]["mass"] = tri_wing.m
+    config["wing"]["mass"] = tri_wing.mass
     config["stroke_joint"]["spring_stiffness"] = opt_params[6]
+    Message.debug("config inertia:")
+    Message.debug(config["wing"]["inertia"])
     chord_cp, spar_cp, blade_areas = aero_properties(tri_wing, config["blade_count"])
     #length = |z0|, width = y3 - y0
     config["pitch_joint"]["spring_stiffness"] = pitch_stiffness_calc(abs(opt_params[1]), opt_params[4] - opt_params[0])
