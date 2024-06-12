@@ -4,18 +4,6 @@ import numpy as np
 #there is the leading edge, a hinge bar, and trailing edge connected by a film 
 
 class BezierWing():
-    def y(self, t):
-        return (1 - t)**3 * self.y0 + 3*(1 - t)**2 * t * self.y1 + 3*(1 - t) * t**2 * self.y2 + t**3  * self.y3
-    
-    def z(self, t):
-        return (1 - t)**3 * self.z0 + 3*(1 - t)**2 * t * self.z1 + 3*(1 - t) * t**2 * self.z2 + t**3  * self.z3
-    
-    def dy(self, t):
-        return 3 * (1 - t)**2 * (self.y1 - self.y0) + 6 * (1 - t) * t * (self.y2 - self.y1) + 3 * t**2 * (self.y3 - self.y2)
-    
-    def dz(self, t):
-        return 3 * (1 - t)**2 * (self.z1 - self.z0) + 6 * (1 - t) * t * (self.z2 - self.z1) + 3 * t**2 * (self.z3 - self.z2)
-    
     def __init__(self, y_0, z_0, y_1, z_1, y_2, z_2, y_3, z_3):
         self.y0 = y_0
         self.z0 = z_0
@@ -29,6 +17,19 @@ class BezierWing():
         self.m = bez_wing_mass(self, d_le = self.D_LE, d_h = self.D_H, d_te = self.D_TE)
 
         self.I = bez_wing_I(self, self.m, d_le = self.D_LE, d_h = self.D_H, d_te = self.D_TE)
+        
+    def y(self, t):
+        return (1 - t)**3 * self.y0 + 3*(1 - t)**2 * t * self.y1 + 3*(1 - t) * t**2 * self.y2 + t**3  * self.y3
+    
+    def z(self, t):
+        return (1 - t)**3 * self.z0 + 3*(1 - t)**2 * t * self.z1 + 3*(1 - t) * t**2 * self.z2 + t**3  * self.z3
+    
+    def dy(self, t):
+        return 3 * (1 - t)**2 * (self.y1 - self.y0) + 6 * (1 - t) * t * (self.y2 - self.y1) + 3 * t**2 * (self.y3 - self.y2)
+    
+    def dz(self, t):
+        return 3 * (1 - t)**2 * (self.z1 - self.z0) + 6 * (1 - t) * t * (self.z2 - self.z1) + 3 * t**2 * (self.z3 - self.z2)
+    
         
 
 #Inertial Return: 1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
