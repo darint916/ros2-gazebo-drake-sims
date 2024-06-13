@@ -69,7 +69,7 @@ class TestSlenderRodInertialproperties(unittest.TestCase):
             calc_com = line_com(coords[0], coords[1], coords[2], coords[3], diameter=self.rod_diameter, density = self.rod_density)
             calc_com = calc_com / self.truth_mass[i]
             self.assertTrue(almost_equal(truth_com[i][0], calc_com[0], self.error_tol) and almost_equal(truth_com[i][1], calc_com[1], self.error_tol),
-                            f"Center of Mass case failed: {coords}. Expected {truth_com[i]} but output was {calc_com}")
+                            f"Rod center of mass case failed: {coords}. Expected {truth_com[i]} but output was {calc_com}")
 
         #     Message.info(f"Analysing rod with endpoints (y, z) at ({coords[0]}, {coords[1]}) and ({coords[2]}, {coords[3]})")
             
@@ -107,7 +107,7 @@ class TestSlenderRodInertialproperties(unittest.TestCase):
                 if not almost_equal(truth_inertia[i][j], calc_i[j], self.error_tol):
                     passed = False
 
-            self.assertTrue(passed, f"Failed inertia case: {coords}. Expected {truth_inertia[i]} but output was {calc_i}")    
+            self.assertTrue(passed, f"Failed rod inertia case: {coords}. Expected {truth_inertia[i]} but output was {calc_i}")    
         #     if passed:
         #         Message.success("Passed Case")
         #     else:

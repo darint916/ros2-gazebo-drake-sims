@@ -88,12 +88,13 @@ def curve_com(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
 #calculates the moment of inertia for a planar film bounded by a curve in the yz plane.
 #Assumes the curve is below the y axis
 def film_I(curve, rho = rho_mem) -> np.array:
-    I = np.array([-rho * sc.integrate.quad(lambda t: (curve.z(t)*curve.y(t)**2 + 1/3 * curve.z(t)**3) * curve.dy(t), 0, 1)[0],
-                  -1/3 * rho * sc.integrate.quad(lambda t: curve.z(t)**3 * curve.dy(t), 0, 1)[0],
-                  -rho * sc.integrate.quad(lambda t: curve.y(t)**2 * curve.z(t) * curve.dy(t), 0, 1)[0],
+    mass = film_m(curve, rho=rho)
+    I = np.array([-mass * sc.integrate.quad(lambda t: (curve.z(t)*curve.y(t)**2 + 1/3 * curve.z(t)**3) * curve.dy(t), 0, 1)[0],
+                  -1/3 * mass * sc.integrate.quad(lambda t: curve.z(t)**3 * curve.dy(t), 0, 1)[0],
+                  -mass * sc.integrate.quad(lambda t: curve.y(t)**2 * curve.z(t) * curve.dy(t), 0, 1)[0],
                    0,
                    0,
-                  -0.5 * rho * sc.integrate.quad(lambda t: curve.y(t) * curve.z(t)**2 * curve.dy(t), 0, 1)[0]])
+                  -0.5 * mass * sc.integrate.quad(lambda t: curve.y(t) * curve.z(t)**2 * curve.dy(t), 0, 1)[0]])
     return I
 
 #calculates the mass of a planar film bounded by a curve in the yz plane.
@@ -101,13 +102,13 @@ def film_I(curve, rho = rho_mem) -> np.array:
 def film_m(curve, rho = rho_mem) -> float:
     return rho * sc.integrate.quad(lambda t: np.abs(curve.z(t) * curve.dy(t)), 0, 1)[0]
 
-# returns the center of mass of a thin film rod following 
+# returns the center of mass of a thin film following 
 # a curve multiplied by the curve mass so it can be divided 
 # by the overall system mass to get a system center of mass 
 # [y, z]
 def film_com(curve, rho = rho_mem) -> np.array: #value tested
-    return np.array([-rho * sc.integrate.quad(lambda t: (curve.z(t) - curve.z0) * curve.y(t) * curve.dy(t), 0, 1)[0],
-                     -rho / 2 * sc.integrate.quad(lambda t: (curve.z(t)**2 - curve.z0**2) * curve.y(t) * curve.dy(t), 0, 1)[0]])
+    return np.array([-rho * sc.integrate.quad(lambda t: curve.z(t) * curve.y(t) * curve.dy(t), 0, 1)[0],
+                     -rho / 2 * sc.integrate.quad(lambda t: (curve.z(t)**2 * curve.dy(t)), 0, 1)[0]])
 
 def bez_wing_I(curve, mass, d_le = D_LE, d_h = D_H, d_te = D_TE, debug = False) -> np.array:
     #leading edge
