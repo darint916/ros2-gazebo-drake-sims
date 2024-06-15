@@ -65,7 +65,6 @@ def curve_I(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
                   0,
                   0,
                   sc.integrate.quad(lambda t: (curve.y(t) * curve.z(t)) *dm_curve(t), 0, t_max)[0]])
-     
     return I
 
 #calculates the mass of a rod following a curve in the yz plane
@@ -106,9 +105,10 @@ def film_m(curve, rho = rho_mem) -> float:
 # a curve multiplied by the curve mass so it can be divided 
 # by the overall system mass to get a system center of mass 
 # [y, z]
+# technically this calculates the moment with respect to an axis
 def film_com(curve, rho = rho_mem) -> np.array: #value tested
     return np.array([-rho * sc.integrate.quad(lambda t: curve.z(t) * curve.y(t) * curve.dy(t), 0, 1)[0],
-                     -rho / 2 * sc.integrate.quad(lambda t: (curve.z(t)**2 * curve.dy(t)), 0, 1)[0]])
+                     -rho / 2 * sc.integrate.quad(lambda t: curve.z(t)**2 * curve.dy(t), 0, 1)[0]])
 
 def bez_wing_I(curve, mass, d_le = D_LE, d_h = D_H, d_te = D_TE, debug = False) -> np.array:
     #leading edge

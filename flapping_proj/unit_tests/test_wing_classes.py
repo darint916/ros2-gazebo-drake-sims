@@ -23,7 +23,7 @@ class TestTriangleInequalities(unittest.TestCase):
         result = check_triangle_inequalities(tri_wing.I[0], tri_wing.I[1], tri_wing.I[2])
         Message.debug(f"I_origin: {tri_wing.I_origin[0]}, {tri_wing.I_origin[1]}, {tri_wing.I_origin[2]}, {tri_wing.I_origin[3]}, {tri_wing.I_origin[4]}, {tri_wing.I_origin[5]}")
         tensor_truth = np.array([148.692908, 6.875943, 141.835885, 0, 0, -3.224729]) / 1000**3 #1000**3 represents conversion from g mm**2 to kg m**2
-        tensor_origin_truth = np.array([594.049086, 8.422495, 585.645511, 0, 0, 22.974025]) / 1000**3
+        tensor_origin_truth = np.array([594.049086, 8.422495, 585.645511, 0, 0, -22.974025]) / 1000**3
         Message.debug(f"Tensor Truth Triangle Inequality Check: {check_triangle_inequalities(tensor_truth[0], tensor_truth[1], tensor_truth[2])}")
 
         com_truth = np.array([47.845714, -2.824405]) /1000
@@ -35,6 +35,7 @@ class TestTriangleInequalities(unittest.TestCase):
         Message.debug(f"Calculated mass: {tri_wing.mass}")
 
         Message.debug(f"tensor_origin_truth: {tensor_origin_truth}")
+        Message.debug(f"Calculated Origin tensor {tri_wing.I_origin}")
         self.assertTrue(result, (f"Triangle Inequalities are not satisfied: {tri_wing.I[0]}, {tri_wing.I[1]}, {tri_wing.I[2]}"))
         self.assertTrue(tri_wing.mass > 0)
         self.assertTrue(tri_wing.I[0] > 0)

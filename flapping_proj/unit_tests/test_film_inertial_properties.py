@@ -161,7 +161,7 @@ class Tri3(FilmCase):
 class Para1(FilmCase):
     name = "Parabola through (0, 0), (1, -1), (2, 0)"
     truth_mass = rho_mem * (4/3)
-    truth_com = [1, -8/15]
+    truth_com = [1, -.4]
     truth_i = np.array([32/105+8/5,
                         32/105,
                         8/5,
