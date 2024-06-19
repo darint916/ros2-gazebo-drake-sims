@@ -1,4 +1,4 @@
-from inertial_properties import *
+from optimization.inertial_properties import *
 import numpy as np
 #wing with a trailing edge shaped like a bezier curve.
 #there is the leading edge, a hinge bar, and trailing edge connected by a film 
@@ -51,11 +51,9 @@ class TriWing():
         
         #center of mass each component * mass of component / overall mass = COM coordinates
         self.com = (line_com(0, 0, y2, 0, self.leading_edge_rod_diameter) + line_com(y0, z0, y1, z1, self.trailing_edge_rod_diameter) + line_com(y1, z0, y1, z1, self.spar_rod_diameter) + film_com(self)) / self.mass
-        com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
 
-        self.I_origin = line_I(0, 0, y2, 0, self.leading_edge_rod_diameter) + line_I(y0, z0, y1, z1, self.trailing_edge_rod_diameter) + line_I(y1, z0, y1, z1, self.spar_rod_diameter) + film_I(self)
-        #1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
-        self.I = self.I_origin - self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2, com_magnitude_sqr - self.com[1]**2, 0, 0, -self.com[0] * self.com[1]])
+        #1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz
+        self.I = line_I(0, 0, y2, 0, diameter=self.leading_edge_rod_diameter, com=self.com) + line_I(y0, z0, y1, z1, diameter=self.trailing_edge_rod_diameter, com=self.com) + line_I(y1, z0, y1, z1, diameter= self.spar_rod_diameter, com=self.com) + film_I(self, com=self.com)
         
         # The error for a triangle inequality primary moments of inertia
         # These values are strictly positive for a valid tensor
@@ -70,6 +68,9 @@ class TriWing():
             min_inertia_index = np.argmin(self.I[0:2])
             self.I[min_inertia_index] *= 1 + 1e-5
         
+        com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
+
+        self.I_origin = self.I + self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2, com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
 
     #Coordinates along wing trailing edge given parametric value t
     def y(self, t):

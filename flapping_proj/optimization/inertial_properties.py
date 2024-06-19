@@ -15,22 +15,25 @@ rho_h = np.pi / 4 * D_H * 1854.55 #kg/m
 rho_mem = 0.05 * 0.0005 / 0.0254**2 / 2.2 #kg/m**2
 
 #calculates moments of inertia for a slender rod in the yz plane
-def line_I(y0, z0, y1, z1, diameter = D_LE, density = 1854.55) -> np.array:
+def line_I(y0, z0, y1, z1, com = np.array([0, 0]), diameter = D_LE, density = 1854.55) -> np.array:
     rho = np.pi / 4 * diameter**2 * density #kg/m
     del_y = y1 - y0
     del_z = z1 - z0
 
     line_length = np.sqrt(del_y**2 + del_z**2)
+    
+    transformed_y0 = y0 - com[0]
+    transformed_z0 = z0 - com[1]
 
-    y_integrated = del_y**2 / 3 + del_y * y0 + y0**2
-    z_integrated = del_z**2 / 3 + del_z * z0 + z0**2
+    y_integrated = del_y**2 / 3 + del_y * transformed_y0 + transformed_y0**2
+    z_integrated = del_z**2 / 3 + del_z * transformed_z0 + transformed_z0**2
 
     I = np.array([y_integrated + z_integrated, 
                   z_integrated, 
                   y_integrated, 
                   0, 
                   0, 
-                  (del_y*del_z/3 + (del_z*y0 + del_y*z0)/2 + y0*z0)]) * rho * line_length
+                  (del_y*del_z/3 + (del_z*transformed_y0 + del_y*transformed_z0)/2 + transformed_y0*transformed_z0)]) * rho * line_length
     return I
 
 #calculates the mass of a rod in the yz plane
@@ -57,14 +60,14 @@ def line_com(y0, z0, y1, z1, diameter = D_LE, density = 1854.55) -> np.array:
     return np.array([y0 + del_y/2, z0+del_z/2]) * line_length*rho
 
 #calculates the moments of inertia for a slender rod in the yz plane that follows a curve
-def curve_I(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
+def curve_I(curve, com = np.array([0, 0]), diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
     rho = np.pi / 4 * diameter**2 * density #kg/m
-    I = np.array([sc.integrate.quad(lambda t: (curve.y(t)**2 + curve.z(t)**2) * dm_curve(curve, t, rho), 0, t_max)[0],
-                  sc.integrate.quad(lambda t: (curve.z(t)**2) * dm_curve(curve, t, rho), 0, t_max)[0],
-                  sc.integrate.quad(lambda t: (curve.y(t)**2) * dm_curve(curve, t, rho), 0, t_max)[0],
+    I = np.array([sc.integrate.quad(lambda t: ((curve.y(t) - com[0])**2 + (curve.z(t) - com[1])**2) * dm_curve(curve, t, rho), 0, t_max)[0],
+                  sc.integrate.quad(lambda t: (curve.z(t) - com[1])**2 * dm_curve(curve, t, rho), 0, t_max)[0],
+                  sc.integrate.quad(lambda t: (curve.y(t) - com[0])**2 * dm_curve(curve, t, rho), 0, t_max)[0],
                   0,
                   0,
-                  sc.integrate.quad(lambda t: (curve.y(t) * curve.z(t)) *dm_curve(t), 0, t_max)[0]])
+                  sc.integrate.quad(lambda t: ((curve.y(t) - com[0]) * (curve.z(t) - com[1])) *dm_curve(t), 0, t_max)[0]])
     return I
 
 #calculates the mass of a rod following a curve in the yz plane
@@ -86,14 +89,14 @@ def curve_com(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
 
 #calculates the moment of inertia for a planar film bounded by a curve in the yz plane.
 #Assumes the curve is below the y axis
-def film_I(curve, rho = rho_mem) -> np.array:
+def film_I(curve, com = np.array([0, 0]), rho = rho_mem) -> np.array:
     mass = film_m(curve, rho=rho)
-    I = np.array([-mass * sc.integrate.quad(lambda t: (curve.z(t)*curve.y(t)**2 + 1/3 * curve.z(t)**3) * curve.dy(t), 0, 1)[0],
-                  -1/3 * mass * sc.integrate.quad(lambda t: curve.z(t)**3 * curve.dy(t), 0, 1)[0],
-                  -mass * sc.integrate.quad(lambda t: curve.y(t)**2 * curve.z(t) * curve.dy(t), 0, 1)[0],
+    I = np.array([-mass * sc.integrate.quad(lambda t: ((curve.z(t) - com[1])*(curve.y(t) - com[0])**2 + 1/3 * (curve.z(t) - com[1])**3) * curve.dy(t), 0, 1)[0],
+                  -1/3 * mass * sc.integrate.quad(lambda t: (curve.z(t) - com[1])**3 * curve.dy(t), 0, 1)[0],
+                  -mass * sc.integrate.quad(lambda t: (curve.y(t) - com[0])**2 * (curve.z(t) - com[1]) * curve.dy(t), 0, 1)[0],
                    0,
                    0,
-                  -0.5 * mass * sc.integrate.quad(lambda t: curve.y(t) * curve.z(t)**2 * curve.dy(t), 0, 1)[0]])
+                  -0.5 * mass * sc.integrate.quad(lambda t: (curve.y(t) - com[0]) * (curve.z(t) - com[1])**2 * curve.dy(t), 0, 1)[0]])
     return I
 
 #calculates the mass of a planar film bounded by a curve in the yz plane.
