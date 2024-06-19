@@ -12,7 +12,7 @@ rho_te = np.pi / 4 * D_TE**2 * 1854.55 #kg/m
 rho_h = np.pi / 4 * D_H * 1854.55 #kg/m
 
 #area density for 12 micron PET sheet
-rho_mem = 0.05 * 0.0005 / 0.00254**2 / 2.2 #kg/m**2
+rho_mem = 0.05 * 0.0005 / 0.0254**2 / 2.2 #kg/m**2
 
 #calculates moments of inertia for a slender rod in the yz plane
 def line_I(y0, z0, y1, z1, diameter = D_LE, density = 1854.55) -> np.array:

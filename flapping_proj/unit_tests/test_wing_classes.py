@@ -21,7 +21,6 @@ class TestTriangleInequalities(unittest.TestCase):
         tri_wing = TriWing(0.001, -0.001, .05, -.025, .1, -.00025)
         #.i = [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
         result = check_triangle_inequalities(tri_wing.I[0], tri_wing.I[1], tri_wing.I[2])
-        Message.debug(f"I_origin: {tri_wing.I_origin[0]}, {tri_wing.I_origin[1]}, {tri_wing.I_origin[2]}, {tri_wing.I_origin[3]}, {tri_wing.I_origin[4]}, {tri_wing.I_origin[5]}")
         tensor_truth = np.array([148.692908, 6.875943, 141.835885, 0, 0, -3.224729]) / 1000**3 #1000**3 represents conversion from g mm**2 to kg m**2
         tensor_origin_truth = np.array([594.049086, 8.422495, 585.645511, 0, 0, -22.974025]) / 1000**3
         Message.debug(f"Tensor Truth Triangle Inequality Check: {check_triangle_inequalities(tensor_truth[0], tensor_truth[1], tensor_truth[2])}")
@@ -35,18 +34,43 @@ class TestTriangleInequalities(unittest.TestCase):
         Message.debug(f"Calculated mass: {tri_wing.mass}")
 
         Message.debug(f"tensor_origin_truth: {tensor_origin_truth}")
-        Message.debug(f"Calculated Origin tensor {tri_wing.I_origin}")
+        Message.debug(f"Calculated Origin tensor {tri_wing.I_origin}")\
+        
+        Message.debug(f"tensor_truth: {tensor_truth}")
+        Message.debug(f"calculated tensor: {tri_wing.I}")
+        Message.debug(f"Triangle Test Error: {tri_wing.I[0] - tri_wing.I[1] - tri_wing.I[2]}")
         self.assertTrue(result, (f"Triangle Inequalities are not satisfied: {tri_wing.I[0]}, {tri_wing.I[1]}, {tri_wing.I[2]}"))
         self.assertTrue(tri_wing.mass > 0)
         self.assertTrue(tri_wing.I[0] > 0)
         self.assertTrue(tri_wing.I[1] > 0)
         self.assertTrue(tri_wing.I[2] > 0)
         #[Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
-
-        result2 = check_triangle_inequalities(4.2636252089686846e-08,1.701644954748123e-09, 4.0934607134938734e-08)
-        result2 = check_triangle_inequalities(3.392129987389574e-06,1.9036163412645447e-06, 1.4885136461250288e-06)
-        Message.debug(f"Tensor Truth Triangle Inequality Check: {result2}")
-        self.assertTrue(result2)
+        
+        many_wings = True
+        failed = None
+        tested = 0
+        min_ys = np.linspace(0, .03, 10)
+        max_ys = np.linspace(0.031, 0.15, 10)
+        tip_zs = np.linspace(-0.2, -0.003, 10)
+        
+        for i in min_ys:
+            for j in max_ys:
+                mid_ys = np.linspace(1.01 * i, .99 * j, 10)
+                for k in mid_ys:
+                    for l in tip_zs:
+                        trial_wing = TriWing(i, 0, k, l, j, 0)
+                        tested += 1
+                        if not check_triangle_inequalities(trial_wing.I[0], trial_wing.I[1], trial_wing.I[2]):
+                            tri_error = np.array([trial_wing.I[0] + trial_wing.I[1] - trial_wing.I[2], 
+                                                  trial_wing.I[1] + trial_wing.I[2] - trial_wing.I[0],
+                                                  trial_wing.I[0] + trial_wing.I[2] - trial_wing.I[1]])
+                            failed = f"Wing {tested} failed: ({i}, 0), ({k}, {l}), ({j}, 0). Inertia Tensor: {trial_wing.I}. Triangle Test Errors: {tri_error}"
+                            many_wings = False
+                            break
+        
+        self.assertTrue(many_wings, failed)
+        
+        
 
         
 if __name__ == "__main__":
