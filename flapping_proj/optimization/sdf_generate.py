@@ -13,11 +13,11 @@ root = tree.getroot()
 
 # Load the JSON configuration
 json_config_path = os.path.join(curr_path,'data','config.json')
-with open(json_config_path, 'r') as json_file:
-    config = json.load(json_file)
 inertia_key = ['ixx', 'ixy', 'ixz', 'iyy', 'iyz', 'izz']
 
 def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.array= None, blade_area:np.array=None):
+    with open(json_config_path, 'r') as json_file:
+        config = json.load(json_file)
     link_names = config['link_names']
     existing_links = {link_name: False for link_name in link_names}
     existing_joints = {joint_name: False for joint_name in config['joint_names']}
@@ -38,6 +38,9 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
                         inertia = config[link_name]['inertia']
                         for i, element in enumerate(inertia_element):
                             element.text = str(inertia[inertia_key[i]]) #Inertia text
+                    pose = inertial.find('pose') #COM position
+                    if pose is not None and link_name == "wing":
+                        pose.text = ', '.join(map(str, config[link_name]['com']))
         for joint in model.findall('.//joint'):
             joint_name = joint.get('name')
             if joint_name in config['joint_names']:
