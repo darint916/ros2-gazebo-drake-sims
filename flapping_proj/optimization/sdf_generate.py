@@ -38,6 +38,9 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
                         inertia = config[link_name]['inertia']
                         for i, element in enumerate(inertia_element):
                             element.text = str(inertia[inertia_key[i]]) #Inertia text
+                    pose = inertial.find('pose') #COM position
+                    if pose is not None and link_name == "wing":
+                        pose.text = ', '.join(map(str, config[link_name]['com']))
         for joint in model.findall('.//joint'):
             joint_name = joint.get('name')
             if joint_name in config['joint_names']:

@@ -13,6 +13,7 @@ import subprocess
 import time
 import signal
 import numpy as np
+from unit_tests.test_wing_classes import check_triangle_inequalities
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 json_config_path = os.path.join(DIR_PATH,'data','config.json')
 
@@ -32,7 +33,7 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     # parameter_lower_bound = np.array([1, -3, 1, -np.inf, 1, -np.inf, .01]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
     #bounds converted to si by the /1000
     parameter_lower_bound = np.array([1, -3, 1, -200, 1, -2, 1]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm] 
-    parameter_upper_bound = np.array([30, -1, 150, -1, 150, 0, 2000]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
+    parameter_upper_bound = np.array([30, -1, 150, -1, 150, 0, 1000]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
     #position coordinates describing wing: (0, y0, z0), (0, y1, z1), (0, y2, z2)
     #y0 is the horizontal location nearest to the root. 
     #z0 is the vertical location of the film near the root
@@ -79,14 +80,16 @@ def sim_start(opt_params):
         config = json.load(json_file)
     Message.data("sim iter start \n opt_params: " + str(opt_params))
     tri_wing = wing_classes.TriWing(opt_params[0], opt_params[1], opt_params[2], opt_params[3], opt_params[4], opt_params[5])
-    config["wing"]["inertia"]["ixx"] = tri_wing.I[0]
-    config["wing"]["inertia"]["iyy"] = tri_wing.I[1]
+    config["wing"]["inertia"]["ixx"] = tri_wing.I[1]
+    config["wing"]["inertia"]["iyy"] = tri_wing.I[0]
     config["wing"]["inertia"]["izz"] = tri_wing.I[2]
     config["wing"]["inertia"]["ixy"] = tri_wing.I[3]
-    config["wing"]["inertia"]["ixz"] = tri_wing.I[4]
-    config["wing"]["inertia"]["iyz"] = tri_wing.I[5]
+    config["wing"]["inertia"]["ixz"] = tri_wing.I[5]
+    config["wing"]["inertia"]["iyz"] = tri_wing.I[4]
+    check_triangle_inequalities(tri_wing.I[0], tri_wing.I[1], tri_wing.I[2])
     config["wing"]["mass"] = tri_wing.mass
     config["stroke_joint"]["spring_stiffness"] = opt_params[6]
+    config["wing"]["com"] = [tri_wing.com[0], 0, tri_wing.com[1], 0, 0, 0]
     Message.debug("config inertia:")
     Message.debug(config["wing"]["inertia"])
     chord_cp, spar_cp, blade_areas = aero_properties(tri_wing, config["blade_count"])
