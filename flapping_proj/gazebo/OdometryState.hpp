@@ -20,7 +20,6 @@ namespace odometry_state
         std::string modelName;
         // ignition::gazebo::Entity canonicalLink;
         
-        std::string modelName;
         int modelPositionIndex = -1;
         std::map<std::string, ignition::gazebo::Entity> jointMap;
         std::map<std::string, ignition::gazebo::Entity> inputJointMap;
@@ -28,9 +27,6 @@ namespace odometry_state
     
         void PositionCallBack(const ignition::msgs::Pose_V &_msg);
         ignition::msgs::Pose_V poseMsg; //for incoming subscribed pose data
-
-        void TorqueCallBack(const ignition::msgs::Double &_msg);
-        ignition::msgs::Double torqueMsg; //for incoming subscribed torque data 
     };
 
     class OdometryState :
