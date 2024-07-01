@@ -119,6 +119,7 @@ def opt_callback(intermediate_result: OptimizeResult) -> bool:
     shutil.copy(os.path.join(DIR_PATH, 'data', 'aero.csv'), os.path.join(iter_path, 'aero.csv'))
     shutil.copy(os.path.join(DIR_PATH, 'data', 'data.csv'), os.path.join(iter_path, 'data.csv'))
     shutil.copy(os.path.join(DIR_PATH, 'data', 'processed.sdf'), os.path.join(iter_path, 'processed.sdf'))
+    shutil.copy(os.path.join(DIR_PATH, 'data', 'input_joint_data.csv'), os.path.join(iter_path, 'input_joint_data.csv'))
     opt_res = os.path.join(iter_path, 'opt_res.json')
     Message.info("opt_res path: ", opt_res)
 

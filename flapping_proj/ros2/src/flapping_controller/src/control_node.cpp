@@ -47,6 +47,7 @@ class ControlNode : public rclcpp::Node
         std::ofstream _csvWriter;
 		std::ofstream _csvInputJointFile;
 		std::ofstream _csvInputJointWriter;
+		double _curr_time;
         // int _csv_writer_buffer; //Buffer if data comes in too fast, not fully implemented yet
 	
 		//Altitude PID controller
@@ -125,8 +126,8 @@ class ControlNode : public rclcpp::Node
 			_csvInputJointFile.open(inputJointFilePath);
 			_csvInputJointWriter = std::ofstream(inputJointFilePath, std::ios::out | std::ios::app);
 			_dataHeaders = "time";
-			for (const auto & jointName : jointNames) {
-				_dataHeaders += "," + jointName + "_velocity"; //semi rundundant, but checks for time alignment
+			for (const auto & jointName : jointNames) { //todo only have the right torque one
+				_dataHeaders += "," + jointName + "_torque"; //semi rundundant, but checks for time alignment
 			}
 			_csvInputJointWriter << _dataHeaders << "\n";
 
@@ -184,6 +185,7 @@ class ControlNode : public rclcpp::Node
 			_motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
 			_sim_length = this->get_parameter("sim_length").as_double();
 			_kill_flag_file_path = this->get_parameter("kill_flag_path").as_string();
+			_curr_time = 0.0;
 		}
 
 	private:
@@ -236,17 +238,22 @@ class ControlNode : public rclcpp::Node
 			// auto msg = geometry_msgs::msg::Twist();
 
 			//Switch joint axis? instead of flipping torque
-			_csvInputJointWriter << _currentPoseTime;
+			double torque_val = 0;
 			for (auto & joint : _jointTorqueControlMap) {
+				torque_val = joint.second;
 				if (joint.first == "joint_RW_J_Flap"){ //edit to change dir later?
 					joint.second *= -1;
 				}
-				_csvInputJointWriter << "," << joint.second;
 				message.data = joint.second;
 				_jointControlPublishersMap[joint.first]->publish(message);
+				//TODO: this is temp 1 wing data torque pub
 			}
-			_csvInputJointWriter << "\n";
-
+			if(_curr_time < _currentPoseTime) {
+				_csvInputJointWriter << _currentPoseTime;
+				_csvInputJointWriter << "," << torque_val;
+				_csvInputJointWriter << "\n";
+				_curr_time = _currentPoseTime;
+			}
 			
 		}
 
