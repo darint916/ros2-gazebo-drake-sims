@@ -1,5 +1,6 @@
 from optimization.inertial_properties import *
 import numpy as np
+from utils.message import Message
 #wing with a trailing edge shaped like a bezier curve.
 #there is the leading edge, a hinge bar, and trailing edge connected by a film 
 
@@ -55,18 +56,27 @@ class TriWing():
         #1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz
         self.I = line_I(0, 0, y2, 0, diameter=self.leading_edge_rod_diameter, com=self.com) + line_I(y0, z0, y1, z1, diameter=self.trailing_edge_rod_diameter, com=self.com) + line_I(y1, z0, y1, z1, diameter= self.spar_rod_diameter, com=self.com) + film_I(self, com=self.com)
         
-        # The error for a triangle inequality primary moments of inertia
-        # These values are strictly positive for a valid tensor
-        tri_error = np.array([self.I[0] + self.I[1] - self.I[2], 
-                              self.I[1] + self.I[2] - self.I[0],
-                              self.I[0] + self.I[2] - self.I[1]])
         
         # If triangle test on the primary moments of inertia fails
         # adds a very small percentage to the smallest moment of inertia. 
         # If the test is barely failing, this will make it pass.
-        if any(tri_error < 0):
-            min_inertia_index = np.argmin(self.I[0:2])
-            self.I[min_inertia_index] *= 1 + 1e-5
+        # Increases the smallest moment by at least 0.001%
+        # or at most 0.01%
+        max_increase = 10
+        for i in range(max_increase):
+            # The error for a triangle inequality primary moments of inertia
+            # These values are strictly positive for a valid tensor
+            tri_error = np.array([self.I[0] + self.I[1] - self.I[2], 
+                                  self.I[1] + self.I[2] - self.I[0],
+                                  self.I[0] + self.I[2] - self.I[1]])
+            if any(tri_error < 0):
+                min_inertia_index = np.argmin(self.I[0:2])
+                self.I[min_inertia_index] *= 1 + 1e-5
+            else:
+                Message.info(f"Tensor modified from calculated value. Loop ran {i} times")
+                break
+            if i == max_increase - 1:
+                Message.error(f"No valid primary moments of inertia. Final tensor values were {self.I}")
         
         com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
 
