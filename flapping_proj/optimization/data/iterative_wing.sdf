@@ -132,6 +132,7 @@
          <link name="wing">
             <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
             <inertial>
+               <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
                <!-- <mass>0.877528688193489</mass> -->
                <mass>0.000877528688193489</mass>
                <!-- <mass>0.000877528688193489</mass> -->
