@@ -73,7 +73,8 @@ class TriWing():
                 min_inertia_index = np.argmin(self.I[0:2])
                 self.I[min_inertia_index] *= 1 + 1e-5
             else:
-                Message.info(f"Tensor modified from calculated value. Loop ran {i} times")
+                if i > 0:
+                    Message.info(f"Tensor modified from calculated value. Loop ran {i} times")
                 break
             if i == max_increase - 1:
                 Message.error(f"No valid primary moments of inertia. Final tensor values were {self.I}")
