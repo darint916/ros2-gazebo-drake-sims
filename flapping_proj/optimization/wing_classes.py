@@ -4,6 +4,30 @@ from utils.message import Message
 #wing with a trailing edge shaped like a bezier curve.
 #there is the leading edge, a hinge bar, and trailing edge connected by a film 
 
+# If triangle test on the primary moments of inertia fails
+# adds a very small percentage to the smallest moment of inertia. 
+# If the test is barely failing, this will make it pass.
+# Increases the smallest moment by at least 0.001%
+# or at most 0.01%
+def inertia_modifier(inertia):
+    max_increase = 10
+    for i in range(max_increase):
+        # The error for a triangle inequality primary moments of inertia
+        # These values are strictly positive for a valid tensor
+        tri_error = np.array([inertia[0] + inertia[1] - inertia[2], 
+                              inertia[1] + inertia[2] - inertia[0],
+                              inertia[0] + inertia[2] - inertia[1]])
+        if any(tri_error < 0):
+            min_inertia_index = np.argmin(inertia[0:2])
+            inertia[min_inertia_index] *= 1 + 1e-5
+        else:
+            if i > 0:
+                Message.info(f"Tensor modified from calculated value. Loop ran {i} times")
+            break
+        if i == max_increase - 1:
+            Message.error(f"No valid primary moments of inertia. Final tensor values were {inertia}")
+        return inertia
+
 class BezierWing():
     def __init__(self, y_0, z_0, y_1, z_1, y_2, z_2, y_3, z_3):
         self.y0 = y_0
@@ -22,16 +46,21 @@ class BezierWing():
     def y(self, t):
         return (1 - t)**3 * self.y0 + 3*(1 - t)**2 * t * self.y1 + 3*(1 - t) * t**2 * self.y2 + t**3  * self.y3
     
-    def z(self, t):
-        return (1 - t)**3 * self.z0 + 3*(1 - t)**2 * t * self.z1 + 3*(1 - t) * t**2 * self.z2 + t**3  * self.z3
-    
     def dy(self, t):
         return 3 * (1 - t)**2 * (self.y1 - self.y0) + 6 * (1 - t) * t * (self.y2 - self.y1) + 3 * t**2 * (self.y3 - self.y2)
     
-    def dz(self, t):
+    def lower_z(self, t):
+        return (1 - t)**3 * self.z0 + 3*(1 - t)**2 * t * self.z1 + 3*(1 - t) * t**2 * self.z2 + t**3  * self.z3
+    
+    def lower_dz(self, t):
         return 3 * (1 - t)**2 * (self.z1 - self.z0) + 6 * (1 - t) * t * (self.z2 - self.z1) + 3 * t**2 * (self.z3 - self.z2)
     
-        
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
+        return 0
+
 
 #Inertial Return: 1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
 class TriWing():    
@@ -55,29 +84,7 @@ class TriWing():
 
         #1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz
         self.I = line_I(0, 0, y2, 0, diameter=self.leading_edge_rod_diameter, com=self.com) + line_I(y0, z0, y1, z1, diameter=self.trailing_edge_rod_diameter, com=self.com) + line_I(y1, z0, y1, z1, diameter= self.spar_rod_diameter, com=self.com) + film_I(self, com=self.com)
-        
-        
-        # If triangle test on the primary moments of inertia fails
-        # adds a very small percentage to the smallest moment of inertia. 
-        # If the test is barely failing, this will make it pass.
-        # Increases the smallest moment by at least 0.001%
-        # or at most 0.01%
-        max_increase = 10
-        for i in range(max_increase):
-            # The error for a triangle inequality primary moments of inertia
-            # These values are strictly positive for a valid tensor
-            tri_error = np.array([self.I[0] + self.I[1] - self.I[2], 
-                                  self.I[1] + self.I[2] - self.I[0],
-                                  self.I[0] + self.I[2] - self.I[1]])
-            if any(tri_error < 0):
-                min_inertia_index = np.argmin(self.I[0:2])
-                self.I[min_inertia_index] *= 1 + 1e-5
-            else:
-                if i > 0:
-                    Message.info(f"Tensor modified from calculated value. Loop ran {i} times")
-                break
-            if i == max_increase - 1:
-                Message.error(f"No valid primary moments of inertia. Final tensor values were {self.I}")
+        self.I = inertia_modifier(self.I)
         
         com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
 
@@ -88,17 +95,26 @@ class TriWing():
         t_adj = np.heaviside(t - .5, .5)
         return ((self.y1 - self.y0) * 2*t + self.y0) * (1 - t_adj) + t_adj * ((self.y2 - self.y1) * (2*t - 1) + self.y1)
     
-    def z(self, t):
-        t_adj = np.heaviside(t - .5, .5)
-        return ((self.z1 - self.z0) * 2*t + self.z0) * (1 - t_adj) + t_adj * ((self.z2 - self.z1) * (2*t - 1) + self.z1)
-        
     def dy(self, t):
         t_adj = np.heaviside(t - .5, .5)
         return (self.y1 - self.y0) * (1 - t_adj) + t_adj * (self.y2 - self.y1)
     
-    def dz(self, t):
+    def lower_z(self, t):
+        t_adj = np.heaviside(t - .5, .5)
+        return ((self.z1 - self.z0) * 2*t + self.z0) * (1 - t_adj) + t_adj * ((self.z2 - self.z1) * (2*t - 1) + self.z1)
+    
+    def lower_dz(self, t):
         t_adj = np.heaviside(t - .5, .5)
         return (self.z1 - self.z0) * (1 - t_adj) + t_adj * (self.z2 - self.z1)
+    
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
+        return 0
+    
+class butterfly_wing():
+    print(1)
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
