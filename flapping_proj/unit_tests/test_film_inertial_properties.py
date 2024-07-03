@@ -23,13 +23,19 @@ class Rect1(FilmCase):
     def y(self, t):
         return t
 
-    def z(self, t):
+    def lower_z(self, t):
         return -1
 
     def dy(self, t):
         return 1
 
-    def dz(self, t):
+    def lower_dz(self, t):
+        return 0
+    
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
         return 0
 
 
@@ -42,13 +48,19 @@ class Rect2(FilmCase):
     def y(self, t):
         return 2*t
 
-    def z(self, t):
+    def lower_z(self, t):
         return -1
 
     def dy(self, t):
         return 2
 
-    def dz(self, t):
+    def lower_dz(self, t):
+        return 0
+    
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
         return 0
 
 
@@ -61,31 +73,20 @@ class Rect3(FilmCase):
     def y(self, t):
         return t+1
 
-    def z(self, t):
+    def lower_z(self, t):
         return -2
 
     def dy(self, t):
         return 1
 
-    def dz(self, t):
+    def lower_dz(self, t):
         return 0
-
-# calculaes a component of a moment of inertia for a right triangle
-
-
-def right_triangle_moment(a0, a1, delta_b):
-    delta_a = a1 - a0
-    return delta_a*delta_b * (delta_a**2 / 3 + delta_a*a0 + a0**2)
-
-# calculaes Iyz for a right triangle
-
-
-def right_triangle_product(y0, y1, z0, z1):
-    del_y = y1 - y0
-    del_z = z1 - z0
-
-    return del_y*del_z/3 + (del_y*z0 + del_z*y0)/2 + y0*z0
-
+    
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
+        return 0
 
 class Tri1(FilmCase):
     name = "Triangle (0, 0), (0, -1), (1, 0)"
@@ -101,14 +102,20 @@ class Tri1(FilmCase):
     def y(self, t):
         return t
 
-    def z(self, t):
+    def lower_z(self, t):
         return t-1
 
     def dy(self, t):
         return 1
 
-    def dz(self, t):
+    def lower_dz(self, t):
         return 1
+    
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
+        return 0
 
 
 class Tri2(FilmCase):
@@ -125,14 +132,20 @@ class Tri2(FilmCase):
     def y(self, t):
         return t+1
 
-    def z(self, t):
+    def lower_z(self, t):
         return t-1
 
     def dy(self, t):
         return 1
 
-    def dz(self, t):
+    def lower_dz(self, t):
         return 1
+    
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
+        return 0
 
 
 class Tri3(FilmCase):
@@ -149,14 +162,20 @@ class Tri3(FilmCase):
     def y(self, t):
         return t
 
-    def z(self, t):
+    def lower_z(self, t):
         return -2*t if t <= .5 else 2*t-2
 
     def dy(self, t):
         return 1
 
-    def dz(self, t):
+    def lower_dz(self, t):
         return -2 if t <= .5 else 2
+    
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
+        return 0
     
 class Para1(FilmCase):
     name = "Parabola through (0, 0), (1, -1), (2, 0)"
@@ -172,14 +191,20 @@ class Para1(FilmCase):
     def y(self, t):
         return 2*t
     
-    def z(self, t):
+    def lower_z(self, t):
         return 4*t**2 - 4*t
     
     def dy(self, t):
         return 2
     
-    def dz(self, t):
+    def lower_dz(self, t):
         8*t - 4
+        
+    def upper_z(self, t):
+        return 0
+    
+    def upper_dz(self, t):
+        return 0
 
 
 class TestFilmInertiaProperties(unittest.TestCase):
