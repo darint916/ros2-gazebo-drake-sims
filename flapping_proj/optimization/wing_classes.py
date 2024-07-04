@@ -3,8 +3,10 @@ import numpy as np
 from utils.message import Message
 import matplotlib.pyplot as plt
 from optimization.geometry_classes import *
-#wing with a trailing edge shaped like a bezier curve.
-#there is the leading edge, a hinge bar, and trailing edge connected by a film 
+from optimization.component_classes import *
+
+RHO_CF = 1854.55 #kg/m**3
+RHO_PET = 1383.995 #kg/m**3
 
 # If triangle test on the primary moments of inertia fails
 # adds a very small percentage to the smallest moment of inertia. 
@@ -45,7 +47,7 @@ class Wing():
         self.cached_com = None
         self.cached_I = None
         
-        self.components = [] #needs to create an instance of the Film class in this first part
+        self.components = [Film(leading_edge, trailing_edge, 12e-6, RHO_PET)]
         for i in sweeps:
             self.components.append(i)
     
@@ -64,7 +66,7 @@ class Wing():
         if self.cached_com == None:
             total = np.zeros(2)
             for i in self.components:
-                total += i.com
+                total += i.com * i.mass
             self.cached_com = total / self.mass
         return self.cached_com
     
