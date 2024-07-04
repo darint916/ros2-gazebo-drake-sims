@@ -6,6 +6,10 @@ D_LE = 0.001 #m
 D_TE = 0.001 #m
 D_H  = 0.00025 #m
 
+#material densities
+rho_cf = 1854.55 #kg/m**3
+rho_pet = 1383.995 #kg/m**3
+
 #linear densities of carbon fiber rods
 rho_le = np.pi / 4 * D_LE**2 * 1854.55 #kg/m
 rho_te = np.pi / 4 * D_TE**2 * 1854.55 #kg/m
@@ -79,7 +83,6 @@ def curve_m(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> float:
 # a curve multiplied by the curve mass so it can be divided 
 # by the overall system mass to get a system center of mass    
 # [y, z]
-
 def curve_com(curve, diameter = D_TE, t_max = 1, density = 1854.55) -> np.array:
     rho = np.pi / 4 * diameter**2 * density #kg/m
     return np.array([sc.integrate.quad(lambda t: curve.y(t) * dm_curve(curve, t, rho), 0, t_max)[0],

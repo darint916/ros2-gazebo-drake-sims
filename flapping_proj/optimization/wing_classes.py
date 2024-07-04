@@ -1,6 +1,8 @@
 from optimization.inertial_properties import *
 import numpy as np
 from utils.message import Message
+import matplotlib.pyplot as plt
+from optimization.geometry_classes import *
 #wing with a trailing edge shaped like a bezier curve.
 #there is the leading edge, a hinge bar, and trailing edge connected by a film 
 
@@ -27,6 +29,56 @@ def inertia_modifier(inertia):
         if i == max_increase - 1:
             Message.error(f"No valid primary moments of inertia. Final tensor values were {inertia}")
         return inertia
+
+# generic wing object
+# assumes all components are placed correctly in the yz plane
+# This is a structure with a single film supported by 
+# a collection of rigid members
+class Wing():
+    # leading_edge is a curve (must be a fully solid member)
+    # trailing edge is a curve (may not be a fully solid member)
+    # leading_edge(y) >= trailing_edge(y). 
+    # sweeps is an array of Sweep instances
+    # sweeps must include the rod forming the leading edge
+    def __init__(self, leading_edge: Curve, trailing_edge: Curve, sweeps = []):
+        self.cached_mass = None
+        self.cached_com = None
+        self.cached_I = None
+        
+        self.components = [] #needs to create an instance of the Film class in this first part
+        for i in sweeps:
+            self.components.append(i)
+    
+    # total mass (kg)
+    @property
+    def mass(self) -> float:
+        if self.mass == None:
+            self.cached_mass = 0
+            for i in self.components:
+                self.cached_mass += i.mass
+        return self.cached_mass
+    
+    # center of mass in the yz plane (m, m)
+    @property
+    def com(self) -> np.array:
+        if self.cached_com == None:
+            total = np.zeros(2)
+            for i in self.components:
+                total += i.com
+            self.cached_com = total / self.mass
+        return self.cached_com
+    
+    # moment of inertia about the 
+    def I(self) -> np.array:
+        if self.cached_I == None:
+            self.cached_I = np.zeros(6)
+            for i in self.components:
+                del_y = i.com[0] - self.com[0]
+                del_z = i.com[1] - self.com[1]
+                displacement_radius = (del_y)**2 + (del_z)**2
+                self.cached_I += i.I + i.mass * np.array([displacement_radius, displacement_radius - del_y**2, displacement_radius - del_z, 0, 0, -del_y * del_z])
+                self.cached_I = inertia_modifier(self.cached_I)
+        return self.cached_I
 
 class BezierWing():
     def __init__(self, y_0, z_0, y_1, z_1, y_2, z_2, y_3, z_3):
