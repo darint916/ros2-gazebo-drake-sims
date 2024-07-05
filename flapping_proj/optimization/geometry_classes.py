@@ -1,5 +1,6 @@
 import numpy as np
 import scipy as sc
+from utils.message import Message
 
 
 def almost_equal(a, b, error_percent):
@@ -115,7 +116,7 @@ class Cubic_Bezier(Curve):
 class LineSegments(Curve):
     def __init__(self, y_points: np.array, z_points: np.array) -> None:
         self.y_points = y_points
-        self.z_points = z_points
+        self.z_points: np.array = z_points
         num_segments = len(y_points) - 1
         if num_segments < 2:
             raise Exception(
@@ -138,7 +139,7 @@ class LineSegments(Curve):
             return num_segments * del_y
 
         def z(t: float):
-            index = (np.floor(t * num_segments) - np.floor(t)).astype(int)
+            index = int((np.floor(t * num_segments) - np.floor(t)))
             del_z = z_points[index + 1] - z_points[index]
             return del_z * (num_segments * t - index) + z_points[index]
 

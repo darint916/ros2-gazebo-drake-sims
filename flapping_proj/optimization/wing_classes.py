@@ -1,5 +1,3 @@
-from flapping_proj.optimization.component_classes import Curve
-from flapping_proj.optimization.geometry_classes import Curve
 from optimization.inertial_properties import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,6 +20,8 @@ class Wing():
     # sweeps must include the sweep forming the leading edge
     def __init__(self, leading_edge: Curve, trailing_edge: Curve, sweeps=[]):
         self.components = [Film(leading_edge, trailing_edge, 12e-6, RHO_PET)]
+        self.leading_edge = leading_edge
+        self.trailing_edge = trailing_edge
         for i in sweeps:
             self.components.append(i)
 
@@ -106,8 +106,8 @@ class TriWing(Wing):
         self.trailing_edge_rod_diameter = 0.0005
 
         leading_edge = Line(self.y0, 0, self.y2, 0)
-        trailing_edge = LineSegments([self.y0, self.y1, self.y2], [
-                                     self.z0, self.z1, self.z2])
+        trailing_edge = LineSegments(np.array([self.y0, self.y1, self.y2]), np.array([
+                                     self.z0, self.z1, self.z2]))
         rods = [Rod(0.002, 0, self.y2, 0, self.leading_edge_rod_diameter, RHO_CF),
                 Rod(self.y0, self.z0, self.y1, self.z1,
                     self.trailing_edge_rod_diameter, RHO_CF),
