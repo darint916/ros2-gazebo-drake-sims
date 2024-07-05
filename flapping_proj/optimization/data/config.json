@@ -1,10 +1,10 @@
 {
     "inputs": {
-        "motor_torque_calc_enabled": false,
-        "frequency": 1.0,
+        "motor_torque_calc_enabled": true,
+        "frequency": 20.0,
         "max_voltage": 6.0,
-        "motor_resistance": 0.5,
-        "motor_torque_constant": 0.1
+        "motor_resistance": 8.8,
+        "motor_torque_constant": 0.00109
     },
     "blade_count": 15,
     "max_step_size": "0.0001",
@@ -41,30 +41,30 @@
         }
     },
     "wing": {
-        "mass": 0.0003441871893769074,
+        "mass": 0.00010654374827589026,
         "inertia": {
-            "ixx": 6.607277588050747e-07,
+            "ixx": 1.0091105045918423e-09,
             "ixy": 0.0,
-            "ixz": -3.951453081269215e-08,
-            "iyy": 8.671770066029521e-07,
+            "ixz": -1.0879800728444157e-09,
+            "iyy": 3.147961568313885e-08,
             "iyz": 0.0,
-            "izz": 2.0645585500939326e-07
+            "izz": 3.047050517854702e-08
         },
         "com": [
-            0.05945545453052161,
+            0.032349953570402275,
             0,
-            -0.03597263888384742,
+            -0.0012202291243124921,
             0,
             0,
             0
         ]
     },
     "stroke_joint": {
-        "spring_stiffness": 0.8236304269716815,
+        "spring_stiffness": 0.9554673610167657,
         "damping": 0.001
     },
     "pitch_joint": {
-        "spring_stiffness": 2.7105938026099417e-10,
+        "spring_stiffness": 2.8972464151021016e-11,
         "damping": 0.002,
         "limits": {
             "lower": -1.7,

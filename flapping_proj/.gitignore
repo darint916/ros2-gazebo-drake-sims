@@ -5,5 +5,6 @@ __pycache__
 data.csv
 aero.csv
 pid_data.csv
+input_joint_data.csv
 venv
 *.code-workspace

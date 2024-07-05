@@ -17,7 +17,11 @@ from unit_tests.test_wing_classes import check_triangle_inequalities
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 json_config_path = os.path.join(DIR_PATH,'data','config.json')
 
-# iterator_counter = 0
+global population_counter
+population_counter = 0
+global iteration_counter 
+iteration_counter = 0
+
 global folder_path
 global counter
 counter = 0
@@ -59,7 +63,7 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     constraints = sc.optimize.LinearConstraint(A, constraint_lower_bound, constraint_upper_bound)
 
     sc.optimize.differential_evolution(sim_start, bounds, constraints = constraints,
-            strategy='best1bin', maxiter=iterations, popsize = 1, polish=False, callback=opt_callback)
+            strategy='best1bin', maxiter=iterations, popsize = popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
     # It will return the fitness value of the simulation
     # The simulation will be started with the given parameters
@@ -104,7 +108,16 @@ def sim_start(opt_params):
     Message.success("sim finished, parsing data")
     global counter
     counter += 1 
+    global iteration_counter
+    iter_path = os.path.join(folder_path, f'iter_{iteration_counter}')
+    if not os.path.exists(iter_path):
+        os.mkdir(iter_path)
+    global population_counter
+    shutil.copy(os.path.join(DIR_PATH, 'data', 'config.json'), os.path.join(iter_path, f'config_{population_counter}.json'))
+    population_counter += 1
     Message.debug("Simulation Generation Total: " + str(counter))
+
+    #Save config every iteration
     return parse_data()
     #end of sim, save parameters and such
 
@@ -112,14 +125,18 @@ def sim_start(opt_params):
 def opt_callback(intermediate_result: OptimizeResult) -> bool:
     print("callback")
     iter_path = os.path.join(folder_path, f'iter_{intermediate_result.nit}') #nit = number iterations
+    global iteration_counter
+    iteration_counter = intermediate_result.nit
+    global population_counter
+    population_counter = 0
     Message.debug("iter Path: ", iter_path)
     if not os.path.exists(iter_path):
         os.mkdir(iter_path)
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'config.json'), os.path.join(iter_path, 'config.json'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'aero.csv'), os.path.join(iter_path, 'aero.csv'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'data.csv'), os.path.join(iter_path, 'data.csv'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'processed.sdf'), os.path.join(iter_path, 'processed.sdf'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'input_joint_data.csv'), os.path.join(iter_path, 'input_joint_data.csv'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'config.json'), os.path.join(iter_path, 'config.json'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'aero.csv'), os.path.join(iter_path, 'aero.csv'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'data.csv'), os.path.join(iter_path, 'data.csv'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'processed.sdf'), os.path.join(iter_path, 'processed.sdf'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'input_joint_data.csv'), os.path.join(iter_path, 'input_joint_data.csv'))
     opt_res = os.path.join(iter_path, 'opt_res.json')
     Message.info("opt_res path: ", opt_res)
 
@@ -173,6 +190,6 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
     
 if __name__ == '__main__':
-    top_start(1, popsize=1)
+    top_start(350, popsize=24)
     # generate_sdf()
     # sim_launch()

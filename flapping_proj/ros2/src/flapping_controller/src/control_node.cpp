@@ -126,9 +126,9 @@ class ControlNode : public rclcpp::Node
 			_csvInputJointFile.open(inputJointFilePath);
 			_csvInputJointWriter = std::ofstream(inputJointFilePath, std::ios::out | std::ios::app);
 			_dataHeaders = "time";
-			for (const auto & jointName : jointNames) { //todo only have the right torque one
-				_dataHeaders += "," + jointName + "_torque"; //semi rundundant, but checks for time alignment
-			}
+			// for (const auto & jointName : jointNames) { //todo only have the right torque one
+			_dataHeaders += ",input_torque"; //semi rundundant, but checks for time alignment
+			// }
 			_csvInputJointWriter << _dataHeaders << "\n";
 
 
