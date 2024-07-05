@@ -95,7 +95,7 @@ class Cubic_Bezier(Curve):
         
         super().__init__(y, dy, z, dz)
         
-class Line_Segments(Curve):
+class LineSegments(Curve):
     def __init__(self, y_points: np.array, z_points: np.array) -> None:
         self.y_points = y_points
         self.z_points = z_points
@@ -127,7 +127,7 @@ class Line_Segments(Curve):
             
         super().__init__(y, dy, z, dz)
 
-class Bounded_Region(Geometry):
+class BoundedRegion(Geometry):
     '''
     A region bounded by two curves in the yz plane
     The y values of the curve must be equal at t = 0 and t = 1
@@ -186,7 +186,7 @@ class Bounded_Region(Geometry):
         
         return del_z / del_y * relative_curve.y(t) - self.lower.z(0)
 
-class Polygon(Bounded_Region):
+class Polygon(BoundedRegion):
     def __init__(self, n: int, diameter: float):
         if n < 3:
             raise ValueError("Polygon must have at least three sides")
@@ -201,9 +201,9 @@ class Polygon(Bounded_Region):
             ys[-1] = diameter / 2
             top_zs[-1] = 0
 
-        super().__init__(Line_Segments(ys, top_zs), Line_Segments(ys, -top_zs))
+        super().__init__(LineSegments(ys, top_zs), LineSegments(ys, -top_zs))
         
-class Circle(Bounded_Region):
+class Circle(BoundedRegion):
     def __init__(self, diameter: float):
         def y(t):
             return diameter / 2 * np.cos(np.pi - np.pi * t)
@@ -216,12 +216,12 @@ class Circle(Bounded_Region):
         
         super().__init__(Curve(y, dy, z, dz), Curve(y, dy, lambda t: -z(t), lambda t: -dz(t)))
         
-class Rectangle(Bounded_Region):
+class Rectangle(BoundedRegion):
     def __init__(self, base: float, height: float):
         half_base = base / 2
         half_height = height / 2
-        upper_boundary = Line_Segments([-half_base, - half_base, half_base, half_base], [0, half_height, half_height, 0])
-        lower_boundary = Line_Segments([-half_base, - half_base, half_base, half_base], [0, -half_height, -half_height, 0])
+        upper_boundary = LineSegments([-half_base, - half_base, half_base, half_base], [0, half_height, half_height, 0])
+        lower_boundary = LineSegments([-half_base, - half_base, half_base, half_base], [0, -half_height, -half_height, 0])
         super().__init__(upper_boundary, lower_boundary)
 
 if __name__ == "__main__":

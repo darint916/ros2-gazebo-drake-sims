@@ -48,11 +48,11 @@ class Component():
         
 class Film(Component):
     def __init__(self, upper: Curve, lower: Curve, thickness: float, density: float) -> None:
-        bounded_region = Bounded_Region(upper, lower)
+        bounded_region = BoundedRegion(upper, lower)
         super().__init__(bounded_region, bounded_region.area * thickness * density, bounded_region.coa, thickness * density * bounded_region.second_moment)
     
 class Sweep(Component):
-    def __init__(self, path: Curve, profile: Bounded_Region, density: float) -> None:
+    def __init__(self, path: Curve, profile: BoundedRegion, density: float) -> None:
         super().__init__(path, path.length * profile.area * density, path.coa, path.second_moment * profile.area * density)
         
 class Rod(Sweep):

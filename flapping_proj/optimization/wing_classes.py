@@ -1,3 +1,5 @@
+from flapping_proj.optimization.component_classes import Curve
+from flapping_proj.optimization.geometry_classes import Curve
 from optimization.inertial_properties import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -97,15 +99,17 @@ class TriWing(Wing):
         self.trailing_edge_rod_diameter = 0.0005 #m trailing edge carbon fiber rod diameter
         
         leading_edge = Line(self.y0, 0, self.y2, 0)
-        trailing_edge = Line_Segments([self.y0, self.y1, self.y2], [self.z0, self.z1, self.z2])
+        trailing_edge = LineSegments([self.y0, self.y1, self.y2], [self.z0, self.z1, self.z2])
         rods = [Rod(0.002, 0, self.y2, 0, self.leading_edge_rod_diameter, RHO_CF),
                 Rod(self.y0, self.z0, self.y1, self.z1, self.trailing_edge_rod_diameter, RHO_CF),
                 Rod(self.y1, self.z0, self.y1, self.z1, self.spar_rod_diameter, RHO_CF)]
         super().__init__(leading_edge, trailing_edge, rods)
     
-class butterfly_wing():
-    print(1)
-
+class StraightButterflyWing(Wing):
+    def __init__(self, film_start: float, leading_edge_length: float, leading_edge_angle: float, mid_bar_length: float, mid_bar_angle: float, trailing_edge_length: float, trailing_edge_angle: float):
+        raise Exception("Not yet supported")
+        super().__init__(leading_edge, trailing_edge, sweeps)
+    
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
