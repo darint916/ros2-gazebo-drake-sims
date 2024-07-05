@@ -29,20 +29,23 @@ def parse_data() -> float:
         config = json.load(json_file)
     flap_freq = config["inputs"]["frequency"] #float Hz
     wing_mass = config["wing"]["mass"] #from config, float kg
+    torque_constant = config["inputs"]["motor_torque_constant"] #from config, float Nm/A
     interest_duration = 4 / flap_freq #duration of time steps to evaluate for
     t_start = config["sim_length"] / 2
     dataname = open(os.path.join(curr_dir, 'data', 'data.csv'), 'r')
     aeroname = open(os.path.join(curr_dir, 'data', 'aero.csv'), 'r')
+    input_joint_name = open(os.path.join(curr_dir, 'data', 'input_joint_data.csv'), 'r')
     #read files from time_start to time_end
 
     t_end = t_start + interest_duration
 
     data = pd.read_csv(dataname)
     aero = pd.read_csv(aeroname)
+    input_joint = pd.read_csv(input_joint_name)
 
     data_interval = data[(data.time >= t_start) & (data.time <= t_end)]
     aero_interval = aero[(aero.time >= t_start) & (aero.time <= t_end)]
-
+    input_joint_interval = input_joint[(input_joint.time >= t_start) & (input_joint.time <= t_end)]
     aero_length = len(aero_interval.time)
 
     num_blades = np.amax(aero_interval.blade_number) + 1
@@ -59,10 +62,21 @@ def parse_data() -> float:
         lift_force[j] += aero_interval.blade_force_z.iloc[i]
         i += 1
     lift_avg = np.average(lift_force)
+    #V*I, v = input sin wave, I = output torque / motor torque const k_a
+    voltage = np.sin(data_interval.time * flap_freq * np.pi * 2)
+    current = input_joint_interval.input_torque / torque_constant
+    instant_power = voltage * current
     #instant power = angular velocity about stroke axis * torque applied on stroke axis
-    instant_power = data_interval.time * data_interval.position_z #needs to be changed to motor torque and stroke velocity
+    # instant_power = data_interval.stroke_joint_velocity * input_joint_interval.stroke_joint_torque #needs to be changed to motor torque and stroke velocity
     power_rms = np.sqrt(np.sum(instant_power ** 2) / len(instant_power))
 
+    # Message.debug("current printing: "+ str(current))
+    # Message.debug("voltage printing: "+ str(voltage))
+    # Message.debug("instant power printing: "+ str(instant_power))
+    # Message.debug("power_rms printing: "+ str(power_rms))
+    # Message.debug("lift_avg printing: "+ str(lift_avg))
+    # Message.debug("wing_mass printing: " + str(wing_mass))
+    
     lift_avg = float(lift_avg)
     power_rms = float(power_rms)
     wing_mass = float(wing_mass)

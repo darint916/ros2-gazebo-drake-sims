@@ -35,6 +35,7 @@ def generate_launch_description():
     # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
 
     data_file = os.path.join(current_dir, '..', 'optimization', 'data','data.csv')
+    input_joint_data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'input_joint_data.csv')
     pid_data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'pid_data.csv')
     
     kill_flag_path = os.path.join(current_dir, '..', 'optimization', '_kill_me.txt') #synchronized with top_level poll
@@ -66,6 +67,7 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 20000}, 
                 {'data_file_path': data_file}, 
+                {'input_joint_data_file_path': input_joint_data_file},
                 {'amplitude': 1.78}, 
                 {'frequency': frequency}, 
                 {'altitude_pid_enabled': True},

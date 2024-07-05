@@ -20,7 +20,6 @@ parameter joints should be ordered properly?
 Add launchfile params here somewhere
 */
 
-
 class ControlNode : public rclcpp::Node
 {
 	private:
@@ -29,6 +28,7 @@ class ControlNode : public rclcpp::Node
 		//in
 		rclcpp::Subscription<geometry_msgs::msg::PoseArray>::SharedPtr _poseArraySubscriber;
 		std::map<std::string, double> _jointPositionMap;
+		std::map<std::string, double> _jointVelocityMap;
 		geometry_msgs::msg::Pose _currentPose;
 		double _currentPoseTime;
 		double _previousPoseTime;
@@ -45,6 +45,9 @@ class ControlNode : public rclcpp::Node
 		std::string _dataHeaders;
 		std::ofstream _csvFile;
         std::ofstream _csvWriter;
+		std::ofstream _csvInputJointFile;
+		std::ofstream _csvInputJointWriter;
+		double _curr_time;
         // int _csv_writer_buffer; //Buffer if data comes in too fast, not fully implemented yet
 	
 		//Altitude PID controller
@@ -66,7 +69,6 @@ class ControlNode : public rclcpp::Node
 	public:
 		ControlNode() : Node("control_node")
 		{
-
 			//params
 			auto param_desc = rcl_interfaces::msg::ParameterDescriptor();
 			param_desc.description = "Joint names to be controlled";
@@ -76,9 +78,10 @@ class ControlNode : public rclcpp::Node
 			this->declare_parameter<std::string>("position_topic", "/world/world1/dynamic_pose/info");
 			this->declare_parameter<int>("control_publish_frequency", 30);
 			this->declare_parameter<std::string>("data_file_path", "../data/data.csv");
+			this->declare_parameter<std::string>("input_joint_data_file_path", "../data/data.csv");
 
 			//Velocity publisher (uses diff drive plugin receiver)
-			_diffDriveVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/world/diff_drive/cmd_vel", 10);
+			// _diffDriveVelPublisher = this->create_publisher<geometry_msgs::msg::Twist>("/world/diff_drive/cmd_vel", 10);
 			this->declare_parameter<double>("amplitude", 10);
 			this->declare_parameter<double>("frequency", 10);
 
@@ -95,6 +98,7 @@ class ControlNode : public rclcpp::Node
 				_jointControlPublishersMap[jointNames[i]] = this->create_publisher<std_msgs::msg::Float64>(jointControlTopics[i], 10);
 				_jointTorqueControlMap[jointNames[i]] = 0.0;
 				_jointPositionMap[jointNames[i]] = 0.0;
+				_jointVelocityMap[jointNames[i]] = 0.0;
 			}
 			//Timer for publication
 			auto publishPeriod = std::chrono::duration<double>(1.0 / this->get_parameter("control_publish_frequency").as_int());
@@ -112,11 +116,21 @@ class ControlNode : public rclcpp::Node
 			_csvFile.open(dataFilePath);
             _csvWriter = std::ofstream(dataFilePath, std::ios::out | std::ios::app);
 			_dataHeaders = "time,position_x,position_y,position_z,quaternion_x,quaternion_y,quaternion_z,quaternion_w";
-			for (const auto & jointName : jointNames) {
-				_dataHeaders += "," + jointName;
+			for (const auto & jointName : jointNames) { //pos + vel headers
+				_dataHeaders += "," + jointName + "," + jointName + "_velocity";
 			}
 			_csvWriter << _dataHeaders << "\n";
-            // _csv_writer_buffer = 0;
+
+			//separate file for vel and input generated (internal ros) 
+			std::string inputJointFilePath = this->get_parameter("input_joint_data_file_path").as_string();
+			_csvInputJointFile.open(inputJointFilePath);
+			_csvInputJointWriter = std::ofstream(inputJointFilePath, std::ios::out | std::ios::app);
+			_dataHeaders = "time";
+			// for (const auto & jointName : jointNames) { //todo only have the right torque one
+			_dataHeaders += ",input_torque"; //semi rundundant, but checks for time alignment
+			// }
+			_csvInputJointWriter << _dataHeaders << "\n";
+
 
 			//Altitude PID controller
 			this->declare_parameter<bool>("altitude_pid_enabled", false);
@@ -158,7 +172,6 @@ class ControlNode : public rclcpp::Node
 			_dataHeadersPID = "time,altitude_target,altitude_error,altitude_output";
 			_csvWriterPID << _dataHeadersPID << "\n";
 
-
 			//optimization sector
 			this->declare_parameter<bool>("motor_torque_calc_enabled", false);
 			this->declare_parameter<double>("max_voltage", 6.0);
@@ -172,7 +185,7 @@ class ControlNode : public rclcpp::Node
 			_motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
 			_sim_length = this->get_parameter("sim_length").as_double();
 			_kill_flag_file_path = this->get_parameter("kill_flag_path").as_string();
-			
+			_curr_time = 0.0;
 		}
 
 	private:
@@ -204,7 +217,8 @@ class ControlNode : public rclcpp::Node
 			int i = 0;
 			for (auto joint = _jointPositionMap.begin(); joint != _jointPositionMap.end(); joint++, i++) {
 				joint->second = msg->poses[i + 1].position.x;  //skip base pose 
-				_csvWriter << "," << joint->second;
+				_jointVelocityMap[joint->first] = msg->poses[i + 1].position.y; //todo: refactor datastructs
+				_csvWriter << "," << joint->second << ',' << _jointVelocityMap[joint->first];
 			}
 			_csvWriter << "\n";
 		}
@@ -224,23 +238,22 @@ class ControlNode : public rclcpp::Node
 			// auto msg = geometry_msgs::msg::Twist();
 
 			//Switch joint axis? instead of flipping torque
+			double torque_val = 0;
 			for (auto & joint : _jointTorqueControlMap) {
+				torque_val = joint.second;
 				if (joint.first == "joint_RW_J_Flap"){ //edit to change dir later?
 					joint.second *= -1;
 				}
 				message.data = joint.second;
 				_jointControlPublishersMap[joint.first]->publish(message);
-				
-				
-				// msg.linear.x = joint.second; //same direction spin
-				// msg.angular.z = joint.second;
-				//Execute once 
-				// if(flag == 0){
-				// 	_diffDriveVelPublisher->publish(msg);
-				// 	flag = 1;
-				// }
+				//TODO: this is temp 1 wing data torque pub
 			}
-
+			if(_curr_time < _currentPoseTime) {
+				_csvInputJointWriter << _currentPoseTime;
+				_csvInputJointWriter << "," << torque_val;
+				_csvInputJointWriter << "\n";
+				_curr_time = _currentPoseTime;
+			}
 			
 		}
 
@@ -303,9 +316,11 @@ class ControlNode : public rclcpp::Node
 			double voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
 			double motor_resistance = this->get_parameter("motor_resistance").as_double();
 			double motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
-			for (auto & joint : _jointTorqueControlMap) {
-				//torque = (u - k_a * omega) * k_a / r_a
-				joint.second = (voltage - motor_torque_constant * 2) * motor_torque_constant / motor_resistance;
+			//current joint velocity from odometry
+			
+			for (auto & joint : _jointTorqueControlMap) { //potential race condition? lmao
+				double curr_joint_vel = _jointVelocityMap[joint.first]; // joint velocity
+				joint.second = (voltage - motor_torque_constant * curr_joint_vel) * motor_torque_constant / motor_resistance;
 				// joint.second = 1; //test
 
 			} 

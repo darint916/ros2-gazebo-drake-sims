@@ -5,6 +5,7 @@
 #include <ignition/math/Quaternion.hh>
 #include "ignition/gazebo/components/CanonicalLink.hh"
 #include "ignition/gazebo/components/JointPosition.hh"
+#include "ignition/gazebo/components/JointVelocity.hh"
 #include "ignition/gazebo/components/Pose.hh" 
 #include "ignition/gazebo/components/Name.hh" 
 #include <ignition/msgs/pose_v.pb.h>
@@ -63,7 +64,12 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
         } else {
             this->dataPtr->jointMap[jointName] = jointEntity;
         }
-        _ecm.CreateComponent(jointEntity, igz::components::JointPosition());
+        if (!_ecm.Component<igz::components::JointPosition>(jointEntity)) {
+            _ecm.CreateComponent(jointEntity, igz::components::JointPosition());
+        }
+        if (!_ecm.Component<igz::components::JointVelocity>(jointEntity)) {
+            _ecm.CreateComponent(jointEntity, igz::components::JointVelocity());
+        }
         jointElem = jointElem->GetNextElement("joint");
     }
 
@@ -81,13 +87,15 @@ void OdometryState::Configure(const igz::Entity &_entity, const std::shared_ptr<
     if(odometryFreq > 0.0){
         std::chrono::duration<double> odomPeriod(1 / odometryFreq);
         this->dataPtr->odomPubPeriod = std::chrono::duration_cast<std::chrono::steady_clock::duration>(odomPeriod);
-    }    
+    }
+
+    //ros2 control input stroke torque subscribers
+    // for (auto const& joint : this->dataPtr->jointMap){ //todo currently single input joint
+    //     std::string jointTorqueTopic = "/joint/" + joint.first + "/torque";
+    //     this->dataPtr->node.Subscribe(jointTorqueTopic, &OdometryStateData::InputJointVelocityCallBack, this->dataPtr.get());
+    // }
 }
 
-// void OdometryState::PreUpdate(const igz::UpdateInfo &_info, igz::EntityComponentManager &_ecm)
-// {
-
-// }
 void OdometryState::PostUpdate(const igz::UpdateInfo &_info, const igz::EntityComponentManager &_ecm)
 {
     if(_info.paused) return;
@@ -98,7 +106,7 @@ void OdometryState::PostUpdate(const igz::UpdateInfo &_info, const igz::EntityCo
     this->dataPtr->prevOdomPubTime = _info.simTime;
 
     //fetch from the auto pub
-    ignition::msgs::Pose_V poseMsgs;
+    ignition::msgs::Pose_V poseMsgs; //main body pose 
     {
         std::lock_guard<std::mutex> lock(this->dataPtr->mutex);
         poseMsgs = this->dataPtr->poseMsg;
@@ -121,20 +129,27 @@ void OdometryState::PostUpdate(const igz::UpdateInfo &_info, const igz::EntityCo
         ignerr << "model pose not found" << std::endl;
         return;
     }
-    ignition::msgs::Pose_V odomMsg;
+    ignition::msgs::Pose_V odomMsg; //overall msg
     odomMsg.mutable_header()->CopyFrom(poseMsg.header());
     odomMsg.add_pose()->CopyFrom(poseMsgs.pose(this->dataPtr->modelPositionIndex));
     
     //iterate through joint map and add them as pose
     for(auto const& joint : this->dataPtr->jointMap){
         auto jointAnglePtr = _ecm.Component<igz::components::JointPosition>(joint.second);
+        auto jointVelocityPtr = _ecm.Component<igz::components::JointVelocity>(joint.second);
         if(jointAnglePtr == nullptr){
             ignerr << "Joint angle not found for " << joint.first << std::endl;
             continue;
         }
+        if(jointVelocityPtr == nullptr){
+            ignerr << "Joint velocity not found for " << joint.first << std::endl;
+            continue;
+        }
         double jointAngle = jointAnglePtr->Data()[0]; //Radians and first idx for revolute joint
+        double jointVelocity = jointVelocityPtr->Data()[0]; //Radians/s and first idx for revolute joint
         ignition::msgs::Pose pose;
-        pose.mutable_position()->set_x(jointAngle);
+        pose.mutable_position()->set_x(jointAngle); //send as part of x
+        pose.mutable_position()->set_y(jointVelocity); //send as part of y
         pose.set_name(joint.first);
         odomMsg.add_pose()->CopyFrom(pose);
     }
@@ -156,6 +171,13 @@ void OdometryStateData::PositionCallBack(const ignition::msgs::Pose_V &_msg)
     std::lock_guard<std::mutex> lock(this->mutex);
     this->poseMsg = _msg;
 }
+
+// void OdometryStateData::InputJointVelocityCallBack(const ignition::msgs::Double &_msg)
+// {
+//     // ignerr << "InputJointVelocityCallBack" << std::endl;
+//     std::lock_guard<std::mutex> lock(this->mutex);
+//     this->jointVelocityMsg = _msg;
+// }
 
 IGNITION_ADD_PLUGIN(
     OdometryState,

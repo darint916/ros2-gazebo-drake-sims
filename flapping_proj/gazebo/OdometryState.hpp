@@ -17,13 +17,14 @@ namespace odometry_state
         std::chrono::steady_clock::duration odomPubPeriod;
         std::chrono::steady_clock::duration prevOdomPubTime = std::chrono::steady_clock::duration::zero();
         std::mutex mutex;
-
+        std::string modelName;
         // ignition::gazebo::Entity canonicalLink;
         
-        std::string modelName;
         int modelPositionIndex = -1;
         std::map<std::string, ignition::gazebo::Entity> jointMap;
-
+        std::map<std::string, ignition::gazebo::Entity> inputJointMap;
+        std::map<std::string, std::string> inputJointTopicMap;
+    
         void PositionCallBack(const ignition::msgs::Pose_V &_msg);
         ignition::msgs::Pose_V poseMsg; //for incoming subscribed pose data
     };

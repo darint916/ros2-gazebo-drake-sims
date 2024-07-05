@@ -22,6 +22,7 @@ def generate_launch_description():
     # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
 
     data_file = os.path.join(current_dir, '..', 'data', 'data.csv')
+    input_joint_data_file = os.path.join(current_dir, '..', 'data', 'input_joint_data.csv')
     pid_data_file = os.path.join(current_dir, '..', 'data', 'pid_data.csv')
     joint_names, model_name = process_user_input()
     position_topic = '/odom'  #from sdf plugin
@@ -48,6 +49,7 @@ def generate_launch_description():
                 {'position_topic': position_topic},
                 {'control_publish_frequency': 200000}, 
                 {'data_file_path': data_file}, 
+                {'input_joint_data_file_path': input_joint_data_file},
                 {'amplitude': 2.758}, #2.73 best lift, Must have decimal, or ros wont take as a double
                 {'frequency': 50.0}, 
                 {'altitude_pid_enabled': True},
