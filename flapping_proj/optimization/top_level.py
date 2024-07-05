@@ -190,6 +190,6 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
     
 if __name__ == '__main__':
-    top_start(350, popsize=24)
+    top_start(350, popsize=7)
     # generate_sdf()
     # sim_launch()
