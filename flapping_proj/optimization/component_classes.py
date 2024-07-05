@@ -22,17 +22,13 @@ class Film(Component):
     def __init__(self, upper: Curve, lower: Curve, thickness: float, density: float) -> None:
         bounded_region = Bounded_Region(upper, lower)
         super().__init__(bounded_region, bounded_region.area * thickness * density, bounded_region.coa, thickness * density * bounded_region.second_moment)
-
-class Rod(Component):
-    def __init__(self, y0: float, z0: float, y1: float, z1: float, diameter: float, density: float) -> None:
-        line = Line(y0, z0, y1, z1)
-        area = np.pi * diameter**2 / 4
-        super().__init__(line, line.length * area * density, line.coa, area * density * line.second_moment)
     
 class Sweep(Component):
-    def __init__(self, curve: Curve, mass: float, com: np.array, inertia: np.array) -> None:
-        # TODO
-        print("not supported yet since it is more complicated")
-        pass
-        super().__init__(curve, mass, com, inertia)
+    def __init__(self, path: Curve, profile: Bounded_Region, density: float) -> None:
+        super().__init__(path, path.length * profile.area * density, path.coa, path.second_moment * profile.area * density)
         
+class Rod(Sweep):
+    def __init__(self, y0: float, z0: float, y1: float, z1: float, diameter: float, density: float) -> None:
+        line = Line(y0, z0, y1, z1)
+        profile = Circle(diameter)
+        super().__init__(line, line.length * profile.area * density, line.coa, line.second_moment * profile.area * density)

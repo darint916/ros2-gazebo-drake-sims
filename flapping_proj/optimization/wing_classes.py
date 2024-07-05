@@ -37,15 +37,16 @@ def inertia_modifier(inertia):
 # This is a structure with a single film supported by 
 # a collection of rigid members
 class Wing():
-    # leading_edge is a curve (must be a fully solid member)
+    # leading_edge is a curve (must be a fully solid member in reality)
     # trailing edge is a curve (may not be a fully solid member)
     # leading_edge(y) >= trailing_edge(y). 
     # sweeps is an array of Sweep instances
-    # sweeps must include the rod forming the leading edge
+    # sweeps must include the sweep forming the leading edge
     def __init__(self, leading_edge: Curve, trailing_edge: Curve, sweeps = []):
         self.cached_mass = None
         self.cached_com = None
         self.cached_I = None
+        self.cached_I_origin = None
         
         self.components = [Film(leading_edge, trailing_edge, 12e-6, RHO_PET)]
         for i in sweeps:
@@ -81,6 +82,13 @@ class Wing():
                 self.cached_I += i.I + i.mass * np.array([displacement_radius, displacement_radius - del_y**2, displacement_radius - del_z, 0, 0, -del_y * del_z])
                 self.cached_I = inertia_modifier(self.cached_I)
         return self.cached_I
+    
+    @property
+    def I_origin(self):
+        if self.cached_I_origin == None:
+            com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
+            self.cached_I_origin = self.I + self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2, com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
+        return self.cached_I_origin
 
 class BezierWing():
     def __init__(self, y_0, z_0, y_1, z_1, y_2, z_2, y_3, z_3):
@@ -117,7 +125,7 @@ class BezierWing():
 
 
 #Inertial Return: 1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
-class TriWing():    
+class TriWing(Wing):    
     def __init__(self, y0, z0, y1, z1, y2, z2):
         self.y0 = y0
         self.z0 = z0
@@ -130,42 +138,12 @@ class TriWing():
         self.spar_rod_diameter = 0.0005 #m Spar carbon fiber rod diameter
         self.trailing_edge_rod_diameter = 0.0005 #m trailing edge carbon fiber rod diameter
         
-        #Mass of leading edge, trailing edge, spar, and mass of plastic film
-        self.mass = line_m(0, 0, y2, 0, self.leading_edge_rod_diameter) + line_m(y0, z0, y1, z1, diameter=self.trailing_edge_rod_diameter) + line_m(y1, z0, y1, z1, self.spar_rod_diameter) + film_m(self)
-        
-        #center of mass each component * mass of component / overall mass = COM coordinates
-        self.com = (line_com(0, 0, y2, 0, self.leading_edge_rod_diameter) + line_com(y0, z0, y1, z1, self.trailing_edge_rod_diameter) + line_com(y1, z0, y1, z1, self.spar_rod_diameter) + film_com(self)) / self.mass
-
-        #1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz
-        self.I = line_I(0, 0, y2, 0, diameter=self.leading_edge_rod_diameter, com=self.com) + line_I(y0, z0, y1, z1, diameter=self.trailing_edge_rod_diameter, com=self.com) + line_I(y1, z0, y1, z1, diameter= self.spar_rod_diameter, com=self.com) + film_I(self, com=self.com)
-        self.I = inertia_modifier(self.I)
-        
-        com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
-
-        self.I_origin = self.I + self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2, com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
-
-    #Coordinates along wing trailing edge given parametric value t
-    def y(self, t):
-        t_adj = np.heaviside(t - .5, .5)
-        return ((self.y1 - self.y0) * 2*t + self.y0) * (1 - t_adj) + t_adj * ((self.y2 - self.y1) * (2*t - 1) + self.y1)
-    
-    def dy(self, t):
-        t_adj = np.heaviside(t - .5, .5)
-        return (self.y1 - self.y0) * (1 - t_adj) + t_adj * (self.y2 - self.y1)
-    
-    def lower_z(self, t):
-        t_adj = np.heaviside(t - .5, .5)
-        return ((self.z1 - self.z0) * 2*t + self.z0) * (1 - t_adj) + t_adj * ((self.z2 - self.z1) * (2*t - 1) + self.z1)
-    
-    def lower_dz(self, t):
-        t_adj = np.heaviside(t - .5, .5)
-        return (self.z1 - self.z0) * (1 - t_adj) + t_adj * (self.z2 - self.z1)
-    
-    def upper_z(self, t):
-        return 0
-    
-    def upper_dz(self, t):
-        return 0
+        leading_edge = Line(y0, 0, y2, 0)
+        trailing_edge = Line_Segments([y0, y1, y2], [z0, z1, z2])
+        rods = [Rod(0.002, 0, y2, 0, self.leading_edge_rod_diameter, RHO_CF),
+                Rod(y0, z0, y1, z1, self.trailing_edge_rod_diameter, RHO_CF),
+                Rod(y1, z0, y1, z1, self.spar_rod_diameter, RHO_CF)]
+        super().__init__(leading_edge, trailing_edge, rods)
     
 class butterfly_wing():
     print(1)

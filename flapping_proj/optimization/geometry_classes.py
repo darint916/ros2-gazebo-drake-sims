@@ -25,7 +25,7 @@ class Curve(Geometry):
     all functions should be of the form func(t) and return a float
     z must be unique for any given value of y
     '''
-    def __init__(self, y: function, dy: function, z: function, dz: function):
+    def __init__(self, y: callable, dy: callable, z: callable, dz: callable):
         self.y = y
         self.dy = dy
         self.z = z
@@ -106,6 +106,38 @@ class Cubic_Bezier(Curve):
             return 3 * (1 - t)**2 * (p1[1] - p0[1]) + 6 * (1 - t) * t * (p2[1] - p1[1]) + 3 * t**2 * (p3[1] - p2[1])
         
         super().__init__(y, dy, z, dz)
+        
+class Line_Segments(Curve):
+    def __init__(self, y_points: np.array, z_points: np.array) -> None:
+        self.y_points = y_points
+        self.z_points = z_points
+        num_segments = len(y_points) - 1
+        if num_segments < 2:
+            raise Exception("Line_Segments instances has less than 2 segments. Please use Line instead")
+        if num_segments + 1 != len(z_points):
+            raise ValueError("Number of y coordinates does not match the number of z coordinates")
+        for i in range(num_segments - 1):
+            if y_points[i] > y_points[i + 1]:
+                raise ValueError("y coordinates may not decrease")
+            
+        def y(t: float):
+            index = (np.floor(t * num_segments) - np.floor(t)).astype(int)
+            del_y = y_points[index + 1] - y_points[index]
+            return del_y * (num_segments * t - index) + y_points[index]
+        def dy(t: float):
+            index = (np.floor(t * num_segments) - np.floor(t)).astype(int)
+            del_y = y_points[index + 1] - y_points[index]
+            return num_segments * del_y
+        def z(t: float):
+            index = (np.floor(t * num_segments) - np.floor(t)).astype(int)
+            del_z = z_points[index + 1] - z_points[index]
+            return del_z * (num_segments * t - index) + z_points[index]
+        def dz(t: float):
+            index = (np.floor(t * num_segments) - np.floor(t)).astype(int)
+            del_z = z_points[index + 1] - z_points[index]
+            return num_segments * del_z
+            
+        super().__init__(y, dy, z, dz)
 
 class Bounded_Region(Geometry):
     '''
@@ -179,5 +211,47 @@ class Bounded_Region(Geometry):
             self.cached_second_moment = np.array([y_sqr_int + z_sqr_int, z_sqr_int, y_sqr_int, 0, 0, yz_prod])
         return self.cached_second_moment
 
+class Polygon(Bounded_Region):
+    def __init__(self, n: int, diameter: float):
+        ys = np.zeros(np.ceil(n / 2))
+        top_zs = np.zeros(np.ceil(n / 2))
+        angle = 2 * np.pi / n
+        point_radius = diameter / np.cos(angle / 2) / 2
+        for i in range(int(n / 2)):
+            ys[i] = point_radius * np.cos(np.pi - i * angle)
+            top_zs[i] = point_radius * np.sin(np.pi - i * angle)
+        if n % 2 == 1:
+            ys[-1] = diameter / 2
+            top_zs[-1] = 0
+
+        super().__init__(Line_Segments(ys, top_zs), Line_Segments(ys, -top_zs))
+        
+class Circle(Bounded_Region):
+    def __init__(self, diameter: float):
+        def y(t):
+            return diameter / 2 * np.cos(np.pi - np.pi * t)
+        def dy(t):
+            return diameter * np.pi / 2 * np.sin(np.pi - np.pi * t)
+        def z(t):
+            return diameter / 2 * np.sin(np.pi - np.pi * t)
+        def dz(t):
+            return -diameter * np.pi / 2 * np.cos(np.pi - np.pi * t)
+        
+        super().__init__(Curve(y, dy, z, dz), Curve(y, dy, lambda t: -z(t), lambda t: -dz(t)))
+
 if __name__ == "__main__":
-    print("hi")
+    import matplotlib.pyplot as plt
+    t = np.linspace(0, 1, 1000)
+    circle = Circle(2)
+    print(circle.area)
+    ys = np.zeros_like(t)
+    zs = np.zeros_like(t)
+    dys = np.zeros_like(t)
+    dzs = np.zeros_like(t)
+    for i in range(len(t)):
+        ys[i] = circle.upper.y(t[i])
+        zs[i] = circle.upper.z(t[i])
+        dys[i] = circle.lower.y(t[i])
+        dzs[i] = circle.lower.z(t[i])
+    plt.scatter(ys, zs, c=t, cmap="cool")
+    plt.scatter(dys, dzs, c=t, cmap="hot")
