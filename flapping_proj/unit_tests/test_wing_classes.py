@@ -60,7 +60,7 @@ class TestTriangleInequalities(unittest.TestCase):
                     for l in tip_zs:
                         trial_wing = TriWing(i, 0, k, l, j, 0)
                         tested += 1
-                        if not check_triangle_inequalities(trial_wing.I[0], trial_wing.I[1], trial_wing.I[2]):
+                        if not check_triangle_inequalities(trial_wing.I[0], trial_wing.I[1], trial_wing.I[2]) or tri_wing.I[0] < 0 or trial_wing.I[1] < 0 or trial_wing.I[2] < 0:
                             tri_error = np.array([trial_wing.I[0] + trial_wing.I[1] - trial_wing.I[2], 
                                                   trial_wing.I[1] + trial_wing.I[2] - trial_wing.I[0],
                                                   trial_wing.I[0] + trial_wing.I[2] - trial_wing.I[1]])
