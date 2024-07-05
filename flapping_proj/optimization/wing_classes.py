@@ -1,6 +1,5 @@
 from optimization.inertial_properties import *
 import numpy as np
-from utils.message import Message
 import matplotlib.pyplot as plt
 from optimization.geometry_classes import *
 from optimization.component_classes import *
@@ -8,29 +7,6 @@ from optimization.component_classes import *
 RHO_CF = 1854.55 #kg/m**3
 RHO_PET = 1383.995 #kg/m**3
 
-# If triangle test on the primary moments of inertia fails
-# adds a very small percentage to the smallest moment of inertia. 
-# If the test is barely failing, this will make it pass.
-# Increases the smallest moment by at least 0.001%
-# or at most 0.01%
-def inertia_modifier(inertia):
-    max_increase = 10
-    for i in range(max_increase):
-        # The error for a triangle inequality primary moments of inertia
-        # These values are strictly positive for a valid tensor
-        tri_error = np.array([inertia[0] + inertia[1] - inertia[2], 
-                              inertia[1] + inertia[2] - inertia[0],
-                              inertia[0] + inertia[2] - inertia[1]])
-        if any(tri_error < 0):
-            min_inertia_index = np.argmin(inertia[0:2])
-            inertia[min_inertia_index] *= 1 + 1e-5
-        else:
-            if i > 0:
-                Message.info(f"Tensor modified from calculated value. Loop ran {i} times")
-            break
-        if i == max_increase - 1:
-            Message.error(f"No valid primary moments of inertia. Final tensor values were {inertia}")
-        return inertia
 
 # generic wing object
 # assumes all components are placed correctly in the yz plane
@@ -45,50 +21,33 @@ class Wing():
     def __init__(self, leading_edge: Curve, trailing_edge: Curve, sweeps = []):
         self.cached_mass = None
         self.cached_com = None
-        self.cached_I = None
+        self.I = None
         self.cached_I_origin = None
         
         self.components = [Film(leading_edge, trailing_edge, 12e-6, RHO_PET)]
         for i in sweeps:
             self.components.append(i)
-    
-    # total mass (kg)
-    @property
-    def mass(self) -> float:
-        if self.mass == None:
-            self.cached_mass = 0
-            for i in self.components:
-                self.cached_mass += i.mass
-        return self.cached_mass
-    
-    # center of mass in the yz plane (m, m)
-    @property
-    def com(self) -> np.array:
-        if self.cached_com == None:
-            total = np.zeros(2)
-            for i in self.components:
-                total += i.com * i.mass
-            self.cached_com = total / self.mass
-        return self.cached_com
-    
-    # moment of inertia about the 
-    def I(self) -> np.array:
-        if self.cached_I == None:
-            self.cached_I = np.zeros(6)
-            for i in self.components:
-                del_y = i.com[0] - self.com[0]
-                del_z = i.com[1] - self.com[1]
-                displacement_radius = (del_y)**2 + (del_z)**2
-                self.cached_I += i.I + i.mass * np.array([displacement_radius, displacement_radius - del_y**2, displacement_radius - del_z, 0, 0, -del_y * del_z])
-                self.cached_I = inertia_modifier(self.cached_I)
-        return self.cached_I
-    
-    @property
-    def I_origin(self):
-        if self.cached_I_origin == None:
-            com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
-            self.cached_I_origin = self.I + self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2, com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
-        return self.cached_I_origin
+            
+        self.mass = 0
+        for i in self.components:
+            self.mass += i.mass
+            
+        self.com = np.zeros(2)
+        for i in self.components:
+            self.com += i.com * i.mass
+        self.com /= self.mass
+        
+        self.I = np.zeros(6)
+        for i in self.components:
+            del_y = i.com[0] - self.com[0]
+            del_z = i.com[1] - self.com[1]
+            displacement_radius = (del_y)**2 + (del_z)**2
+            self.I += i.I + i.mass * np.array([displacement_radius, displacement_radius - del_y**2, displacement_radius - del_z, 0, 0, -del_y * del_z])
+        
+        self.I = inertia_modifier(self.I)
+        
+        com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
+        self.I_origin = self.I + self.mass * np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2, com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
 
 class BezierWing():
     def __init__(self, y_0, z_0, y_1, z_1, y_2, z_2, y_3, z_3):
@@ -123,26 +82,25 @@ class BezierWing():
     def upper_dz(self, t):
         return 0
 
-
 #Inertial Return: 1d array of [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
 class TriWing(Wing):    
     def __init__(self, y0, z0, y1, z1, y2, z2):
-        self.y0 = y0
-        self.z0 = z0
-        self.y1 = y1
-        self.z1 = z1
-        self.y2 = y2
-        self.z2 = z2
+        self.y0 = np.round(y0, 12)
+        self.z0 = np.round(z0, 12)
+        self.y1 = np.round(y1, 12)
+        self.z1 = np.round(z1, 12)
+        self.y2 = np.round(y2, 12)
+        self.z2 = np.round(z2, 12)
 
         self.leading_edge_rod_diameter = 0.001 #m leading edge carbon fiber rod diameter
         self.spar_rod_diameter = 0.0005 #m Spar carbon fiber rod diameter
         self.trailing_edge_rod_diameter = 0.0005 #m trailing edge carbon fiber rod diameter
         
-        leading_edge = Line(y0, 0, y2, 0)
-        trailing_edge = Line_Segments([y0, y1, y2], [z0, z1, z2])
-        rods = [Rod(0.002, 0, y2, 0, self.leading_edge_rod_diameter, RHO_CF),
-                Rod(y0, z0, y1, z1, self.trailing_edge_rod_diameter, RHO_CF),
-                Rod(y1, z0, y1, z1, self.spar_rod_diameter, RHO_CF)]
+        leading_edge = Line(self.y0, 0, self.y2, 0)
+        trailing_edge = Line_Segments([self.y0, self.y1, self.y2], [self.z0, self.z1, self.z2])
+        rods = [Rod(0.002, 0, self.y2, 0, self.leading_edge_rod_diameter, RHO_CF),
+                Rod(self.y0, self.z0, self.y1, self.z1, self.trailing_edge_rod_diameter, RHO_CF),
+                Rod(self.y1, self.z0, self.y1, self.z1, self.spar_rod_diameter, RHO_CF)]
         super().__init__(leading_edge, trailing_edge, rods)
     
 class butterfly_wing():
