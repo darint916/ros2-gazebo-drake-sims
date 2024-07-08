@@ -4,7 +4,7 @@ from utils.message import Message
 
 
 def almost_equal(a, b, error_percent):
-    return abs(a - b) <= abs(a*error_percent)
+    return np.abs(a - b) <= np.abs(a*error_percent)
 
 # I feel like this is needed but don't know what to do with it
 
