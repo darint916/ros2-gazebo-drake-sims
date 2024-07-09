@@ -3,12 +3,13 @@ from typing import Tuple
 import numpy as np
 from optimization.wing_classes import Wing
 from optimization.geometry_classes import almost_equal
+from utils.message import Message
 
 def aero_properties(wing: Wing, n) -> Tuple[np.array, np.array]:
     start = .5/n
     del_y = (wing.leading_edge.y(1) - wing.leading_edge.y(0)) / n
     
-    spar_cp = np.linspace(wing.leading_edge.y(0), wing.leading_edge.y(1), n)
+    spar_cp = np.linspace(start, 1 - start, n) * del_y * n + wing.leading_edge.y(0)
     chord_cp = np.zeros_like(spar_cp)
     blade_area = np.zeros_like(spar_cp)
     
@@ -19,14 +20,16 @@ def aero_properties(wing: Wing, n) -> Tuple[np.array, np.array]:
     # is taken to be where the end of the wing is
     for i in range(n):
         interest_y = spar_cp[i]
-        t_upper = np.array()
-        t_lower = np.array()
+        t_upper = np.zeros(0, dtype=float)
+        t_lower = np.zeros(0, dtype=float)
         tests = 100
-        while t_upper.size < 1 or t_lower.size < 1:
+        while (t_upper.size < 1) or (t_lower.size < 1):
             t = np.linspace(0, 1, tests)
-            t_upper = np.where(almost_equal(interest_y, wing.leading_edge.y(t), 0.001))
-            t_lower = np.where(almost_equal(interest_y, wing.trailing_edge.y(t), 0.001))
+            t_upper = np.where(almost_equal(interest_y, wing.leading_edge.y(t), 0.001))[0]
+            t_lower = np.where(almost_equal(interest_y, wing.trailing_edge.y(t), 0.001))[0]
             tests *= 5
+            if tests > 1e9:
+                raise OverflowError(f"Unable to find valid parameters for blade calculations. Looking at {tests} inputs")
         
         z_upper = np.amax(wing.leading_edge.z(t_upper))
         z_lower = np.amin(wing.trailing_edge.z(t_lower))
