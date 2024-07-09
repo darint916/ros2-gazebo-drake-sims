@@ -1,0 +1,29 @@
+import unittest
+import numpy as np
+from optimization.component_classes import Curve
+from utils.message import Message
+from optimization.wing_classes import *
+from optimization.aero_properties import *
+
+class DumbRectange(Wing):
+    def __init__(self, spar_length: float, chord_length: float):
+        leading_edge = Curve(lambda t: spar_length * t**2, lambda t: 2 * t * spar_length, lambda t: 0, lambda t: 0)
+        trailing_edge = Curve(lambda t: spar_length * np.sin(t * np.pi / 2), lambda t: spar_length * np.pi / 2 * np.cos(t * np.pi / 2), lambda t: -chord_length, lambda t: 0)
+        super().__init__(leading_edge, trailing_edge)
+
+class TestAeroProperties(unittest.TestCase):
+    def test_rectangle_clac(self):
+        Message.warning("Aero")
+        cases = [RectWing(1, 1), RectWing(2, 1), RectWing(1, 2), DumbRectange(1, 1)]
+        n = 15
+        n_recp = 1/n
+        truth_chord_cps = [np.ones(n) * -.25, np.ones(n) * -.5, np.ones(n) * -.5, np.ones(n) * -.25]
+        truth_spar_cps = [np.linspace(n_recp, 1-n_recp, n), np.linspace(2*n_recp, 2-2*n_recp, n), np.linspace(n_recp, 1-n_recp, n), np.linspace(n_recp, 1-n_recp, n)]
+        truth_blade_areas = [np.ones(n) * n_recp, np.ones(n) * 2 * n_recp, np.ones(n) * 2 * n_recp, np.ones(n) * n_recp]
+        
+        for case in range(len(cases)):
+            calc_chord, calc_spar, calc_area = aero_properties(cases[case], n)
+            self.assertEqual(truth_spar_cps, calc_spar)
+            self.assertEqual(truth_chord_cps, calc_chord)
+            self.assertEqual(truth_blade_areas, calc_area)
+        self.assertTrue(False)

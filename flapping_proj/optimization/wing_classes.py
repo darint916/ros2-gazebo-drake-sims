@@ -114,6 +114,28 @@ class TriWing(Wing):
                 Rod(self.y1, self.z0, self.y1, self.z1, self.spar_rod_diameter, RHO_CF)]
         super().__init__(leading_edge, trailing_edge, rods)
 
+class RightWing(Wing):
+    '''
+    A wing in the shape of a right triangle
+    '''
+    def __init__(self, spar_length: float, chord_length: float):
+        leading_edge = Line(0, 0, spar_length, 0)
+        trailing_edge = Line(0, -chord_length, spar_length, 0)
+        sweeps = [Sweep(leading_edge, Circle(0.001), RHO_CF)]
+        super().__init__(leading_edge, trailing_edge, sweeps)
+        
+class RectWing(Wing):
+    '''
+    A wing in the shape of a rectangle
+    Mostly a debug class as making this wing as is 
+    would not function well
+    '''
+    def __init__(self, spar_length: float, chord_length: float):
+        leading_edge = Line(0, 0, spar_length, 0)
+        trailing_edge = Line(0, -chord_length, spar_length, -chord_length)
+        sweeps = [Sweep(leading_edge, Circle(0.001), RHO_CF)]
+        super().__init__(leading_edge, trailing_edge, sweeps)
+        
 
 class StraightButterflyWing(Wing):
     def __init__(self, film_start: float, leading_edge_length: float, leading_edge_angle: float, mid_bar_length: float, mid_bar_angle: float, trailing_edge_length: float, trailing_edge_angle: float):
