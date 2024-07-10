@@ -30,6 +30,9 @@ def parse_data() -> float:
     flap_freq = config["inputs"]["frequency"] #float Hz
     wing_mass = config["wing"]["mass"] #from config, float kg
     torque_constant = config["inputs"]["motor_torque_constant"] #from config, float Nm/A
+    motor_gear_ratio = config["inputs"]["motor_gear_ratio"] #from config, float
+    external_gear_ratio = config["inputs"]["external_gear_ratio"] #from config, float
+    reduction_efficiency = config["inputs"]["reduction_efficiency"] #from config, float
     interest_duration = 4 / flap_freq #duration of time steps to evaluate for
     t_start = config["sim_length"] / 2
     dataname = open(os.path.join(curr_dir, 'data', 'data.csv'), 'r')
@@ -63,8 +66,9 @@ def parse_data() -> float:
         i += 1
     lift_avg = np.average(lift_force)
     #V*I, v = input sin wave, I = output torque / motor torque const k_a
+    effective_reduction = motor_gear_ratio * external_gear_ratio * reduction_efficiency
     voltage = np.sin(data_interval.time * flap_freq * np.pi * 2)
-    current = input_joint_interval.input_torque / torque_constant
+    current = input_joint_interval.input_torque / torque_constant / effective_reduction
     instant_power = voltage * current
     #instant power = angular velocity about stroke axis * torque applied on stroke axis
     # instant_power = data_interval.stroke_joint_velocity * input_joint_interval.stroke_joint_torque #needs to be changed to motor torque and stroke velocity

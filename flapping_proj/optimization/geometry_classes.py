@@ -139,7 +139,7 @@ class LineSegments(Curve):
             return num_segments * del_y
 
         def z(t: float):
-            index = int((np.floor(t * num_segments) - np.floor(t)))
+            index = (np.floor(t * num_segments) - np.floor(t)).astype(int)
             del_z = z_points[index + 1] - z_points[index]
             return del_z * (num_segments * t - index) + z_points[index]
 

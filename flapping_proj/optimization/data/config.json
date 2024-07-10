@@ -4,7 +4,10 @@
         "frequency": 20.0,
         "max_voltage": 6.0,
         "motor_resistance": 8.8,
-        "motor_torque_constant": 0.00109
+        "motor_torque_constant": 0.00109,
+        "motor_gear_ratio": 4.0,
+        "external_gear_ratio": 5.0,
+        "reduction_efficiency": 0.8
     },
     "blade_count": 15,
     "max_step_size": "0.0001",
@@ -30,41 +33,41 @@
         }
     },
     "hinge": {
-        "mass": "0.5",
+        "mass": "0.0057",
         "inertia": {
-            "ixx": "0.05",
-            "ixy": "0",
-            "ixz": "0",
-            "iyy": "0.05",
-            "iyz": "0",
-            "izz": "0.1"
+            "ixx": "20.03e-9",
+            "ixy": "-0.05e-9",
+            "ixz": "4.55e-9",
+            "iyy": "31.49e-9",
+            "iyz": "0.02e-9",
+            "izz": "11.75e-9"
         }
     },
     "wing": {
-        "mass": 0.0005401317968378766,
+        "mass": 0.00034972566717007163,
         "inertia": {
-            "ixx": 5.5785770240679845e-06,
+            "ixx": 8.6617921e-07,
             "ixy": 0.0,
-            "ixz": 2.374657629012108e-06,
-            "iyy": 6.27645786219207e-06,
+            "ixz": 3.293019e-07,
+            "iyy": 1.222500321e-06,
             "iyz": 0.0,
-            "izz": 2.629800579343612e-06
+            "izz": 6.6904405e-07
         },
         "com": [
-            0.08598176052768478,
+            0.062210984952593716,
             0,
-            -0.00029088922453437234,
+            -0.0006656200549003314,
             0,
             0,
             0
         ]
     },
     "stroke_joint": {
-        "spring_stiffness": 0.5828011896753821,
+        "spring_stiffness": 0.5321277195238512,
         "damping": 0.001
     },
     "pitch_joint": {
-        "spring_stiffness": 1.1165944419089506e-10,
+        "spring_stiffness": 9.065778948748952e-11,
         "damping": 0.002,
         "limits": {
             "lower": -1.7,

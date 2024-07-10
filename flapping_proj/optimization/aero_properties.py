@@ -25,8 +25,8 @@ def aero_properties(wing: Wing, n) -> Tuple[np.array, np.array]:
         tests = 100
         while (t_upper.size < 1) or (t_lower.size < 1):
             t = np.linspace(0, 1, tests)
-            t_upper = np.where(almost_equal(interest_y, wing.leading_edge.y(t), 0.001))[0]
-            t_lower = np.where(almost_equal(interest_y, wing.trailing_edge.y(t), 0.001))[0]
+            t_upper = t[np.where(almost_equal(interest_y, wing.leading_edge.y(t), 0.001))[0]]
+            t_lower = t[np.where(almost_equal(interest_y, wing.trailing_edge.y(t), 0.001))[0]]
             tests *= 5
             if tests > 1e9:
                 raise OverflowError(f"Unable to find valid parameters for blade calculations. Looking at {tests} inputs")
