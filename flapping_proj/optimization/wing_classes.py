@@ -1,5 +1,3 @@
-from flapping_proj.optimization.component_classes import Curve
-from flapping_proj.optimization.geometry_classes import Curve
 from optimization.inertial_properties import *
 import numpy as np
 import matplotlib.pyplot as plt
