@@ -87,7 +87,7 @@ def parse_data() -> float:
 
     # if lift_avg == 0 or power_rms == 0 or wing_mass == 0:
     #     return 
-    return (1 - lift_avg) / power_rms / wing_mass
+    return power_rms - lift_avg
 
 if __name__ == "__main__":
     print(parse_data())

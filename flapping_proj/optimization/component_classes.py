@@ -63,12 +63,21 @@ class Film(Component):
 
 
 class Sweep(Component):
+    '''
+    A profile that follows a curve. The profile should never self-intersect 
+    and have a center of area at the origin.F 
+    '''
+
     def __init__(self, path: Curve, profile: BoundedRegion, density: float) -> None:
         super().__init__(path, path.length * profile.area * density,
                          path.coa, path.second_moment * profile.area * density)
 
 
 class Rod(Sweep):
+    '''
+    A slender cylindrical rod that follows a line in the yz plane
+    '''
+
     def __init__(self, y0: float, z0: float, y1: float, z1: float, diameter: float, density: float) -> None:
         line = Line(y0, z0, y1, z1)
         profile = Circle(diameter)

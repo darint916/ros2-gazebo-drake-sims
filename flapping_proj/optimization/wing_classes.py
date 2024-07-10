@@ -1,3 +1,5 @@
+from flapping_proj.optimization.component_classes import Curve
+from flapping_proj.optimization.geometry_classes import Curve
 from optimization.inertial_properties import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -51,6 +53,8 @@ class Wing():
                      com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
 
 # depriciated
+
+
 class BezierWing():
     def __init__(self, y_0, z_0, y_1, z_1, y_2, z_2, y_3, z_3):
         print("WARNING: BezierWing uses depriciated components and is not yet updated to Component internal format.")
@@ -114,33 +118,66 @@ class TriWing(Wing):
                 Rod(self.y1, self.z0, self.y1, self.z1, self.spar_rod_diameter, RHO_CF)]
         super().__init__(leading_edge, trailing_edge, rods)
 
+
 class RightWing(Wing):
     '''
     A wing in the shape of a right triangle
     '''
+
     def __init__(self, spar_length: float, chord_length: float):
         leading_edge = Line(0, 0, spar_length, 0)
         trailing_edge = Line(0, -chord_length, spar_length, 0)
         sweeps = [Sweep(leading_edge, Circle(0.001), RHO_CF)]
         super().__init__(leading_edge, trailing_edge, sweeps)
-        
+
+
 class RectWing(Wing):
     '''
     A wing in the shape of a rectangle
     Mostly a debug class as making this wing as is 
     would not function well
     '''
+
     def __init__(self, spar_length: float, chord_length: float):
         leading_edge = Line(0, 0, spar_length, 0)
         trailing_edge = Line(0, -chord_length, spar_length, -chord_length)
         sweeps = [Sweep(leading_edge, Circle(0.001), RHO_CF)]
         super().__init__(leading_edge, trailing_edge, sweeps)
-        
+
 
 class StraightButterflyWing(Wing):
     def __init__(self, film_start: float, leading_edge_length: float, leading_edge_angle: float, mid_bar_length: float, mid_bar_angle: float, trailing_edge_length: float, trailing_edge_angle: float):
         raise Exception("Not yet supported")
         super().__init__(leading_edge, trailing_edge, sweeps)
+
+
+class ThreeSegmentWing(Wing):
+    def __init__(self, wing_length: float, gap_size: float, spar_angle_0: float, spar_length_0: float, spar_angle_1: float, spar_length_1: float):
+        leading_edge_diameter = 0.001  # m
+        spar_diameter = 0.0005  # m
+        leading_edge_bar = Rod(0.002, 0, wing_length, 0,
+                               leading_edge_diameter, RHO_CF)
+
+        spar_0_pts = [wing_length / 3,
+                      -gap_size,
+                      wing_length / 3 + spar_length_0 * np.cos(spar_angle_0),
+                      -gap_size - spar_length_0 * np.sin(spar_angle_0)]
+        spar_0 = Rod(spar_0_pts[0], spar_0_pts[1],
+                     spar_0_pts[2], spar_0_pts[3], spar_diameter, RHO_CF)
+
+        spar_1_pts = [2*wing_length / 3,
+                      -gap_size,
+                      wing_length / 3 + spar_length_1 * np.cos(spar_angle_1),
+                      -gap_size - spar_length_1 * np.sin(spar_angle_1)]
+        spar_1 = Rod(spar_1_pts[0], spar_1_pts[1],
+                     spar_1_pts[2], spar_1_pts[3], spar_diameter, RHO_CF)
+
+        leading_edge = Line(0.008, 0, wing_length, 0)
+        trailing_edge = LineSegments(np.array([0.008, spar_0_pts[2], spar_1_pts[2], wing_length]), np.array(
+            [0, spar_0_pts[3], spar_1_pts[3], 0]))
+
+        super().__init__(leading_edge, trailing_edge,
+                         [leading_edge_bar, spar_0, spar_1])
 
 
 if __name__ == "__main__":
