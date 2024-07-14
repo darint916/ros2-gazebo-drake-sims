@@ -44,3 +44,7 @@ class TestAeroProperties(unittest.TestCase):
                             f"Chord failed for rectange {case}, expected {truth_chord_cps[case]}, got {calc_chord}")
             self.assertTrue(np.allclose(calc_area, truth_blade_areas[case]),
                             f"Area failed for rectangle {case}, expected {truth_blade_areas[case]}, got {calc_area}")
+            
+    def test_internal_screaming(self):
+        import optimization.approx_wing_amplitude as ah
+        ah.flapping_amp()
