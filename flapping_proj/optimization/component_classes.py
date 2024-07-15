@@ -18,7 +18,7 @@ def check_triangle_inequalities(Ixx, Iyy, Izz):
 
 def inertia_modifier(inertia: np.array):
     max_increase = 10
-    inertia = np.round(inertia, 15)
+    inertia = np.round(inertia, 13)
     for i in range(max_increase):
         # The error for a triangle inequality primary moments of inertia
         # These values are strictly positive for a valid tensor

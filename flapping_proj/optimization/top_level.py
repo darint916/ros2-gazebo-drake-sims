@@ -36,8 +36,8 @@ def top_start(iterations:int,title:str = "beta_test", popsize:int = 15):
     #lower and upper bounds for [y0, z0, y1, z1, y2, z2, k_phi]
     # parameter_lower_bound = np.array([1, -3, 1, -np.inf, 1, -np.inf, .01]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
     #bounds converted to si by the /1000
-    parameter_lower_bound = np.array([7, -3, 1, -200, 1, -2, .01]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm] 
-    parameter_upper_bound = np.array([30, -1, 150, -1, 150, 0, 50]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
+    parameter_lower_bound = np.array([7, -3, 1, -200, 1, -2, 0]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm] 
+    parameter_upper_bound = np.array([30, -1, 150, -1, 150, 0, 10]) / 1000 #[mm, mm, mm, mm, mm, mm, mNm]
     #position coordinates describing wing: (0, y0, z0), (0, y1, z1), (0, y2, z2)
     #y0 is the horizontal location nearest to the root. 
     #z0 is the vertical location of the film near the root

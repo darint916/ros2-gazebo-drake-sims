@@ -190,7 +190,7 @@
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
-                  <damping>0.002</damping>
+                  <damping>1e-16</damping>
                   <!-- <spring_stiffness>0.0000018</spring_stiffness> -->
                   <spring_stiffness>.18</spring_stiffness>
                   <!-- <friction>1</friction>    -->
@@ -220,7 +220,7 @@
                <xyz>0 1 0</xyz>
                <dynamics>
                   <!-- <damping>.0001</damping> -->
-                  <damping>.001</damping>
+                  <damping>1e-15</damping>
                   <!-- <friction>1</friction>    -->
                   <!-- <spring_reference>1</spring_reference> -->
                   <!-- <spring_reference>1.5708</spring_reference> -->
