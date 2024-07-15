@@ -31,14 +31,16 @@ class Wing():
         for i in self.components:
             self.mass += i.mass
             self.com += i.com * i.mass
+        self.com /= self.mass
+        
+        for i in self.components:
             del_y = i.com[0] - self.com[0]
             del_z = i.com[1] - self.com[1]
             displacement_radius = (del_y)**2 + (del_z)**2
             self.I += i.I + i.mass * \
                 np.array([displacement_radius, displacement_radius - del_y **
                          2, displacement_radius - del_z, 0, 0, -del_y * del_z])
-        self.com /= self.mass
-        self.I = inertia_modifier(self.I)
+        self.I = inertia_modifier(self.I):
 
         com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
         self.I_origin = self.I + self.mass * \
