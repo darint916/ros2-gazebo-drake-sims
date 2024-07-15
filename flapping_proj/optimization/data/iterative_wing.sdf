@@ -194,13 +194,13 @@
                   <!-- <spring_stiffness>0.0000018</spring_stiffness> -->
                   <spring_stiffness>.18</spring_stiffness>
                   <!-- <friction>1</friction>    -->
-                  <!-- <spring_reference>1.5708</spring_reference> -->
+                  <!-- <spring_reference>-1.57</spring_reference> -->
                   <!-- <spring_re ference>1</spring_reference> -->
                   <!-- <spring_stiffness>.025</spring_stiffness> -->
                   <!-- <spring_stiffness>10000</spring_stiffness> -->
                </dynamics>
                <limit>
-               <effort>0</effort>
+                  <effort>0</effort>
                   <lower>-1.571</lower>
                   <upper>1.571</upper>
                   <!-- <lower>-1.79769e+308</lower>

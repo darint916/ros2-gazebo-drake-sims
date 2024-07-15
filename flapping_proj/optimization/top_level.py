@@ -2,7 +2,7 @@ from optimization.sdf_generate import generate_sdf
 from optimization.cost_update import parse_data
 from optimization.aero_properties import aero_properties
 from utils.message import Message
-import optimization.wing_classes
+import optimization.wing_classes as wing_classes
 import scipy as sc
 from scipy.optimize import OptimizeResult
 import os
