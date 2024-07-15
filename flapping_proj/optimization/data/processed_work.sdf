@@ -172,7 +172,7 @@
                 <axis>
                     <xyz>-1 0 0</xyz>
                     <dynamics>
-                        <damping>0.001</damping>
+                        <damping>1e-16</damping>
                         <spring_stiffness>10.18</spring_stiffness>
                     </dynamics>
                     <limit>
@@ -189,7 +189,7 @@
                 <axis>
                     <xyz>0 -1 0</xyz>
                     <dynamics>
-                        <damping>.001</damping>
+                        <damping>1e-16</damping>
                         <spring_stiffness>5</spring_stiffness>
                     </dynamics>
                     <limit>

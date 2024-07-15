@@ -4,6 +4,7 @@ import scipy as sc
 from optimization.geometry_classes import Geometry
 from optimization.geometry_classes import *
 from utils.message import Message
+import sys
 
 
 def check_triangle_inequalities(Ixx, Iyy, Izz):
@@ -12,30 +13,32 @@ def check_triangle_inequalities(Ixx, Iyy, Izz):
 # If triangle test on the primary moments of inertia fails
 # adds a very small percentage to the smallest moment of inertia.
 # If the test is barely failing, this will make it pass.
-# Increases the smallest moment by at least 0.001%
-# or at most 0.01%
+# Increases the smallest moment by at least 1%
 
 
 def inertia_modifier(inertia: np.array):
-    max_increase = 10
-    inertia = np.round(inertia, 15)
-    for i in range(max_increase):
-        # The error for a triangle inequality primary moments of inertia
-        # These values are strictly positive for a valid tensor
+    max_increase = 100
+    inertia = np.round(inertia, 12)
+    # The error for a triangle inequality primary moments of inertia
+    # These values are strictly positive for a valid tensor
+    tri_error = np.array([inertia[0] + inertia[1] - inertia[2],
+                          inertia[1] + inertia[2] - inertia[0],
+                          inertia[0] + inertia[2] - inertia[1]])
+    Message.info(f"Initial tensor values are {inertia}")
+    min_inertia_index = np.argmin(inertia[0:2])
+    i = 0
+    while np.any(tri_error < sys.float_info.epsilon * 1e2):
+        inertia[min_inertia_index] *= 1 + 1e-2
+        if i > max_increase:
+            Message.error(f"Inertia tensor could not be modified to satisfy triangle inequalities. Final tensor was {inertia}")
+            break
         tri_error = np.array([inertia[0] + inertia[1] - inertia[2],
                               inertia[1] + inertia[2] - inertia[0],
                               inertia[0] + inertia[2] - inertia[1]])
-        if not check_triangle_inequalities(inertia[0], inertia[1], inertia[2]):
-            min_inertia_index = np.argmin(inertia[0:2])
-            inertia[min_inertia_index] *= 1 + 1e-5
-        else:
-            if i > 0:
-                Message.info(
-                    f"Tensor modified from calculated value. Loop ran {i} times")
-            break
-        if i == max_increase - 1:
-            Message.error(
-                f"No valid primary moments of inertia. Final tensor values were {inertia}")
+        i+=1
+    if i > 0:
+        Message.info(
+            f"Tensor modified from calculated value. Loop ran {i} times")
     return inertia
 
 

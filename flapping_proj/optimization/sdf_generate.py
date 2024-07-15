@@ -45,12 +45,15 @@ def generate_sdf(output_path:str=None, chord_cps:np.array= None, spar_cps:np.arr
             joint_name = joint.get('name')
             if joint_name in config['joint_names']:
                 existing_joints[joint_name] = True
-                axis = joint.find('axis')
-                if config[joint_name]['damping'] is not None and joint.find('damping') is not None:
-                    joint.find('damping').text = str(config[joint_name]['damping'])
-                if config[joint_name]['spring_stiffness'] is not None and joint.find('spring_stiffness') is not None:
-                    joint.find('spring_stiffness').text = str(config[joint_name]['spring_stiffness'])
-        
+                dynamics = joint.find('axis').find('dynamics')
+                if dynamics is not None:
+                    if config[joint_name]['damping'] is not None and dynamics.find('damping') is not None:
+                        dynamics.find('damping').text = str(config[joint_name]['damping'])
+                    if config[joint_name]['spring_stiffness'] is not None and dynamics.find('spring_stiffness') is not None:
+                        dynamics.find('spring_stiffness').text = str(config[joint_name]['spring_stiffness'])
+                else:
+                    Message.error(f"Joint {joint_name} does not have dynamics")
+            
         # print(chord_cps)
         # print("chord above spar below")
         # print( spar_cps)
