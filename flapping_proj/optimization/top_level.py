@@ -35,19 +35,14 @@ def top_start(iterations: int, title: str = "beta_test", popsize: int = 15):
     Message.debug("TESTING: " + title, True)
     Message.info("folder path: " + folder_path)
 
-    # lower and upper bounds for [y0, z0, y1, z1, y2, z2, k_phi, k_psi]
+    # lower and upper bounds for [wing_length, spar_0_length, spar_0_angle, spar_1_length, spar_1_angle, k_phi, k_psi]
     # bounds converted to si by the /1000
-    # [mm, mm, mm, mm, mm, mm, mNmm mNm]
-    parameter_lower_bound = np.array([7, -3, 1, -200, 20, -2, 0, 0]) / 1000
+    # [mm, mm, rad, mm, rad, mNmm mNm]
+    parameter_lower_bound = np.array(
+        [30, 10, np.pi/12, 10, np.pi/12, 0, 0]) / 1000
     # [mm, mm, mm, mm, mm, mm, mNm, mNm]
     parameter_upper_bound = np.array(
-        [30, -1, 150, -1, 150, 0, 100, 100]) / 1000
-    # position coordinates describing wing: (0, y0, z0), (0, y1, z1), (0, y2, z2)
-    # y0 is the horizontal location nearest to the root.
-    # z0 is the vertical location of the film near the root
-    # y1 and z1 gives the tip of the triangle
-    # y2 is the length of the wing
-    # realistically z2 should probably be constrained to 0
+        [150, 80, np.pi/2, 80, np.pi/2, 100, 100]) / 1000
     # k_phi is the stiffness about the flapping axis
     # k_psi is the stiffness about the wing pitch axis
 
@@ -55,16 +50,11 @@ def top_start(iterations: int, title: str = "beta_test", popsize: int = 15):
 
     # products of A and opt_params gives a constraint on variables
     # in order,
-    # y1 - y0 >= 0.001
-    # y2 - y0 >= 0.001
-    # y2 - y1 >= 0.001
-    # z0 - z1 >= 0
-    A = np.array([[-1, 0, 1, 0, 0, 0, 0, 0],  # represents linear constraints
-                  [-1, 0, 0, 0, 1, 0, 0, 0],
-                  [0, 0, -1, 0, 1, 0, 0, 0],
-                  [0, 1, 0, -1, 0, 0, 0, 0]])
-    constraint_lower_bound = np.array([0.001, 0.001, 0.001, 0])
-    constraint_upper_bound = np.array([np.inf, np.inf, np.inf, np.inf])
+    # spar_0_angle - spar_1_angle >= 0.001
+    A = np.array([[0, 0, 1, 0, -1, 0, 0]  # represents linear constraints
+                  ])
+    constraint_lower_bound = np.array([0.001])
+    constraint_upper_bound = np.array([np.inf])
     constraints = sc.optimize.LinearConstraint(
         A, constraint_lower_bound, constraint_upper_bound)
 
@@ -87,29 +77,29 @@ def pitch_stiffness_calc(length: float, width: float) -> float:  # lw of hinge
 
 
 def sim_start(opt_params):
-    # opt_params: y0, z0, y1, z1,.. y2, z2, stroke_stiffness, pitch_stiffness
+    # opt_params: wing_length, spar_0_length, spar_0_angle, spar_1_length, spar_1_angle, stroke_stiffness, pitch_stiffness
     # Bezier wing too hard to make
     with open(json_config_path, 'r') as json_file:
         config = json.load(json_file)
     Message.data("sim iter start \n opt_params: " + str(opt_params))
-    tri_wing = wing_classes.TriWing(
-        opt_params[0], opt_params[1], opt_params[2], opt_params[3], opt_params[4], opt_params[5])
-    config["wing"]["inertia"]["ixx"] = tri_wing.I[1]
-    config["wing"]["inertia"]["iyy"] = tri_wing.I[0]
-    config["wing"]["inertia"]["izz"] = tri_wing.I[2]
-    config["wing"]["inertia"]["ixy"] = tri_wing.I[3]
-    config["wing"]["inertia"]["ixz"] = tri_wing.I[5]
-    config["wing"]["inertia"]["iyz"] = tri_wing.I[4]
-    check_triangle_inequalities(tri_wing.I[0], tri_wing.I[1], tri_wing.I[2])
-    config["wing"]["mass"] = tri_wing.mass
-    config["stroke_joint"]["spring_stiffness"] = opt_params[6]
-    config["wing"]["com"] = [tri_wing.com[0], 0, tri_wing.com[1], 0, 0, 0]
+    test_wing = wing_classes.TriWing(
+        opt_params[0], 0, opt_params[1], opt_params[2], opt_params[3], opt_params[4])
+    config["wing"]["inertia"]["ixx"] = test_wing.I[1]
+    config["wing"]["inertia"]["iyy"] = test_wing.I[0]
+    config["wing"]["inertia"]["izz"] = test_wing.I[2]
+    config["wing"]["inertia"]["ixy"] = test_wing.I[3]
+    config["wing"]["inertia"]["ixz"] = test_wing.I[5]
+    config["wing"]["inertia"]["iyz"] = test_wing.I[4]
+    check_triangle_inequalities(test_wing.I[0], test_wing.I[1], test_wing.I[2])
+    config["wing"]["mass"] = test_wing.mass
+    config["stroke_joint"]["spring_stiffness"] = opt_params[5]
+    config["wing"]["com"] = [test_wing.com[0], 0, test_wing.com[1], 0, 0, 0]
     Message.debug("config inertia:")
     Message.debug(config["wing"]["inertia"])
     chord_cp, spar_cp, blade_areas = aero_properties(
-        tri_wing, config["blade_count"])
+        test_wing, config["blade_count"])
     # length = |z0|, width = y3 - y0
-    config["pitch_joint"]["spring_stiffness"] = opt_params[7]
+    config["pitch_joint"]["spring_stiffness"] = opt_params[6]
     with open(json_config_path, 'w') as file:  # comment out to not update
         json.dump(config, file, indent=4)
     Message.info("config updated")
