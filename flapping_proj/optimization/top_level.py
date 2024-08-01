@@ -50,21 +50,37 @@ def top_start(iterations: int, title: str = "beta_test", popsize: int = 15):
 
     # products of A and opt_params gives a constraint on variables
     # in order,
-    # spar_0_angle - spar_1_angle >= 0.001
+    # spar_0_angle - spar_1_angle >= 0
     A = np.array([[0, 0, 1, 0, -1, 0, 0]  # represents linear constraints
                   ])
-    constraint_lower_bound = np.array([0.001])
-    constraint_upper_bound = np.array([np.inf])
-    constraints = sc.optimize.LinearConstraint(
-        A, constraint_lower_bound, constraint_upper_bound)
+    linear_constraint_lower_bound = np.array([0])
+    linear_constraint_upper_bound = np.array([np.inf])
+    linear_constraints = sc.optimize.LinearConstraint(
+        A, linear_constraint_lower_bound, linear_constraint_upper_bound)
 
-    sc.optimize.differential_evolution(sim_start, bounds, constraints=constraints,
+    # Constraints so that the endpoints of spar_0 is before spar_1
+    # and spar angles are
+    nonlinear_lower = np.array([0.001])
+    nonlinear_upper = np.array([np.inf])
+    nonlinear_constraint = sc.optimize.Nonlinearconstraint(
+        three_segment_constaints, nonlinear_lower, nonlinear_upper)
+
+    sc.optimize.differential_evolution(sim_start, bounds, constraints=(nonlinear_constraint, linear_constraints),
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
     # It will return the fitness value of the simulation
     # The simulation will be started with the given parameters
     # The parameters will be read from the file and the simulation will be started
     # The fitness value will be read from the file and returned
+
+
+def three_segment_constaints(opt_params: np.ndarray) -> np.ndarray:
+    wing_length, spar_0_length, spar_0_angle, spar_1_length, spar_1_angle, k_phi, k_psi = opt_params
+
+    spar_0_end = wing_length / 3 + spar_0_length * np.cos(spar_0_angle)
+    spar_1_end = wing_length / 3 + spar_1_length * np.cos(spar_1_angle)
+
+    return np.array([spar_1_end - spar_0_end])
 
 
 def pitch_stiffness_calc(length: float, width: float) -> float:  # lw of hinge
