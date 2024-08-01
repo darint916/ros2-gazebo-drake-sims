@@ -39,10 +39,10 @@ def top_start(iterations: int, title: str = "beta_test", popsize: int = 15):
     # bounds converted to si by the /1000
     # [mm, mm, rad, mm, rad, mNmm mNm]
     parameter_lower_bound = np.array(
-        [30, 10, np.pi/12, 10, np.pi/12, 0, 0]) / 1000
+        [70, 20, 1000 * np.pi/12, 10, 1000*np.pi/12, 0, 0]) / 1000
     # [mm, mm, mm, mm, mm, mm, mNm, mNm]
     parameter_upper_bound = np.array(
-        [150, 80, np.pi/2, 80, np.pi/2, 100, 100]) / 1000
+        [150, 80, 1000*np.pi/2, 80, 1000*np.pi/2, 100, 100]) / 1000
     # k_phi is the stiffness about the flapping axis
     # k_psi is the stiffness about the wing pitch axis
 
@@ -62,10 +62,12 @@ def top_start(iterations: int, title: str = "beta_test", popsize: int = 15):
     # and spar angles are
     nonlinear_lower = np.array([0.001])
     nonlinear_upper = np.array([np.inf])
-    nonlinear_constraint = sc.optimize.Nonlinearconstraint(
+    nonlinear_constraint = sc.optimize.NonlinearConstraint(
         three_segment_constaints, nonlinear_lower, nonlinear_upper)
 
-    sc.optimize.differential_evolution(sim_start, bounds, constraints=(nonlinear_constraint, linear_constraints),
+    initial_guess = np.array([100, 50, 1000*np.pi/4, 50, 1000*np.pi/4, 50, 50]) / 1000
+
+    sc.optimize.differential_evolution(sim_start, bounds, constraints=(nonlinear_constraint, linear_constraints), x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
     # It will return the fitness value of the simulation
@@ -98,13 +100,13 @@ def sim_start(opt_params):
     with open(json_config_path, 'r') as json_file:
         config = json.load(json_file)
     Message.data("sim iter start \n opt_params: " + str(opt_params))
-    test_wing = wing_classes.TriWing(
-        opt_params[0], 0, opt_params[1], opt_params[2], opt_params[3], opt_params[4])
+    test_wing = wing_classes.ThreeSegmentWing(
+        opt_params[0], 0.01, 0, opt_params[2], opt_params[1], opt_params[4], opt_params[3])
     config["wing"]["inertia"]["ixx"] = test_wing.I[1]
     config["wing"]["inertia"]["iyy"] = test_wing.I[0]
     config["wing"]["inertia"]["izz"] = test_wing.I[2]
     config["wing"]["inertia"]["ixy"] = test_wing.I[3]
-    config["wing"]["inertia"]["ixz"] = test_wing.I[5]
+    config["wing"]["inertia"]["ixz"] = -test_wing.I[5]
     config["wing"]["inertia"]["iyz"] = test_wing.I[4]
     check_triangle_inequalities(test_wing.I[0], test_wing.I[1], test_wing.I[2])
     config["wing"]["mass"] = test_wing.mass

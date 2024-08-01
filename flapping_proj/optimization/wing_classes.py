@@ -188,6 +188,7 @@ class ThreeSegmentWing(Wing):
                       -gap_size - spar_length_1 * np.sin(spar_angle_1)]
         spar_1 = Rod(spar_1_pts[0], spar_1_pts[1],
                      spar_1_pts[2], spar_1_pts[3], spar_diameter, RHO_CF)
+        
 
         if spar_0_pts[2] > spar_1_pts[2]:
             raise ValueError(
@@ -196,10 +197,10 @@ class ThreeSegmentWing(Wing):
             leading_edge = LineSegments(np.array(
                 [root_edge, wing_length, spar_1_pts[2]]), np.array([0, 0, spar_1_pts[3]]))
             trailing_edge = LineSegments(np.array(
-                [root_edge, spar_0_pts[2], spar_1_pts[2]], np.array([0, spar_0_pts[3], spar_1_pts[3]])))
+                [root_edge, spar_0_pts[2], spar_1_pts[2]]), np.array([0, spar_0_pts[3], spar_1_pts[3]]))
         else:
             leading_edge = Line(root_edge, 0, wing_length, 0)
-            trailing_edge = LineSegments(np.array([0.008, spar_0_pts[2], spar_1_pts[2], wing_length]), np.array(
+            trailing_edge = LineSegments(np.array([root_edge, spar_0_pts[2], spar_1_pts[2], wing_length]), np.array(
                 [0, spar_0_pts[3], spar_1_pts[3], 0]))
 
         super().__init__(leading_edge, trailing_edge,
