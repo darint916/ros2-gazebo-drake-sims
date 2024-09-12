@@ -1,0 +1,396 @@
+<?xml version="1.0"?>
+<sdf version='1.9'>
+  <world name="world1">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>0.025</real_time_factor>
+    </physics>
+    <plugin filename="libignition-gazebo-physics-system.so"
+      name="ignition::gazebo::systems::Physics">
+    </plugin>
+    <plugin filename="libignition-gazebo-user-commands-system.so"
+      name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+    <plugin filename="libignition-gazebo-scene-broadcaster-system.so"
+      name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <model name="ground_plane">
+      <pose relative_to="world">0 0 0 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="link">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="link">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name='hardrobot'>
+      <pose relative_to="world">0 0 0.5 3.145 0 1.57</pose>
+      <link name='base_link'>
+        <inertial>
+          <pose>-8.3564e-06 -4.8616e-05 0.028244 0 0 0</pose>
+          <mass>0.0094893000000000009</mass>
+          <inertia>
+            <ixx>1.0833000000000001e-06</ixx>
+            <ixy>-2.4791999999999999e-09</ixy>
+            <ixz>-2.8749000000000001e-16</ixz>
+            <iyy>1.2964e-06</iyy>
+            <iyz>-2.8980999999999999e-15</iyz>
+            <izz>7.5880000000000004e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>0 0.941175 0 1</diffuse>
+            <ambient>0 0.941175 0 1</ambient>
+          </material>
+        </visual>
+      </link>
+      <joint name='stroke_joint_1' type='revolute'>
+        <pose relative_to='base_link'>0.0165 0 -0.004 -1.5708 0 0</pose>
+        <parent>base_link</parent>
+        <child>stroke_link_1</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <!-- <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit> -->
+          <dynamics>
+            <!-- <spring_reference>0</spring_reference> -->
+            <spring_stiffness>0.025</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='stroke_link_1'>
+        <pose relative_to='stroke_joint_1'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>-0.0028729 0.0019735 0.0011937 0 0 0</pose>
+          <mass>0.0010774000000000001</mass>
+          <inertia>
+            <ixx>2.8171999999999999e-08</ixx>
+            <ixy>-2.9826000000000001e-10</ixy>
+            <ixz>-6.2879999999999998e-09</ixz>
+            <iyy>4.2497e-08</iyy>
+            <iyz>1.2433e-10</iyz>
+            <izz>1.6038999999999999e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='stroke_link_1_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_1.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='stroke_link_1_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_1.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>0.87255 0.87255 0.87255 1</diffuse>
+            <ambient>0.87255 0.87255 0.87255 1</ambient>
+          </material>
+        </visual>
+      </link>
+      <joint name='pitch_joint_1' type='revolute'>
+        <pose relative_to='stroke_link_1'>0 0 0 0 0 0</pose>
+        <parent>stroke_link_1</parent>
+        <child>wing_link_1</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <!-- <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit> -->
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.0016</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='wing_link_1'>
+        <pose relative_to='pitch_joint_1'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.049825 -0.0030248 -2.8965e-11 0 0 0</pose>
+          <mass>0.00021413000000000001</mass>
+          <inertia>
+            <ixx>3.1471e-09</ixx>
+            <ixy>1.939e-09</ixy>
+            <ixz>3.9555000000000003e-18</ixz>
+            <iyy>1.2694e-07</iyy>
+            <iyz>-1.2313999999999999e-17</iyz>
+            <izz>1.2996000000000001e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='wing_link_1_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_1.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='wing_link_1_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_1.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>0.87255 0.87255 0.87255 1</diffuse>
+            <ambient>0.87255 0.87255 0.87255 1</ambient>
+          </material>
+        </visual>
+      </link>
+      <joint name='stroke_joint_2' type='revolute'>
+        <pose relative_to='base_link'>-0.0165 0 -0.004 -1.5708 4.235164736271502e-22
+          -3.141585307179587</pose>
+        <parent>base_link</parent>
+        <child>stroke_link_2</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <!-- <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit> -->
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.025</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='stroke_link_2'>
+        <pose relative_to='stroke_joint_2'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>-0.0028729 0.0019735 0.0011937 0 0 0</pose>
+          <mass>0.0010774000000000001</mass>
+          <inertia>
+            <ixx>2.8171999999999999e-08</ixx>
+            <ixy>-2.9826000000000001e-10</ixy>
+            <ixz>-6.2879999999999998e-09</ixz>
+            <iyy>4.2497e-08</iyy>
+            <iyz>1.2433e-10</iyz>
+            <izz>1.6038999999999999e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='stroke_link_2_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_2.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='stroke_link_2_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_2.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 0.553925 0.0392163 1</diffuse>
+            <ambient>1 0.553925 0.0392163 1</ambient>
+          </material>
+        </visual>
+      </link>
+      <joint name='pitch_joint_2' type='revolute'>
+        <pose relative_to='stroke_link_2'>0 0 0 0 0 0</pose>
+        <parent>stroke_link_2</parent>
+        <child>wing_link_2</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-1.79769e+308</lower>
+            <upper>1.79769e+308</upper>
+            <!-- <lower>0</lower>
+            <upper>0</upper> -->
+         </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.0016</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='wing_link_2'>
+        <pose relative_to='pitch_joint_2'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.049825 -0.0030248 -2.8965e-11 0 0 0</pose>
+          <mass>0.00021413000000000001</mass>
+          <inertia>
+            <ixx>3.1471e-09</ixx>
+            <ixy>1.939e-09</ixy>
+            <ixz>3.9552000000000003e-18</ixz>
+            <iyy>1.2694e-07</iyy>
+            <iyz>-1.2313999999999999e-17</iyz>
+            <izz>1.2996000000000001e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='wing_link_2_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_2.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='wing_link_2_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_2.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 0.553925 0.0392163 1</diffuse>
+            <ambient>1 0.553925 0.0392163 1</ambient>
+          </material>
+        </visual>
+      </link>
+      <joint name="anchor" type="revolute">
+        <pose relative_to="base_link">0 0 0 0 0 0</pose>
+        <parent>world</parent>
+        <child>base_link</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+          </limit>
+        </axis>
+      </joint>
+      <plugin
+        filename="aero_state_plugins"
+        name="odometry_state">
+        <world_name>world1</world_name>
+        <odometry_topic>/odom</odometry_topic>
+        <odom_publish_frequency>10000.0</odom_publish_frequency>
+        <joint>stroke_joint_1</joint>
+        <joint>pitch_joint_1</joint>
+        <joint>pitch_joint_2</joint>
+        <joint>stroke_joint_2</joint>
+      </plugin>
+      <plugin
+        filename="libignition-gazebo-apply-joint-force-system.so"
+        name="ignition::gazebo::systems::ApplyJointForce">
+        <joint_name>stroke_joint_1</joint_name>
+      </plugin>
+      <plugin
+        filename="libignition-gazebo-apply-joint-force-system.so"
+        name="ignition::gazebo::systems::ApplyJointForce">
+        <joint_name>stroke_joint_2</joint_name>
+      </plugin>
+
+      <plugin filename="aero_state_plugins" name="aerodynamics">
+        <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
+        <only_data>false</only_data>
+        
+        <link>
+            <link_name>wing_link_1</link_name>
+            <link_type>wing</link_type>
+            <stall_angle>15</stall_angle>
+            <fluid_density>1.293</fluid_density>
+            <drag_coefficient>1.28</drag_coefficient>
+            <lift_coefficient>1</lift_coefficient>
+            <control_joint>stroke_joint_1</control_joint>
+            <wing_pitch_joint>pitch_joint_1</wing_pitch_joint>
+            <blades>9</blades>
+            <!-- <blades>1</blades> -->
+            <!-- <center_pressure_list>0,-.025,0</center_pressure_list> -->
+            <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
+            <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
+            <!-- <chord_direction_list>1,0,0</chord_direction_list> -->
+           <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
+           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
+
+           <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
+           <!-- <blade_area_list>0.0075</blade_area_list>  -->
+           <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
+        </link>
+        <link>
+           <link_name>wing_link_2</link_name>
+           <link_type>wing</link_type>
+           <stall_angle>15</stall_angle>
+           <fluid_density>1.293</fluid_density>
+           <drag_coefficient>1.28</drag_coefficient>
+           <lift_coefficient>1</lift_coefficient>
+           <control_joint>stroke_joint_2</control_joint>
+           <wing_pitch_joint>pitch_joint_2</wing_pitch_joint>
+           <blades>9</blades>
+           <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
+           <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
+           <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
+           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
+           <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
+           <!-- <blade_area_list>0.0075</blade_area_list>  -->
+           <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
+        </link>
+     </plugin>
+    </model>
+  </world>
+</sdf>

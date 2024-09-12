@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="_DD_TLA.SLDASM">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-8.3564E-06 -4.8616E-05 0.028244"
+        rpy="0 0 0" />
+      <mass
+        value="0.0094893" />
+      <inertia
+        ixx="1.0833E-06"
+        ixy="-2.4792E-09"
+        ixz="-2.8749E-16"
+        iyy="1.2964E-06"
+        iyz="-2.8981E-15"
+        izz="7.588E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0.75294 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="stroke_link_1">
+    <inertial>
+      <origin
+        xyz="-0.0028729 0.0019735 0.0011937"
+        rpy="0 0 0" />
+      <mass
+        value="0.0010774" />
+      <inertia
+        ixx="2.8172E-08"
+        ixy="-2.9826E-10"
+        ixz="-6.288E-09"
+        iyy="4.2497E-08"
+        iyz="1.2433E-10"
+        izz="1.6039E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/stroke_link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/stroke_link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="stroke_joint_1"
+    type="revolute">
+    <origin
+      xyz="0.0165 0 -0.004"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="stroke_link_1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="wing_link_1">
+    <inertial>
+      <origin
+        xyz="0.049825 -0.0030248 -2.8965E-11"
+        rpy="0 0 0" />
+      <mass
+        value="0.00021413" />
+      <inertia
+        ixx="3.1471E-09"
+        ixy="1.939E-09"
+        ixz="3.9555E-18"
+        iyy="1.2694E-07"
+        iyz="-1.2314E-17"
+        izz="1.2996E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/wing_link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/wing_link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pitch_joint_1"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="stroke_link_1" />
+    <child
+      link="wing_link_1" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="stroke_link_2">
+    <inertial>
+      <origin
+        xyz="-0.0028729 0.0019735 0.0011937"
+        rpy="0 0 0" />
+      <mass
+        value="0.0010774" />
+      <inertia
+        ixx="2.8172E-08"
+        ixy="-2.9826E-10"
+        ixz="-6.288E-09"
+        iyy="4.2497E-08"
+        iyz="1.2433E-10"
+        izz="1.6039E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/stroke_link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.9098 0.44314 0.031373 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/stroke_link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="stroke_joint_2"
+    type="revolute">
+    <origin
+      xyz="-0.0165 0 -0.004"
+      rpy="-1.5708 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="stroke_link_2" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="wing_link_2">
+    <inertial>
+      <origin
+        xyz="0.049825 -0.0030248 -2.8965E-11"
+        rpy="0 0 0" />
+      <mass
+        value="0.00021413" />
+      <inertia
+        ixx="3.1471E-09"
+        ixy="1.939E-09"
+        ixz="3.9552E-18"
+        iyy="1.2694E-07"
+        iyz="-1.2314E-17"
+        izz="1.2996E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/wing_link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.9098 0.44314 0.031373 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://_DD_TLA.SLDASM/meshes/wing_link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pitch_joint_2"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="stroke_link_2" />
+    <child
+      link="wing_link_2" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

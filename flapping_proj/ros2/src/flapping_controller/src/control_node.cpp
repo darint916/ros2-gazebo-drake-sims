@@ -179,6 +179,9 @@ class ControlNode : public rclcpp::Node
 			this->declare_parameter<double>("motor_torque_constant", 1.0);
 			this->declare_parameter<double>("sim_length", 5.0);
 			this->declare_parameter<std::string>("kill_flag_path", "../optimization/kill_flag.txt");
+			this->declare_parameter<double>("gear_ratio", 20.0);
+			this->declare_parameter<double>("motor_back_emf", 0.000114);
+			this->declare_parameter<double>("motor_dynamic_friction", 0.000114);
 			_motor_torque_calc_enabled = this->get_parameter("motor_torque_calc_enabled").as_bool();
 			_max_voltage = this->get_parameter("max_voltage").as_double();
 			_motor_resistance = this->get_parameter("motor_resistance").as_double();
@@ -198,7 +201,7 @@ class ControlNode : public rclcpp::Node
 
 			//Time updates
 			_previousPoseTime = _currentPoseTime;
-			if (_currentPoseTime == _sim_length) {
+			if (_currentPoseTime >= _sim_length) {
 				std::ofstream kill_flag_file(_kill_flag_file_path);
 				kill_flag_file << 1;
 				kill_flag_file.close();
@@ -236,11 +239,11 @@ class ControlNode : public rclcpp::Node
 			auto message = std_msgs::msg::Float64();
 			// int flag = 0;
 			// auto msg = geometry_msgs::msg::Twist();
-
 			//Switch joint axis? instead of flipping torque
 			double torque_val = 0;
 			for (auto & joint : _jointTorqueControlMap) {
 				torque_val = joint.second;
+				// RCLCPP_INFO_STREAM(this->get_logger(), "timer callback" << torque_val);
 				if (joint.first == "joint_RW_J_Flap"){ //edit to change dir later?
 					joint.second *= -1;
 				}
@@ -265,9 +268,13 @@ class ControlNode : public rclcpp::Node
 			double frequency = this->get_parameter("frequency").as_double();
 			double phase = 0;
 			// RCLCPP_INFO_STREAM(this->get_logger(), "Current time: " << _currentPoseTime);
+			// RCLCPP_INFO_STREAM(this->get_logger(), "amp" << amplitude);
+			// RCLCPP_INFO_STREAM(this->get_logger(), "freq " << frequency);
+			// RCLCPP_INFO_STREAM(this->get_logger(), "sin " << amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime + phase));
+			// RCLCPP_INFO_STREAM(this->get_logger(), "time " << amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime + phase));
 			for (auto & joint : _jointTorqueControlMap) {
 				joint.second = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime + phase);
-				
+
 				//square wave (min max)
 				// if (joint.second < 0) {
 				// 	joint.second = -amplitude;
@@ -314,22 +321,25 @@ class ControlNode : public rclcpp::Node
 			double amplitude = this->get_parameter("max_voltage").as_double();
 			double frequency = this->get_parameter("frequency").as_double();
 			double voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
-			double motor_resistance = this->get_parameter("motor_resistance").as_double();
-			double motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
-			// double motor_gear_ratio = this->get_parameter("motor_gear_ratio").as_double();
-			// double external_gear_ration = this->get_parameter("external_gear_ratio").as_double();
-			// double reduction_efficiency = this->get_parameter("reduction_efficiency").as_double();
+			// double motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
+			double gear_ratio = this->get_parameter("gear_ratio").as_double();
+			double motor_back_emf = this->get_parameter("motor_back_emf").as_double();
+			double motor_dynamic_friction = this->get_parameter("motor_dynamic_friction").as_double();
+
 			//current joint velocity from odometry
 			
 			for (auto & joint : _jointTorqueControlMap) { //potential race condition? lmao
 				double curr_joint_vel = _jointVelocityMap[joint.first]; // joint velocity
-				double effective_gear_ratio = 20; //motor_gear_ratio * external_gear_ration * reduction_efficiency;
-				joint.second = effective_gear_ratio * (voltage - motor_torque_constant * curr_joint_vel) * motor_torque_constant / motor_resistance;
-				// joint.second = 1; //test
+				//electrical time constant assumed to be large compared to mechanical. Electric fast >> mech
+				double motor_speed = curr_joint_vel * gear_ratio * 60 / (2 * M_PI); //rad/s to rpm
+				joint.second = (_motor_torque_constant * voltage / _motor_resistance) - ((_motor_torque_constant * motor_back_emf / _motor_resistance +  motor_dynamic_friction) * motor_speed);
+				// joint.second = (voltage - _motor_torque_constant * curr_joint_vel) * _motor_torque_constant / _motor_resistance;
 
-			} 
+				joint.second *= gear_ratio; //test
+			}
 		}
 };
+
 
 int main(int argc, char ** argv)
 {

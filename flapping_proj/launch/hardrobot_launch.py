@@ -8,8 +8,8 @@ def process_user_input():
     #config here, could later use config file?
     #TODO: YAML CONFIG FILE FROM GUI
     ''''''''''''''''''''''''
-    joint_names = ['joint_LW_J_Pitch', 'joint_RW_J_Pitch', 'joint_LW_J_Flap', 'joint_RW_J_Flap']
-    model_name = 'URDF_LargeWings' 
+    joint_names = ['stroke_joint_1', 'pitch_joint_1', 'stroke_joint_2', 'pitch_joint_2']
+    model_name = 'hardrobot' 
     # model_name = 'URDF_Bodies2SLDASM'
     # world_name = 'world1'
     ''''''''''''''''''''''''
@@ -18,7 +18,7 @@ def process_user_input():
 
 def generate_launch_description():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    sdf_file = os.path.join(current_dir, '..', 'gazebo', 'URDF_LargeWings.sdf')
+    sdf_file = os.path.join(current_dir, '..', 'gazebo', 'hardrobot.sdf')
     # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
 
     data_file = os.path.join(current_dir, '..', 'data', 'data.csv')
@@ -47,25 +47,28 @@ def generate_launch_description():
                 {'joint_names': joint_names},
                 {'joint_control_topics': joint_control_topics},
                 {'position_topic': position_topic},
-                {'control_publish_frequency': 200000}, 
+                {'control_publish_frequency': 50000}, 
                 {'data_file_path': data_file}, 
                 {'input_joint_data_file_path': input_joint_data_file},
-                {'amplitude': 2.758}, #2.73 best lift, Must have decimal, or ros wont take as a double
-                {'frequency': 50.0}, 
-                {'altitude_pid_enabled': True},
+                {'amplitude': 0.1}, #2.73 best lift, Must have decimal, or ros wont take as a double
+                {'frequency': 10.0}, 
+                {'altitude_pid_enabled': False},
                 {'altitude_kp': 0.3},
                 {'altitude_ki': 0.001},
                 {'altitude_kd': 0.02},
                 {'altitude_max_pid_output': 6.27},
                 {'altitude_max_integral': 3.0},
                 {'static_altitude': 10.0},
-                {'pid_data_enabled': True},
+                {'pid_data_enabled': False},
                 {'pid_data_file_path': pid_data_file},
-                {'motor_torque_calc_enabled': False},
-                # {'max_voltage': max_voltage}, #AC voltage sin wave typically 6 V
-                # {'motor_resistance': motor_resistance},
-                # {'motor_torque_constant': motor_torque_constant},
-                {'sim_length': 10}, #duration before kill poll
+                {'motor_torque_calc_enabled': True},
+                {'max_voltage': 6.0}, #AC voltage sin wave typically 6 V
+                {'motor_resistance': 8.8},
+                {'motor_torque_constant': 0.00109},
+                {'sim_length': 20.0}, #duration before kill poll
+                {'gear_ratio': 20.0},
+                {'motor_back_emf': 0.000114}, #V/rpm
+                {'motor_dynamic_friction': 0.00000000102}, #Nm/rpm
                 # {'kill_flag_path': kill_flag_path}
             ]
         ),
