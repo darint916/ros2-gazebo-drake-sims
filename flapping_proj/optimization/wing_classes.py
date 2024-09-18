@@ -184,7 +184,7 @@ class ThreeSegmentWing(Wing):
 
         spar_1_pts = [2*wing_length / 3,
                       -gap_size,
-                      wing_length / 3 + spar_length_1 * np.cos(spar_angle_1),
+                      2*wing_length / 3 + spar_length_1 * np.cos(spar_angle_1),
                       -gap_size - spar_length_1 * np.sin(spar_angle_1)]
         spar_1 = Rod(spar_1_pts[0], spar_1_pts[1],
                      spar_1_pts[2], spar_1_pts[3], spar_diameter, RHO_CF)
