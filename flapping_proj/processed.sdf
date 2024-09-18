@@ -1,4 +1,3 @@
-<?xml version="1.0" ?>
 <sdf version="1.8">
    <world name="world2">
       <physics name="1ms" type="ignored">
@@ -50,23 +49,23 @@
             </visual>
          </link>
       </model>
-            <model name="URDF_LargeWings"> <!-- flies in -y dir-->
-         <!-- <pose relative_to="world">0 0 .5 1.5708 0 0</pose> -->
+            <model name="URDF_LargeWings"> 
+         
          <pose relative_to="world">0 0 .5 1.5708 0 0</pose>
-         <!-- <pose relative_to="world">0 0 1 .5708 0 0</pose> -->
+         
          <link name="body">
             <pose>0 0 0 0 0 0</pose>
             <inertial>
                <pose>0 0 0 0 0 0</pose>
-               <!-- <mass>06.35649989496079</mass> -->
-               <mass>0.0</mass>
+               
+               <mass>1.0</mass>
                <inertia>
-                  <ixx>0</ixx>
+                  <ixx>0.1</ixx>
                   <ixy>0</ixy>
                   <ixz>0</ixz>
-                  <iyy>0</iyy>
+                  <iyy>0.1</iyy>
                   <iyz>0</iyz>
-                  <izz>0</izz>
+                  <izz>0.2</izz>
                </inertia>
             </inertial>
 
@@ -83,27 +82,20 @@
                   <specular>0.0 0.0 1.0 1</specular>
                </material>
             </visual>
-            <!-- <collision name="body">
-               <pose>0 0 0 0 0 0</pose>
-               <geometry>
-                  <mesh>
-                     <uri>model://URDF_LargeWings/meshes/base_link.STL</uri>
-                  </mesh>
-               </geometry>
-            </collision> -->
+            
          </link>
          <link name="hinge">
             <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
             <inertial>
-               <mass>0</mass>
-               <!-- <mass>1.17693121573423E-02</mass> -->
+               <mass>0.0057</mass>
+               
                <inertia>
-                  <ixx>0</ixx>
-                  <ixy>0</ixy>
-                  <ixz>0</ixz>
-                  <iyy>0</iyy>
-                  <iyz>0</iyz>
-                  <izz>0</izz>
+                  <ixx>20.03e-9</ixx>
+                  <ixy>-0.05e-9</ixy>
+                  <ixz>4.55e-9</ixz>
+                  <iyy>31.49e-9</iyy>
+                  <iyz>0.02e-9</iyz>
+                  <izz>11.75e-9</izz>
                </inertia>
             </inertial>
             <visual name="hinge">
@@ -119,30 +111,23 @@
                   <specular>1.0 0.0 1.0 .9</specular>
                </material>
             </visual>
-            <!-- <collision name="hinge">
-               <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
-               <geometry>
-                  <mesh>
-                     <uri>model://URDF_LargeWings/meshes/RW_Flap.STL</uri>
-                  </mesh>
-               </geometry>
-            </collision> -->
+            
          </link>
 
          <link name="wing">
             <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
             <inertial>
-               <pose>0 0 0 0 0 0</pose>
-               <!-- <mass>0.877528688193489</mass> -->
-               <mass>0.000877528688193489</mass>
-               <!-- <mass>0.000877528688193489</mass> -->
+               <pose>0.07754735114871919, 0, -0.0009103580706055688, 0, 0, 0</pose>
+               
+               <mass>0.00036959713400068044</mass>
+               
                <inertia>
-                  <ixx>2.20784802051055E-07</ixx>
-                  <ixy>-1.94452067435317E-22</ixy>
-                  <ixz>3.28740984197998E-26</ixz>
-                  <iyy>1.64537443187689E-06</iyy>
-                  <iyz>-3.13090473832643E-24</iyz>
-                  <izz>1.86614295089975E-06</izz>
+                  <ixx>7.768337e-07</ixx>
+                  <ixy>0.0</ixy>
+                  <ixz>5.913927e-07</ixz>
+                  <iyy>3.4666798e-06</iyy>
+                  <iyz>0.0</iyz>
+                  <izz>3.3134127e-06</izz>
                </inertia>
             </inertial>
             <visual name="wing">
@@ -184,34 +169,32 @@
       
          <joint name="pitch_joint" type="revolute">
             <pose relative_to="hinge">0 0 0 0 0 0</pose>
-            <!-- <pose relative_to="RW_Flap">0.00899999999999999 0.004 0 0.785398 0 0</pose> -->
+            
             <parent>hinge</parent>
             <child>wing</child>
             <axis>
                <xyz>1 0 0</xyz>
                <dynamics>
                   <damping>1e-16</damping>
-                  <!-- <spring_stiffness>0.0000018</spring_stiffness> -->
-                  <spring_stiffness>.18</spring_stiffness>
-                  <!-- <friction>1</friction>    -->
-                  <!-- <spring_reference>-1.57</spring_reference> -->
-                  <!-- <spring_re ference>1</spring_reference> -->
-                  <!-- <spring_stiffness>.025</spring_stiffness> -->
-                  <!-- <spring_stiffness>10000</spring_stiffness> -->
+                  
+                  <spring_stiffness>9.212274410259822e-11</spring_stiffness>
+                  
+                  
+                  
+                  
+                  
                </dynamics>
                <limit>
-                  <effort>0</effort>
-                  <lower>-1.571</lower>
-                  <upper>1.571</upper>
-                  <!-- <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper> -->
-                  <!-- <lower>0</lower>
-                  <upper>0</upper> -->
+               <effort>0</effort>
+                  <lower>-1.79769e+8</lower>
+                  <upper>1.79769e+8</upper>
+                  
+                  
                </limit>
             </axis>
          </joint>
 
-         <!-- passive-->
+         
          <joint name="stroke_joint" type="revolute">
             <pose relative_to="body">0.0125 0.0125 0 0 0 0</pose>
             <parent>body</parent>
@@ -219,26 +202,25 @@
             <axis>
                <xyz>0 1 0</xyz>
                <dynamics>
-                  <!-- <damping>.0001</damping> -->
+                  
                   <damping>1e-15</damping>
-                  <!-- <friction>1</friction>    -->
-                  <!-- <spring_reference>1</spring_reference> -->
-                  <!-- <spring_reference>1.5708</spring_reference> -->
-                  <!-- <spring_stiffness>.01</spring_stiffness> -->
-                  <spring_stiffness>5</spring_stiffness>
+                  
+                  
+                  
+                  
+                  <spring_stiffness>5.897565978102382e-08</spring_stiffness>
                </dynamics>
                <limit>
-                  <!-- <effort>0</effort>  -->
-                  <lower>-1.571</lower>
-                  <upper>1.571</upper>
-                  <!-- <lower>-1.79769e+308</lower>
-                  <upper>1.79769e+308</upper> -->
+                  
+                  <lower>-1.79769e+5</lower>
+                  <upper>1.79769e+5</upper>
+                  
                </limit>
             </axis>
          </joint>
 
          
-      <!-- <gravity> 0 0 0 </gravity> -->
+      
 
 
          <plugin filename="aero_state_plugins" name="aerodynamics">
@@ -256,39 +238,32 @@
                <wing_pitch_joint>pitch_joint</wing_pitch_joint>
                <blades>15</blades>
                <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
-               <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
+               
                <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
                <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
-               <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
-               <!-- <blade_area_list>0.0075</blade_area_list>  -->
+               
+               
                <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
             </link>
          </plugin>
 
-         <!-- controller/odom plugin-->
-         <plugin 
-            filename="aero_state_plugins" 
-            name="odometry_state">
+         
+         <plugin filename="aero_state_plugins" name="odometry_state">
             <world_name>world2</world_name>
             <odometry_topic>/odom</odometry_topic>
             <odom_publish_frequency>1000.0</odom_publish_frequency>
             <joint>pitch_joint</joint> 
-            <!-- <joint>joint_LW_J_Pitch</joint>
-            <joint>joint_RW_J_Pitch</joint> -->
+            
             <joint>stroke_joint</joint>
          </plugin>
 
-         <!-- subscribes to model_name/joint/jointname/cmd_force , takes doubles -->
+         
 
-         <plugin  
-            filename="libignition-gazebo-apply-joint-force-system.so" 
-            name = "ignition::gazebo::systems::ApplyJointForce">
+         <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
             <joint_name>stroke_joint</joint_name>
          </plugin> 
 
-         <plugin  
-            filename="libignition-gazebo-apply-joint-force-system.so" 
-            name = "ignition::gazebo::systems::ApplyJointForce">
+         <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
          <joint_name>pitch_joint</joint_name> 
          </plugin>
       </model>

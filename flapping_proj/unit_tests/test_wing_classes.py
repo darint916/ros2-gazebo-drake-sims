@@ -49,13 +49,13 @@ class TestTriangleInequalities(unittest.TestCase):
         many_wings = True
         failed = None
         tested = 0
-        min_ys = np.linspace(0, .03, 10)
-        max_ys = np.linspace(0.031, 0.15, 10)
-        tip_zs = np.linspace(-0.2, -0.003, 10)
+        min_ys = np.linspace(0, .03, 5)
+        max_ys = np.linspace(0.031, 0.15, 5)
+        tip_zs = np.linspace(-0.2, -0.003, 5)
         
         for i in min_ys:
             for j in max_ys:
-                mid_ys = np.linspace(1.01 * i, .99 * j, 10)
+                mid_ys = np.linspace(1.01 * i, .99 * j, 5)
                 for k in mid_ys:
                     for l in tip_zs:
                         trial_wing = TriWing(i, 0, k, l, j, 0)

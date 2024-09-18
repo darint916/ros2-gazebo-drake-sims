@@ -316,11 +316,15 @@ class ControlNode : public rclcpp::Node
 			double voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
 			double motor_resistance = this->get_parameter("motor_resistance").as_double();
 			double motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
+			// double motor_gear_ratio = this->get_parameter("motor_gear_ratio").as_double();
+			// double external_gear_ration = this->get_parameter("external_gear_ratio").as_double();
+			// double reduction_efficiency = this->get_parameter("reduction_efficiency").as_double();
 			//current joint velocity from odometry
 			
 			for (auto & joint : _jointTorqueControlMap) { //potential race condition? lmao
 				double curr_joint_vel = _jointVelocityMap[joint.first]; // joint velocity
-				joint.second = (voltage - motor_torque_constant * curr_joint_vel) * motor_torque_constant / motor_resistance;
+				double effective_gear_ratio = 20; //motor_gear_ratio * external_gear_ration * reduction_efficiency;
+				joint.second = effective_gear_ratio * (voltage - motor_torque_constant * curr_joint_vel) * motor_torque_constant / motor_resistance;
 				// joint.second = 1; //test
 
 			} 

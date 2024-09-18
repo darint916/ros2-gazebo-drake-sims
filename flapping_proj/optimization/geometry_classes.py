@@ -4,7 +4,7 @@ from utils.message import Message
 
 
 def almost_equal(a, b, error_percent):
-    return abs(a - b) <= abs(a*error_percent)
+    return np.abs(a - b) <= np.abs(a*error_percent)
 
 # I feel like this is needed but don't know what to do with it
 
@@ -92,7 +92,7 @@ class Line(Curve):
 
 
 class Cubic_Bezier(Curve):
-    def __init__(self, p0: np.array, p1: np.array, p2: np.array, p3: np.array):
+    def __init__(self, p0: np.ndarray, p1: np.ndarray, p2: np.ndarray, p3: np.ndarray):
         self.p0 = p0
         self.p1 = p1
         self.p2 = p2
@@ -114,9 +114,9 @@ class Cubic_Bezier(Curve):
 
 
 class LineSegments(Curve):
-    def __init__(self, y_points: np.array, z_points: np.array) -> None:
-        self.y_points = y_points
-        self.z_points: np.array = z_points
+    def __init__(self, y_points: np.ndarray, z_points: np.ndarray) -> None:
+        self.y_points = np.asarray(y_points)
+        self.z_points = np.asarray(z_points)
         num_segments = len(y_points) - 1
         if num_segments < 2:
             raise Exception(
@@ -139,7 +139,7 @@ class LineSegments(Curve):
             return num_segments * del_y
 
         def z(t: float):
-            index = int((np.floor(t * num_segments) - np.floor(t)))
+            index = (np.floor(t * num_segments) - np.floor(t)).astype(int)
             del_z = z_points[index + 1] - z_points[index]
             return del_z * (num_segments * t - index) + z_points[index]
 

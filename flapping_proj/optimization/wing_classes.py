@@ -26,15 +26,13 @@ class Wing():
             self.components.append(i)
 
         self.mass = 0
+        self.com = np.zeros(2)
+        self.I = np.zeros(6)
         for i in self.components:
             self.mass += i.mass
-
-        self.com = np.zeros(2)
-        for i in self.components:
             self.com += i.com * i.mass
         self.com /= self.mass
-
-        self.I = np.zeros(6)
+        
         for i in self.components:
             del_y = i.com[0] - self.com[0]
             del_z = i.com[1] - self.com[1]
@@ -42,13 +40,31 @@ class Wing():
             self.I += i.I + i.mass * \
                 np.array([displacement_radius, displacement_radius - del_y **
                          2, displacement_radius - del_z, 0, 0, -del_y * del_z])
-
         self.I = inertia_modifier(self.I)
 
         com_magnitude_sqr = self.com[0]**2 + self.com[1]**2
         self.I_origin = self.I + self.mass * \
             np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2,
-                     com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
+                      com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
+            
+    def display_wing(self):
+        t = np.linspace(0, 1, 1000)
+        fig, ax = plt.subplots()
+        films = []
+        sweeps = []
+        for i in self.components:
+            if type(i) == Film:
+                films.append(i)
+            elif type(i) == Sweep:
+                sweeps.append(i)
+            else:
+                raise Exception("Unepected component type encountered while plotting the wing")
+        
+        for i in films:
+            ax.plot(i.geo.upper.y(t), i.geo.upper.z(t), alpha = .5, color="blue")
+            ax.plot(i.geo.lower.y(t), i.geo.lower.z(t), alpha = .5, color="blue")
+        for i in sweeps:
+            ax.plot(i.geo.y(t), i.geo.z(t), color = "black")
 
 # depriciated
 class BezierWing():
@@ -115,10 +131,80 @@ class TriWing(Wing):
         super().__init__(leading_edge, trailing_edge, rods)
 
 
+class RightWing(Wing):
+    '''
+    A wing in the shape of a right triangle
+    '''
+
+    def __init__(self, spar_length: float, chord_length: float):
+        leading_edge = Line(0, 0, spar_length, 0)
+        trailing_edge = Line(0, -chord_length, spar_length, 0)
+        sweeps = [Sweep(leading_edge, Circle(0.001), RHO_CF)]
+        super().__init__(leading_edge, trailing_edge, sweeps)
+
+
+class RectWing(Wing):
+    '''
+    A wing in the shape of a rectangle
+    Mostly a debug class as making this wing as is 
+    would not function well
+    '''
+
+    def __init__(self, spar_length: float, chord_length: float):
+        leading_edge = Line(0, 0, spar_length, 0)
+        trailing_edge = Line(0, -chord_length, spar_length, -chord_length)
+        sweeps = [Sweep(leading_edge, Circle(0.001), RHO_CF)]
+        super().__init__(leading_edge, trailing_edge, sweeps)
+
+
 class StraightButterflyWing(Wing):
     def __init__(self, film_start: float, leading_edge_length: float, leading_edge_angle: float, mid_bar_length: float, mid_bar_angle: float, trailing_edge_length: float, trailing_edge_angle: float):
         raise Exception("Not yet supported")
         super().__init__(leading_edge, trailing_edge, sweeps)
+
+
+class ThreeSegmentWing(Wing):
+    '''
+    A wing that has a straight leading edge and two spars evenly 
+    spaced along the leading edge that support the structure of the wing. 
+    '''
+
+    def __init__(self, wing_length: float, root_edge: float, gap_size: float, spar_angle_0: float, spar_length_0: float, spar_angle_1: float, spar_length_1: float):
+        leading_edge_diameter = 0.001  # m
+        spar_diameter = 0.0005  # m
+        leading_edge_bar = Rod(0.002, 0, wing_length, 0,
+                               leading_edge_diameter, RHO_CF)
+
+        spar_0_pts = [wing_length / 3,
+                      -gap_size,
+                      wing_length / 3 + spar_length_0 * np.cos(spar_angle_0),
+                      -gap_size - spar_length_0 * np.sin(spar_angle_0)]
+        spar_0 = Rod(spar_0_pts[0], spar_0_pts[1],
+                     spar_0_pts[2], spar_0_pts[3], spar_diameter, RHO_CF)
+
+        spar_1_pts = [2*wing_length / 3,
+                      -gap_size,
+                      wing_length / 3 + spar_length_1 * np.cos(spar_angle_1),
+                      -gap_size - spar_length_1 * np.sin(spar_angle_1)]
+        spar_1 = Rod(spar_1_pts[0], spar_1_pts[1],
+                     spar_1_pts[2], spar_1_pts[3], spar_diameter, RHO_CF)
+        
+
+        if spar_0_pts[2] > spar_1_pts[2]:
+            raise ValueError(
+                "Spar 0 extends beyond spar 1, which is not allowed.")
+        elif spar_1_pts[2] > wing_length:
+            leading_edge = LineSegments(np.array(
+                [root_edge, wing_length, spar_1_pts[2]]), np.array([0, 0, spar_1_pts[3]]))
+            trailing_edge = LineSegments(np.array(
+                [root_edge, spar_0_pts[2], spar_1_pts[2]]), np.array([0, spar_0_pts[3], spar_1_pts[3]]))
+        else:
+            leading_edge = Line(root_edge, 0, wing_length, 0)
+            trailing_edge = LineSegments(np.array([root_edge, spar_0_pts[2], spar_1_pts[2], wing_length]), np.array(
+                [0, spar_0_pts[3], spar_1_pts[3], 0]))
+
+        super().__init__(leading_edge, trailing_edge,
+                         [leading_edge_bar, spar_0, spar_1])
 
 
 if __name__ == "__main__":
