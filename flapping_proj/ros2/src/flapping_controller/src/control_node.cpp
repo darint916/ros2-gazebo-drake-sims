@@ -318,9 +318,13 @@ class ControlNode : public rclcpp::Node
 		void motor_torque_output (){
 			//TODO 
 			// GET OMEGA VALUE
+
+			// double amplitude = this->get_parameter("ramp_up").as_double();
+			// double amplitude = this->get_parameter("max_voltage").as_double() * (1 - std::exp(-0.5 * _currentPoseTime));
 			double amplitude = this->get_parameter("max_voltage").as_double();
 			double frequency = this->get_parameter("frequency").as_double();
 			double voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
+			voltage = voltage > 0 ? amplitude : -amplitude;
 			// double motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
 			double gear_ratio = this->get_parameter("gear_ratio").as_double();
 			double motor_back_emf = this->get_parameter("motor_back_emf").as_double();
@@ -332,7 +336,7 @@ class ControlNode : public rclcpp::Node
 				double curr_joint_vel = _jointVelocityMap[joint.first]; // joint velocity
 				//electrical time constant assumed to be large compared to mechanical. Electric fast >> mech
 				double motor_speed = curr_joint_vel * gear_ratio * 60 / (2 * M_PI); //rad/s to rpm
-				joint.second = (_motor_torque_constant * voltage / _motor_resistance) - ((_motor_torque_constant * motor_back_emf / _motor_resistance +  motor_dynamic_friction) * motor_speed);
+				joint.second = (_motor_torque_constant * -voltage / _motor_resistance) - ((_motor_torque_constant * motor_back_emf / _motor_resistance +  motor_dynamic_friction) * motor_speed);
 				// joint.second = (voltage - _motor_torque_constant * curr_joint_vel) * _motor_torque_constant / _motor_resistance;
 
 				joint.second *= gear_ratio; //test

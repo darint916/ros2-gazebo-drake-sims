@@ -51,7 +51,7 @@ def generate_launch_description():
                 {'data_file_path': data_file}, 
                 {'input_joint_data_file_path': input_joint_data_file},
                 {'amplitude': 0.1}, #2.73 best lift, Must have decimal, or ros wont take as a double
-                {'frequency': 10.0}, 
+                {'frequency': 15.0}, 
                 {'altitude_pid_enabled': False},
                 {'altitude_kp': 0.3},
                 {'altitude_ki': 0.001},
