@@ -3,7 +3,7 @@
   <world name="world1">
     <physics name="1ms" type="ignored">
       <max_step_size>0.0001</max_step_size>
-      <real_time_factor>0.25</real_time_factor>
+      <real_time_factor>0.01</real_time_factor>
     </physics>
     <plugin filename="libignition-gazebo-physics-system.so"
       name="ignition::gazebo::systems::Physics">
@@ -368,13 +368,12 @@
             <blades>9</blades>
             <!-- <blades>1</blades> -->
             <!-- <center_pressure_list>0,-.025,0</center_pressure_list> -->
-            <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
+            <center_pressure_list>0, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
             <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
             <!-- <chord_direction_list>1,0,0</chord_direction_list> -->
            <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
-      
            <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
+           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
            <!-- <blade_area_list>0.0075</blade_area_list>  -->
            <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
         </link>

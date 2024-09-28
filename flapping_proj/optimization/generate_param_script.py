@@ -18,4 +18,4 @@ chord_cp, spar_cp, blade_areas = aero_properties(
     test_wing, 20)
 print("Chord CP: ", chord_cp)
 print("Spar CP: ", spar_cp)
-print("Blade Areaaight s: ", blade_areas)
+print("Blade Areas: ", blade_areas)

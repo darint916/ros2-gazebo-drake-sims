@@ -1,10 +1,10 @@
 {
     "voltage": {
-        "frequency": 30.0,
+        "frequency": 10.0,
         "waves": [
             {
                 "type": "sin",
-                "amplitude": 20.0,
+                "amplitude": 10.0,
                 "phase": 0.0
             },
             {
