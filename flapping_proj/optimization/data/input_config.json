@@ -1,0 +1,19 @@
+{
+    "voltage": {
+        "waves": [
+            {
+                "type": "sin",
+                "amplitude": 1,
+                "frequency": 1,
+                "phase": 0
+            },
+            {
+                "type": "sin",
+                "amplitude": 1,
+                "frequency": 2,
+                "phase": 0
+            }
+        ]
+    },
+    "sim_length": 5.5
+}

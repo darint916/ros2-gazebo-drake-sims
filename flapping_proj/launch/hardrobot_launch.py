@@ -1,3 +1,4 @@
+import json
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument, ExecuteProcess
@@ -7,7 +8,7 @@ import os
 def process_user_input():
     #config here, could later use config file?
     #TODO: YAML CONFIG FILE FROM GUI
-    ''''''''''''''''''''''''
+    
     joint_names = ['stroke_joint_1', 'pitch_joint_1', 'stroke_joint_2', 'pitch_joint_2']
     model_name = 'hardrobot' 
     # model_name = 'URDF_Bodies2SLDASM'
@@ -17,6 +18,10 @@ def process_user_input():
 
 
 def generate_launch_description():
+    json_config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../optimization/data/config.json')
+    with open(json_config_path, 'r') as json_file:
+        config = json.load(json_file)
+    ''''''''''''''''''''''''
     current_dir = os.path.dirname(os.path.abspath(__file__))
     sdf_file = os.path.join(current_dir, '..', 'gazebo', 'hardrobot.sdf')
     # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
@@ -70,6 +75,13 @@ def generate_launch_description():
                 {'motor_back_emf': 0.000114}, #V/rpm
                 {'motor_dynamic_friction': 0.00000000102}, #Nm/rpm
                 # {'kill_flag_path': kill_flag_path}
+                #controls
+                {'control_opt_en': True},
+                {'control_a': config["voltage"]["waves"][0]["amplitude"]},
+                {'control_b': config["voltage"]["waves"][1]["amplitude"]},
+                {'control_frequency': config["voltage"]["waves"][0]["frequency"]},
+                # {'control_a_phase': config["voltage"]["waves"][0]["phase"]},
+                # {'control_b_phase': config["voltage"]["waves"][1]["phase"]},
             ]
         ),
         Node(

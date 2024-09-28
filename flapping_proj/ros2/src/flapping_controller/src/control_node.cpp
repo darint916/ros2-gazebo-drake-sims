@@ -189,6 +189,21 @@ class ControlNode : public rclcpp::Node
 			_sim_length = this->get_parameter("sim_length").as_double();
 			_kill_flag_file_path = this->get_parameter("kill_flag_path").as_string();
 			_curr_time = 0.0;
+			
+
+			//control optimization (A*cos(wt*2pi + phase) + B*cos(2wt*2pi + phase2))
+			this->declare_parameter<bool>("control_opt_en", false);
+			this->declare_parameter<double>("control_a", 6.0);
+			this->declare_parameter<double>("control_b", 6.0);
+			this->declare_parameter<double>("control_frequency", 15.0);
+			this->declare_parameter<double>("control_a_phase", 0.0);
+			this->declare_parameter<double>("control_b_phase", 0.0);
+			_control_opt_en = this->get_parameter("control_opt_en").as_bool();
+			_control_a = this->get_parameter("control_a").as_double();
+			_control_b = this->get_parameter("control_b").as_double();
+			_control_frequency = this->get_parameter("control_frequency").as_double();
+			_control_a_phase = this->get_parameter("control_a_phase").as_double();
+			_control_b_phase = this->get_parameter("control_b_phase").as_double();
 		}
 
 	private:
@@ -323,8 +338,13 @@ class ControlNode : public rclcpp::Node
 			// double amplitude = this->get_parameter("max_voltage").as_double() * (1 - std::exp(-0.5 * _currentPoseTime));
 			double amplitude = this->get_parameter("max_voltage").as_double();
 			double frequency = this->get_parameter("frequency").as_double();
-			double voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
-			voltage = voltage > 0 ? amplitude : -amplitude;
+			double voltage = 0;
+			if(_control_opt_en){
+				voltage = _control_a * std::cos(2.0 * M_PI * _control_frequency * _currentPoseTime + _control_a_phase) + _control_b * std::cos(4.0 * M_PI * _control_frequency * _currentPoseTime + _control_b_phase);
+			} else {
+				voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
+				voltage = voltage > 0 ? amplitude : -amplitude;
+			}
 			// double motor_torque_constant = this->get_parameter("motor_torque_constant").as_double();
 			double gear_ratio = this->get_parameter("gear_ratio").as_double();
 			double motor_back_emf = this->get_parameter("motor_back_emf").as_double();

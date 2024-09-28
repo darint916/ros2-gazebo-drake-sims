@@ -351,52 +351,52 @@
       </plugin>
 
       
+      
+      <plugin filename="aero_state_plugins" name="aerodynamics">
+        <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
+        <only_data>false</only_data>
+        
+        <link>
+            <link_name>wing_link_1</link_name>
+            <link_type>wing</link_type>
+            <stall_angle>15</stall_angle>
+            <fluid_density>1.293</fluid_density>
+            <drag_coefficient>1.28</drag_coefficient>
+            <lift_coefficient>1</lift_coefficient>
+            <control_joint>stroke_joint_1</control_joint>
+            <wing_pitch_joint>pitch_joint_1</wing_pitch_joint>
+            <blades>9</blades>
+            <!-- <blades>1</blades> -->
+            <!-- <center_pressure_list>0,-.025,0</center_pressure_list> -->
+            <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
+            <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
+            <!-- <chord_direction_list>1,0,0</chord_direction_list> -->
+           <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
+           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
+      
+           <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
+           <!-- <blade_area_list>0.0075</blade_area_list>  -->
+           <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
+        </link>
+        <link>
+           <link_name>wing_link_2</link_name>
+           <link_type>wing</link_type>
+           <stall_angle>15</stall_angle>
+           <fluid_density>1.293</fluid_density>
+           <drag_coefficient>1.28</drag_coefficient>
+           <lift_coefficient>1</lift_coefficient>
+           <control_joint>stroke_joint_2</control_joint>
+           <wing_pitch_joint>pitch_joint_2</wing_pitch_joint>
+           <blades>9</blades>
+           <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
+           <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
+           <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
+           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
+           <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
+           <!-- <blade_area_list>0.0075</blade_area_list>  -->
+           <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
+        </link>
+      </plugin>
     </model>
   </world>
 </sdf>
-<!-- 
-<plugin filename="aero_state_plugins" name="aerodynamics">
-  <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
-  <only_data>false</only_data>
-  
-  <link>
-      <link_name>wing_link_1</link_name>
-      <link_type>wing</link_type>
-      <stall_angle>15</stall_angle>
-      <fluid_density>1.293</fluid_density>
-      <drag_coefficient>1.28</drag_coefficient>
-      <lift_coefficient>1</lift_coefficient>
-      <control_joint>stroke_joint_1</control_joint>
-      <wing_pitch_joint>pitch_joint_1</wing_pitch_joint>
-      <blades>9</blades>
-      <!-- <blades>1</blades> -->
-      <!-- <center_pressure_list>0,-.025,0</center_pressure_list> -->
-      <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
-      <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
-      <!-- <chord_direction_list>1,0,0</chord_direction_list> -->
-     <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-     <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
-
-     <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
-     <!-- <blade_area_list>0.0075</blade_area_list>  -->
-     <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
-  </link>
-  <link>
-     <link_name>wing_link_2</link_name>
-     <link_type>wing</link_type>
-     <stall_angle>15</stall_angle>
-     <fluid_density>1.293</fluid_density>
-     <drag_coefficient>1.28</drag_coefficient>
-     <lift_coefficient>1</lift_coefficient>
-     <control_joint>stroke_joint_2</control_joint>
-     <wing_pitch_joint>pitch_joint_2</wing_pitch_joint>
-     <blades>9</blades>
-     <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
-     <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
-     <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-     <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
-     <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
-     <!-- <blade_area_list>0.0075</blade_area_list>  -->
-     <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
-  </link>
-</plugin> -->
