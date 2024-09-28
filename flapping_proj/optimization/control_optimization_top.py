@@ -77,8 +77,7 @@ def sim_start(opt_params):
     Message.data("sim iter start \n opt_params: " + str(opt_params))
     config["voltage"]["waves"][0]["amplitude"] = opt_params[0]
     config["voltage"]["waves"][1]["amplitude"] = opt_params[1]
-    config["voltage"]["waves"][0]["frequency"] = opt_params[2]
-    config["voltage"]["waves"][1]["frequency"] = opt_params[2] * 2
+    config["voltage"]["frequency"] = opt_params[2]
     config["voltage"]["waves"][0]["phase"] = opt_params[3]
     config["voltage"]["waves"][1]["phase"] = opt_params[4]
     with open(json_config_path, 'w') as file:  # comment out to not update

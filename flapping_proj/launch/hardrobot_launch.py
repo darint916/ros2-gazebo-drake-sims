@@ -18,7 +18,7 @@ def process_user_input():
 
 
 def generate_launch_description():
-    json_config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../optimization/data/config.json')
+    json_config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../optimization/data/input_config.json')
     with open(json_config_path, 'r') as json_file:
         config = json.load(json_file)
     ''''''''''''''''''''''''
@@ -79,9 +79,9 @@ def generate_launch_description():
                 {'control_opt_en': True},
                 {'control_a': config["voltage"]["waves"][0]["amplitude"]},
                 {'control_b': config["voltage"]["waves"][1]["amplitude"]},
-                {'control_frequency': config["voltage"]["waves"][0]["frequency"]},
-                # {'control_a_phase': config["voltage"]["waves"][0]["phase"]},
-                # {'control_b_phase': config["voltage"]["waves"][1]["phase"]},
+                {'control_frequency': config["voltage"]["frequency"]},
+                {'control_a_phase': config["voltage"]["waves"][0]["phase"]},
+                {'control_b_phase': config["voltage"]["waves"][1]["phase"]},
             ]
         ),
         Node(

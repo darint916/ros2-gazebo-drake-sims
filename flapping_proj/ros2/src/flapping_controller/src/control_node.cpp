@@ -66,6 +66,14 @@ class ControlNode : public rclcpp::Node
 		double _sim_length;
 		std::string _kill_flag_file_path;
 
+		//control optimization
+		bool _control_opt_en;
+		double _control_a;
+		double _control_b;
+		double _control_frequency;
+		double _control_a_phase;
+		double _control_b_phase;
+
 	public:
 		ControlNode() : Node("control_node")
 		{
