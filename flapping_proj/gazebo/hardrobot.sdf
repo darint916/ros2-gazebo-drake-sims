@@ -169,15 +169,15 @@
       <link name='wing_link_1'>
         <pose relative_to='pitch_joint_1'>0 0 0 0 0 0</pose>
         <inertial>
-          <pose>0.05343132 0.05343132 0 0 0 0</pose>
+          <pose>0.05343132 -0.00015011 0 0 0 0</pose>
           <mass>0.00019505718293280825</mass>
           <inertia>
-            <ixx>1.59545e-07</ixx>
-            <ixy>1.939e-09</ixy>
+            <ixx>2.40850e-08</ixx>
+            <ixy>3.68900e-08</ixy>
             <ixz>0.0</ixz>
-            <iyy>2.40850e-08</iyy>
+            <iyy>1.43228e-07</iyy>
             <iyz>0.0</iyz>
-            <izz>1.2996000000000001e-07</izz>
+            <izz>1.59545e-07</izz>
           </inertia>
         </inertial>
         <collision name='wing_link_1_collision'>
@@ -282,19 +282,27 @@
       <link name='wing_link_2'>
         <pose relative_to='pitch_joint_2'>0 0 0 0 0 0</pose>
         <inertial>
-          <pose>0.049825 -0.0030248 -2.8965e-11 0 0 0</pose>
+          <pose>0.05343132 -0.00015011 0 0 0 0</pose>
           <mass>0.00021413000000000001</mass>
-          <inertia>
+          <!-- <inertia>
             <ixx>3.1471e-09</ixx>
             <ixy>1.939e-09</ixy>
             <ixz>3.9552000000000003e-18</ixz>
             <iyy>1.2694e-07</iyy>
             <iyz>-1.2313999999999999e-17</iyz>
             <izz>1.2996000000000001e-07</izz>
+          </inertia> -->
+          <inertia>
+            <ixx>2.40850e-08</ixx>
+            <ixy>3.68900e-08</ixy>
+            <ixz>0.0</ixz>
+            <iyy>1.43228e-07</iyy>
+            <iyz>0.0</iyz>
+            <izz>1.59545e-07</izz>
           </inertia>
         </inertial>
         <collision name='wing_link_2_collision'>
-          <pose>0 0 0 0 0 0</pose>
+          <pose>0 0 0 0 0 0</pose> 
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
