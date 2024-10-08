@@ -70,7 +70,7 @@ def generate_launch_description():
                 {'max_voltage': 6.0}, #AC voltage sin wave typically 6 V
                 {'motor_resistance': 8.8},
                 {'motor_torque_constant': 0.00109},
-                {'sim_length': 20.0}, #duration before kill poll
+                {'sim_length': 10.0}, #duration before kill poll
                 {'gear_ratio': 20.0},
                 {'motor_back_emf': 0.000114}, #V/rpm
                 {'motor_dynamic_friction': 0.00000000102}, #Nm/rpm

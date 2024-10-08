@@ -3,7 +3,7 @@
   <world name="world1">
     <physics name="1ms" type="ignored">
       <max_step_size>0.0001</max_step_size>
-      <real_time_factor>0.01</real_time_factor>
+      <real_time_factor>2</real_time_factor>
     </physics>
     <plugin filename="libignition-gazebo-physics-system.so"
       name="ignition::gazebo::systems::Physics">
@@ -169,7 +169,7 @@
       <link name='wing_link_1'>
         <pose relative_to='pitch_joint_1'>0 0 0 0 0 0</pose>
         <inertial>
-          <pose>0.05343132 -0.00015011 0 0 0 0</pose>
+          <pose>0.05343132 -0.0015011 0 0 0 0</pose>
           <mass>0.00019505718293280825</mass>
           <inertia>
             <ixx>2.40850e-08</ixx>
@@ -272,7 +272,7 @@
             <upper>1.79769e+308</upper>
             <!-- <lower>0</lower>
             <upper>0</upper> -->
-         </limit>
+          </limit>
           <dynamics>
             <spring_reference>0</spring_reference>
             <spring_stiffness>0.0016</spring_stiffness>
@@ -282,7 +282,7 @@
       <link name='wing_link_2'>
         <pose relative_to='pitch_joint_2'>0 0 0 0 0 0</pose>
         <inertial>
-          <pose>0.05343132 -0.00015011 0 0 0 0</pose>
+          <pose>0.05343132 -0.0015011 0 0 0 0</pose>
           <mass>0.00021413000000000001</mass>
           <!-- <inertia>
             <ixx>3.1471e-09</ixx>
@@ -302,7 +302,7 @@
           </inertia>
         </inertial>
         <collision name='wing_link_2_collision'>
-          <pose>0 0 0 0 0 0</pose> 
+          <pose>0 0 0 0 0 0</pose>
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
@@ -324,6 +324,19 @@
           </material>
         </visual>
       </link>
+      <!-- <joint name="pole" type="prismatic">
+        <pose relative_to="base_link">0 0 0 0 0 0</pose>
+        <parent>world</parent>
+        <child>base_link</child>
+        <axis>
+           <xyz>0 0 1</xyz>
+           <limit>
+              <lower>-1.79769e+308</lower>
+              <upper>1.79769e+308</upper>
+           </limit>
+        </axis>
+     </joint> -->
+
       <joint name="anchor" type="revolute">
         <pose relative_to="base_link">0 0 0 0 0 0</pose>
         <parent>world</parent>
@@ -358,50 +371,89 @@
         <joint_name>stroke_joint_2</joint_name>
       </plugin>
 
-      
-      
+
       <plugin filename="aero_state_plugins" name="aerodynamics">
         <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
         <only_data>false</only_data>
-        
+
         <link>
-            <link_name>wing_link_1</link_name>
-            <link_type>wing</link_type>
-            <stall_angle>15</stall_angle>
-            <fluid_density>1.293</fluid_density>
-            <drag_coefficient>1.28</drag_coefficient>
-            <lift_coefficient>1</lift_coefficient>
-            <control_joint>stroke_joint_1</control_joint>
-            <wing_pitch_joint>pitch_joint_1</wing_pitch_joint>
-            <blades>9</blades>
-            <!-- <blades>1</blades> -->
-            <!-- <center_pressure_list>0,-.025,0</center_pressure_list> -->
-            <center_pressure_list>0, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
-            <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
-            <!-- <chord_direction_list>1,0,0</chord_direction_list> -->
-           <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-           <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
-           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
-           <!-- <blade_area_list>0.0075</blade_area_list>  -->
-           <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
+          <link_name>wing_link_1</link_name>
+          <link_type>wing</link_type>
+          <stall_angle>15</stall_angle>
+          <fluid_density>1.293</fluid_density>
+          <drag_coefficient>1.28</drag_coefficient>
+          <lift_coefficient>1</lift_coefficient>
+          <control_joint>stroke_joint_1</control_joint>
+          <wing_pitch_joint>pitch_joint_1</wing_pitch_joint>
+          <blades>20</blades>
+          <!-- <blades>1</blades> -->
+          <!-- <center_pressure_list>0,-.025,0</center_pressure_list> -->
+          <center_pressure_list>0.01225, -0.0035302152111091395, 0, 0.01675, -0.010553872558211698,
+            0, 0.02125, -0.01756476454210382, 0, 0.025750000000000002, -0.024637960327532536, 0,
+            0.03025, -0.031634968599391175, 0, 0.03475, -0.038624089569024106, 0,
+            0.03925000000000001, -0.045705172656678526, 0, 0.043750000000000004,
+            -0.052694293626311464, 0, 0.04825000000000001, -0.059775376713965885, 0,
+            0.052750000000000005, -0.0667794254021554, 0, 0.05725, -0.07384558077125322, 0, 0.06175,
+            -0.07410064383542903, 0, 0.06625, -0.06995726802239668, 0, 0.07075000000000001,
+            -0.06573567406177194, 0, 0.07525, -0.061605687556100394, 0, 0.07975,
+            -0.05737070428811486, 0, 0.08424999999999999, -0.053273576235711405, 0, 0.08875,
+            -0.049005734514457784, 0, 0.09325, -0.031591916087299346, 0, 0.09775000000000002,
+            -0.010723861424129143, 0</center_pressure_list>
+          <!-- <upward_vector_list>0,0,1</upward_vector_list> -->
+          <!-- <chord_direction_list>1,0,0</chord_direction_list> -->
+          <upward_vector_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1 </upward_vector_list>
+          <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0
+          </upward_vector_list> -->
+          <chord_direction_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1</chord_direction_list>
+          <!-- <blade_area_list>0.0075</blade_area_list>  -->
+          <!--
+          <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list> -->
+          <blade_area_list>6.35438738e-06, 1.89969706e-05, 3.16165762e-05, 4.43483286e-05,
+            5.69429435e-05, 6.95233612e-05, 8.22693108e-05, 9.48497285e-05,
+            1.07595678e-04, 1.20202966e-04, 1.32922045e-04, 1.33381159e-04,
+            1.25923082e-04, 1.18324213e-04, 1.10890238e-04, 1.03267268e-04,
+            9.58924372e-05, 8.82103221e-05, 5.68654490e-05, 1.93029506e-05</blade_area_list>
         </link>
         <link>
-           <link_name>wing_link_2</link_name>
-           <link_type>wing</link_type>
-           <stall_angle>15</stall_angle>
-           <fluid_density>1.293</fluid_density>
-           <drag_coefficient>1.28</drag_coefficient>
-           <lift_coefficient>1</lift_coefficient>
-           <control_joint>stroke_joint_2</control_joint>
-           <wing_pitch_joint>pitch_joint_2</wing_pitch_joint>
-           <blades>9</blades>
-           <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0, -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0, 0.060, -0.025, 0 </center_pressure_list>
-           <!-- upward vector verified to be vector when there is no rotation applied, original link orientation in wing frame-->
-           <upward_vector_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </upward_vector_list>
-           <chord_direction_list>0,0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1, </chord_direction_list>
-           <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0 </upward_vector_list> -->
-           <!-- <blade_area_list>0.0075</blade_area_list>  -->
-           <blade_area_list>0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,0.00085,</blade_area_list>
+          <link_name>wing_link_2</link_name>
+          <link_type>wing</link_type>
+          <stall_angle>15</stall_angle>
+          <fluid_density>1.293</fluid_density>
+          <drag_coefficient>1.28</drag_coefficient>
+          <lift_coefficient>1</lift_coefficient>
+          <control_joint>stroke_joint_2</control_joint>
+          <wing_pitch_joint>pitch_joint_2</wing_pitch_joint>
+          <blades>20</blades>
+          <!-- <center_pressure_list>-0.060, -0.025, 0, -0.045, -0.025, 0, -0.030, -0.025, 0,
+          -0.015, -0.025, 0, 0.000, -0.025, 0, 0.015, -0.025, 0, 0.030, -0.025, 0, 0.045, -0.025, 0,
+          0.060, -0.025, 0 </center_pressure_list> -->
+          <center_pressure_list>0.01225, -0.0035302152111091395, 0, 0.01675, -0.010553872558211698,
+            0, 0.02125, -0.01756476454210382, 0, 0.025750000000000002, -0.024637960327532536, 0,
+            0.03025, -0.031634968599391175, 0, 0.03475, -0.038624089569024106, 0,
+            0.03925000000000001, -0.045705172656678526, 0, 0.043750000000000004,
+            -0.052694293626311464, 0, 0.04825000000000001, -0.059775376713965885, 0,
+            0.052750000000000005, -0.0667794254021554, 0, 0.05725, -0.07384558077125322, 0, 0.06175,
+            -0.07410064383542903, 0, 0.06625, -0.06995726802239668, 0, 0.07075000000000001,
+            -0.06573567406177194, 0, 0.07525, -0.061605687556100394, 0, 0.07975,
+            -0.05737070428811486, 0, 0.08424999999999999, -0.053273576235711405, 0, 0.08875,
+            -0.049005734514457784, 0, 0.09325, -0.031591916087299346, 0, 0.09775000000000002,
+            -0.010723861424129143, 0</center_pressure_list>
+          <!-- upward vector verified to be vector when there is no rotation applied, original link
+          orientation in wing frame-->
+          <upward_vector_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1 </upward_vector_list>
+          <chord_direction_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1</chord_direction_list>
+          <!-- <upward_vector_list>0,1, 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0
+          </upward_vector_list> -->
+          <!-- <blade_area_list>0.0075</blade_area_list>  -->
+          <blade_area_list>6.35438738e-06, 1.89969706e-05, 3.16165762e-05, 4.43483286e-05,
+            5.69429435e-05, 6.95233612e-05, 8.22693108e-05, 9.48497285e-05,
+            1.07595678e-04, 1.20202966e-04, 1.32922045e-04, 1.33381159e-04,
+            1.25923082e-04, 1.18324213e-04, 1.10890238e-04, 1.03267268e-04,
+            9.58924372e-05, 8.82103221e-05, 5.68654490e-05, 1.93029506e-05</blade_area_list>
         </link>
       </plugin>
     </model>
