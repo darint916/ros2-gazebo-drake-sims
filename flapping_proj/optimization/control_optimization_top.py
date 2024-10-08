@@ -74,7 +74,7 @@ def sim_start(opt_params):
     # Bezier wing too hard to make
     with open(json_config_path, 'r') as json_file:
         config = json.load(json_file)
-    Message.data("sim iter start \n opt_params: " + str(opt_params))
+    Message.data("sim iter start \n opt_params: 1. wave one amp; 2. wave two amp; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params))
     config["voltage"]["waves"][0]["amplitude"] = opt_params[0]
     config["voltage"]["waves"][1]["amplitude"] = opt_params[1]
     config["voltage"]["frequency"] = opt_params[2]
@@ -92,13 +92,13 @@ def sim_start(opt_params):
     if not os.path.exists(iter_path):
         os.mkdir(iter_path)
     global population_counter
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'config.json'),
+    shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'),
                 os.path.join(iter_path, f'config_{population_counter}.json'))
     population_counter += 1
     Message.debug("Simulation Generation Total: " + str(counter))
 
     # Save config every iteration
-    return parse_data()
+    return parse_data() #returns cost
     # end of sim, save parameters and such
 
 # copies generated data files to a new folder for each iteration
@@ -115,7 +115,7 @@ def opt_callback(intermediate_result: OptimizeResult) -> bool:
     Message.debug("iter Path: ", iter_path)
     if not os.path.exists(iter_path):
         os.mkdir(iter_path)
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'config.json'), os.path.join(iter_path, 'config.json'))
+    shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'), os.path.join(iter_path, 'input_config.json'))
     shutil.copy(os.path.join(DIR_PATH, 'data', 'aero.csv'), os.path.join(iter_path, 'aero.csv'))
     shutil.copy(os.path.join(DIR_PATH, 'data', 'data.csv'), os.path.join(iter_path, 'data.csv'))
     shutil.copy(os.path.join(DIR_PATH, 'data', 'processed.sdf'), os.path.join(iter_path, 'processed.sdf'))

@@ -24,11 +24,11 @@ def generate_launch_description():
     ''''''''''''''''''''''''
     current_dir = os.path.dirname(os.path.abspath(__file__))
     sdf_file = os.path.join(current_dir, '..', 'gazebo', 'hardrobot.sdf')
-    # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
+    kill_flag_path = os.path.join(current_dir, '..', 'optimization', '_kill_me.txt') #synchronized with top_level poll
 
-    data_file = os.path.join(current_dir, '..', 'data', 'data.csv')
-    input_joint_data_file = os.path.join(current_dir, '..', 'data', 'input_joint_data.csv')
-    pid_data_file = os.path.join(current_dir, '..', 'data', 'pid_data.csv')
+    data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'data.csv')
+    input_joint_data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'input_joint_data.csv')
+    pid_data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'pid_data.csv')
     joint_names, model_name = process_user_input()
     position_topic = '/odom'  #from sdf plugin
     joint_control_topics = []
@@ -70,11 +70,11 @@ def generate_launch_description():
                 {'max_voltage': 6.0}, #AC voltage sin wave typically 6 V
                 {'motor_resistance': 8.8},
                 {'motor_torque_constant': 0.00109},
-                {'sim_length': 10.0}, #duration before kill poll
+                {'sim_length': 5.0}, #duration before kill poll
                 {'gear_ratio': 20.0},
                 {'motor_back_emf': 0.000114}, #V/rpm
                 {'motor_dynamic_friction': 0.00000000102}, #Nm/rpm
-                # {'kill_flag_path': kill_flag_path}
+                {'kill_flag_path': kill_flag_path},
                 #controls
                 {'control_opt_en': True},
                 {'control_a': config["voltage"]["waves"][0]["amplitude"]},
@@ -91,7 +91,7 @@ def generate_launch_description():
         )
     ])
 
-    launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', sdf_file]))
+    launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', '-r', sdf_file]))
 
     return launch_description
 

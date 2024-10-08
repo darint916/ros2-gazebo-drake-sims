@@ -32,7 +32,6 @@ def parse_opt_config():
 
 def generate_launch_description():
     sdf_file = os.path.join(current_dir, '..', 'optimization', 'data', 'processed.sdf')
-    # sdf_file = os.path.join(current_dir, '..', 'gazebo', 'flapping.sdf')
 
     data_file = os.path.join(current_dir, '..', 'optimization', 'data','data.csv')
     input_joint_data_file = os.path.join(current_dir, '..', 'optimization', 'data', 'input_joint_data.csv')

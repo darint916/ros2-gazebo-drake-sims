@@ -116,7 +116,7 @@ void OdometryState::PostUpdate(const igz::UpdateInfo &_info, const igz::EntityCo
     ignition::msgs::Pose poseMsg;
     if(this->dataPtr->modelPositionIndex < 0){
         int poses = poseMsgs.pose_size();
-        ignwarn << "poseMsgs size: " << poses << std::endl;
+        ignerr << "poseMsgs size: " << poses << std::endl;
         ignwarn << "modelName: " << this->dataPtr->modelName << std::endl;
         for(int i = 0; i < poses; ++i){
             if(poseMsgs.pose(i).name() == this->dataPtr->modelName){

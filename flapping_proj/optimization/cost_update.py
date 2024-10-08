@@ -60,7 +60,7 @@ def parse_data() -> float:
     aero_length = len(aero_interval.time)
 
     num_blades = np.amax(aero_interval.blade_number) + 1
-    lift_force = np.zeros(int(aero_length / num_blades))
+    lift_force = np.zeros(len(np.unique(aero_interval.time)))
     i = 0  # aero_interval index
     j = 0  # lift force index
     time_prev = aero_interval.time.iloc[0]
@@ -98,7 +98,8 @@ def parse_data() -> float:
     # power_rms: 2 * 8.8 / 6: rms power consumed assuming the motor is at stall at all times (6V / 2 8.8 ohm)
     # lift_avg: 0.1470997807: target lift of 15g/wing over the average cycle
     # This should normalize power to 1 and lift to 1000
-    cost = - lift_avg / 0.1470997807 * 10 + power_rms * 2 * 8.8 / 6
+    # cost = - lift_avg / 0.1470997807 * 10 + power_rms * 2 * 8.8 / 6
+    cost = - lift_avg #for lift only
 
     Message.data("power_rms printing: " + str(power_rms))
     Message.data("lift_avg printing: " + str(lift_avg))
@@ -106,7 +107,6 @@ def parse_data() -> float:
     Message.data("cost: " + str(cost))
 
     return cost
-
 
 if __name__ == "__main__":
     print(parse_data())
