@@ -3,7 +3,7 @@
   <world name="world1">
     <physics name="1ms" type="ignored">
       <max_step_size>0.0001</max_step_size>
-      <real_time_factor>1</real_time_factor>
+      <real_time_factor>0.02</real_time_factor>
     </physics>
     <plugin filename="libignition-gazebo-physics-system.so"
       name="ignition::gazebo::systems::Physics">
@@ -373,7 +373,7 @@
 
 
       <plugin filename="aero_state_plugins" name="aerodynamics">
-        <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/data/aero.csv</data_file_path>
+        <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/optimization/data/aero.csv</data_file_path>
         <only_data>false</only_data>
 
         <link>

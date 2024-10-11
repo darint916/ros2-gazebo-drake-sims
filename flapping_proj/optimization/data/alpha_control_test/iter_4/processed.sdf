@@ -1,0 +1,226 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <world name="world2">
+        <physics name="1ms" type="ignored">
+            <max_step_size>0.0001</max_step_size>
+            <real_time_factor> 1</real_time_factor>
+        </physics>
+        <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
+        </plugin>
+        <plugin filename="libignition-gazebo-user-commands-system.so" name="ignition::gazebo::systems::UserCommands">
+        </plugin>
+        <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster">
+        </plugin>
+        <light type="directional" name="sun">
+            <cast_shadows>true</cast_shadows>
+            <pose>0 0 10 0 0 0</pose>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <attenuation>
+                <range>1000</range>
+                <constant>0.9</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+        </light>
+        <model name="ground_plane">
+            <pose relative_to="world">0 0 0 0 0 0</pose>
+            <static>true</static>
+            <link name="link">
+                <collision name="link">
+                    <geometry>
+                        <plane>
+                            <normal>0 0 1</normal>
+                        </plane>
+                    </geometry>
+                </collision>
+                <visual name="link">
+                    <geometry>
+                        <plane>
+                            <normal>0 0 1</normal>
+                            <size>100 100</size>
+                        </plane>
+                    </geometry>
+                    <material>
+                        <ambient>0.8 0.8 0.8 1</ambient>
+                        <diffuse>0.8 0.8 0.8 1</diffuse>
+                        <specular>0.8 0.8 0.8 1</specular>
+                    </material>
+                </visual>
+            </link>
+        </model>
+        <model name="URDF_LargeWings">
+            <pose relative_to="world">0 0 .5 1.5708 0 0</pose>
+            <link name="body">
+                <pose>0 0 0 0 0 0</pose>
+                <inertial>
+                    <pose>0 0 0 0 0 0</pose>
+                    <mass>1.0</mass>
+                    <inertia>
+                        <ixx>0.1</ixx>
+                        <ixy>0</ixy>
+                        <ixz>0</ixz>
+                        <iyy>0.1</iyy>
+                        <iyz>0</iyz>
+                        <izz>0.2</izz>
+                    </inertia>
+                </inertial>
+                <visual name="body">
+                    <pose>0 0 0 0 0 0</pose>
+                    <geometry>
+                        <box>
+                            <size>0.025 0.025 0.01</size>
+                        </box>
+                    </geometry>
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+            </link>
+            <link name="hinge">
+                <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
+                <inertial>
+                    <mass>0.0057</mass>
+                    <inertia>
+                        <ixx>20.03e-9</ixx>
+                        <ixy>-0.05e-9</ixy>
+                        <ixz>4.55e-9</ixz>
+                        <iyy>31.49e-9</iyy>
+                        <iyz>0.02e-9</iyz>
+                        <izz>11.75e-9</izz>
+                    </inertia>
+                </inertial>
+                <visual name="hinge">
+                    <pose relative_to="stroke_joint">0 0 0 0 0 0</pose>
+                    <geometry>
+                        <sphere>
+                            <radius>0.0025</radius>
+                        </sphere>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 0.0 1.0 .9</ambient>
+                        <diffuse>1.0 0.0 1.0 .9</diffuse>
+                        <specular>1.0 0.0 1.0 .9</specular>
+                    </material>
+                </visual>
+            </link>
+            <link name="wing">
+                <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
+                <inertial>
+                    <pose>0.0669772645094185, 0, -8.074593262581272e-05, 0, 0, 0</pose>
+                    <mass>0.0002562368702682411</mass>
+                    <inertia>
+                        <ixx>4.351e-08</ixx>
+                        <ixy>0.0</ixy>
+                        <ixz>-5.9454e-08</ixz>
+                        <iyy>3.45244e-07</iyy>
+                        <iyz>0.0</iyz>
+                        <izz>3.16171e-07</izz>
+                    </inertia>
+                </inertial>
+                <visual name="wing">
+                    <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
+                    <geometry>
+                        <mesh>
+                            <uri>model://URDF_LargeWings/meshes/RW_Pitch.STL</uri>
+                        </mesh>
+                    </geometry>
+                    <material>
+                        <ambient>1.0 0.0 0.0 .9</ambient>
+                        <diffuse>1.0 0.0 0.0 .9</diffuse>
+                        <specular>1.0 0.0 0.0 .9</specular>
+                    </material>
+                </visual>
+                <collision name="wing">
+                    <pose relative_to="pitch_joint">0 0 0 0 0 0</pose>
+                    <geometry>
+                        <mesh>
+                            <uri>model://URDF_LargeWings/meshes/RW_Pitch.STL</uri>
+                        </mesh>
+                    </geometry>
+                </collision>
+            </link>
+            <joint name="anchor2" type="revolute">
+                <pose relative_to="body">0 0 0 0 0 0</pose>
+                <parent>world</parent>
+                <child>body</child>
+                <axis>
+                    <xyz>0 1 0</xyz>
+                    <limit>
+                        <effort>0</effort>
+                        <lower>0</lower>
+                        <upper>0</upper>
+                    </limit>
+                </axis>
+            </joint>
+            <joint name="pitch_joint" type="revolute">
+                <pose relative_to="hinge">0 0 0 0 0 0</pose>
+                <parent>hinge</parent>
+                <child>wing</child>
+                <axis>
+                    <xyz>1 0 0</xyz>
+                    <dynamics>
+                        <damping>1e-16</damping>
+                        <spring_stiffness>0.009720529397388766</spring_stiffness>
+                    </dynamics>
+                    <limit>
+                        <effort>0</effort>
+                        <lower>-1.571</lower>
+                        <upper>1.571</upper>
+                    </limit>
+                </axis>
+            </joint>
+            <joint name="stroke_joint" type="revolute">
+                <pose relative_to="body">0.0125 0.0125 0 0 0 0</pose>
+                <parent>body</parent>
+                <child>hinge</child>
+                <axis>
+                    <xyz>0 1 0</xyz>
+                    <dynamics>
+                        <damping>1e-15</damping>
+                        <spring_stiffness>0.03245407689340849</spring_stiffness>
+                    </dynamics>
+                    <limit>
+                        <lower>-1.571</lower>
+                        <upper>1.571</upper>
+                    </limit>
+                </axis>
+            </joint>
+            <plugin filename="aero_state_plugins" name="aerodynamics">
+                <data_file_path>/home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/optimization/data/aero.csv</data_file_path>
+                <only_data>false</only_data>
+                <link>
+                    <link_name>wing</link_name>
+                    <link_type>wing</link_type>
+                    <stall_angle>15</stall_angle>
+                    <fluid_density>1.293</fluid_density>
+                    <drag_coefficient>1.28</drag_coefficient>
+                    <lift_coefficient>1</lift_coefficient>
+                    <control_joint>stroke_joint</control_joint>
+                    <wing_pitch_joint>pitch_joint</wing_pitch_joint>
+                    <blades>15</blades>
+                    <center_pressure_list>0.014094449255891938, -0.0007971640817968686, 0, 0.022283347767675817, -0.0023899261938315768, 0, 0.030472246279459693, -0.0039754382053491105, 0, 0.03866114479124357, -0.00557260839342192, 0, 0.04685004330302745, -0.007169778581494729, 0, 0.055038941814811324, -0.00875765026401844, 0, 0.0632278403265952, -0.00902565763146008, 0, 0.07141673883837908, -0.007377941660625805, 0, 0.07960563735016295, -0.006396017801030913, 0, 0.08779453586194683, -0.005413750933340345, 0, 0.0959834343737307, -0.00442122992889462, 0, 0.10417233288551457, -0.0034502462222462523, 0, 0.11236123139729846, -0.0024683223626513675, 0, 0.12055012990908234, -0.0014887815066685958, 0, 0.12873902842086624, -0.0004962605022228702, 0</center_pressure_list>
+                    <upward_vector_list>0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1</upward_vector_list>
+                    <chord_direction_list>0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1, 0,0,1</chord_direction_list>
+                    <blade_area_list>2.6111583052295753e-05, 7.828345220776282e-05, 0.0001302178400138884, 0.00018253409831858842, 0.00023485035662328843, 0.0002868620368549771, 0.00029564077738453696, 0.00024166886193890768, 0.00020950536260882092, 0.00017733062784479732, 0.00014482001273991797, 0.00011301486461856113, 8.085136528847459e-05, 4.876592265731929e-05, 1.6255307552439926e-05</blade_area_list>
+                </link>
+            </plugin>
+            <plugin filename="aero_state_plugins" name="odometry_state">
+                <world_name>world2</world_name>
+                <odometry_topic>/odom</odometry_topic>
+                <odom_publish_frequency>1000.0</odom_publish_frequency>
+                <joint>pitch_joint</joint>
+                <joint>stroke_joint</joint>
+            </plugin>
+            <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
+                <joint_name>stroke_joint</joint_name>
+            </plugin>
+            <plugin filename="libignition-gazebo-apply-joint-force-system.so" name="ignition::gazebo::systems::ApplyJointForce">
+                <joint_name>pitch_joint</joint_name>
+            </plugin>
+        </model>
+    </world>
+</sdf>

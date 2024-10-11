@@ -99,7 +99,7 @@ def parse_data() -> float:
     # lift_avg: 0.1470997807: target lift of 15g/wing over the average cycle
     # This should normalize power to 1 and lift to 1000
     # cost = - lift_avg / 0.1470997807 * 10 + power_rms * 2 * 8.8 / 6
-    cost = - lift_avg #for lift only
+    cost = -lift_avg #for lift only
 
     Message.data("power_rms printing: " + str(power_rms))
     Message.data("lift_avg printing: " + str(lift_avg))

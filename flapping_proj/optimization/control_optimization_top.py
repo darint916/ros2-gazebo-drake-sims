@@ -74,7 +74,7 @@ def sim_start(opt_params):
     # Bezier wing too hard to make
     with open(json_config_path, 'r') as json_file:
         config = json.load(json_file)
-    Message.data("sim iter start \n opt_params: 1. wave one amp; 2. wave two amp; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params))
+    Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params))
     config["voltage"]["waves"][0]["amplitude"] = opt_params[0]
     config["voltage"]["waves"][1]["amplitude"] = opt_params[1]
     config["voltage"]["frequency"] = opt_params[2]
@@ -98,7 +98,7 @@ def sim_start(opt_params):
     Message.debug("Simulation Generation Total: " + str(counter))
 
     # Save config every iteration
-    return parse_data() #returns cost
+    return parse_data() * 2 #returns cost, * 2 cuz 2 wings
     # end of sim, save parameters and such
 
 # copies generated data files to a new folder for each iteration
