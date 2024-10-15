@@ -189,6 +189,7 @@ void AerodynamicsData::Load(igz::EntityComponentManager &_ecm, const sdf::Elemen
             this->linkMap[linkName].wingParameters.bladeAreaList = ParseStringStringToVector(ss4);
             if (this->linkMap[linkName].wingParameters.bladeAreaList.size() != this->linkMap[linkName].wingParameters.blades){
                 ignerr << "bladeArea size does not match blades" << std::endl;
+                ignerr << "Parsed Blades: " << this->linkMap[linkName].wingParameters.bladeAreaList.size() << std::endl;
                 this->validConfig = false;
                 return;
             }

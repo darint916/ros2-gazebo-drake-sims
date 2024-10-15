@@ -33,7 +33,7 @@ mainly diff evol
 V = A * sin(wt + phi) + B * sin(2*wt + theta)
 Params = [A, B, w, phi, theta]
 '''
-def top_start(iterations: int, title: str = "alpha_control_test", popsize: int = 15):
+def top_start(iterations: int, title: str = "beta_control_test_large_wing", popsize: int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
     if not os.path.exists(folder_path):
@@ -41,15 +41,24 @@ def top_start(iterations: int, title: str = "alpha_control_test", popsize: int =
     Message.debug("TESTING: " + title, True)
     Message.info("folder path: " + folder_path)
 
+    '''BASE TEST 1'''
     # lower and upper bounds for parameters [A, B, w, phi, theta]
     # [V, V, Hz, rad, rad]
-    parameter_lower_bound = np.array([0, 0, 15, -np.pi, -np.pi])
-    parameter_upper_bound = np.array([14, 14, 45, np.pi, np.pi])
+    parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
+    parameter_upper_bound = np.array([70, 70, 60, np.pi, np.pi])
     bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
 
-    # NO CONSTRAINTS FOR NOW
+    # '''BASE TEST 2 (GAMMA PARAM)'''
+    # # lower and upper bounds for parameters [A, gamma, w, phi, theta]
+    # # [V, V, Hz, rad, rad]
+    # parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
+    # parameter_upper_bound = np.array([20, 1, 60, np.pi, np.pi])
+    # bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
+    
+    
     # products of A and opt_params gives a constraint on variables
-    # in order,
+    # in order, 
+    
     # spar_0_angle - spar_1_angle >= 0
     # A = np.array([[0, 0, 1, 0, -1, 0, 0]  # represents linear constraints
     #               ])
@@ -184,6 +193,6 @@ class NumpyEncoder(json.JSONEncoder):
 
 
 if __name__ == '__main__':
-    top_start(350, popsize=7)
+    top_start(250, popsize=5)
     # generate_sdf()
     # sim_launch()

@@ -1,16 +1,16 @@
 {
     "voltage": {
-        "frequency": 23.75970699,
+        "frequency": 20.0,
         "waves": [
             {
                 "type": "cos",
-                "amplitude": 13.948484967829865,
-                "phase": -2.4341063592556473
+                "amplitude": 50.0,
+                "phase": 0.0
             },
             {
                 "type": "cos",
-                "amplitude": 2.7065482888724057,
-                "phase": 0.2823744938046288
+                "amplitude": 0.0,
+                "phase": 0.0
             }
         ]
     },
