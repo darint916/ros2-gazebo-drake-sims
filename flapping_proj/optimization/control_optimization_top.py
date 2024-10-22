@@ -40,7 +40,7 @@ def write_to_json(data: dict, path: str) -> None:
     with open(path, 'w') as file:
         json.dump(existing_data, file, indent=4)
 
-def top_start(iterations: int, title: str = "inits", popsize: int = 15):
+def top_start(iterations: int, title: str = "Beta_test_2_constraint_second_wave", popsize: int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
     if not os.path.exists(folder_path):
@@ -52,19 +52,19 @@ def top_start(iterations: int, title: str = "inits", popsize: int = 15):
     Message.debug("TESTING: " + title, True)
     Message.info("folder path: " + folder_path)
 
-    '''BASE TEST 1'''
+    # '''BASE TEST 1'''
     # lower and upper bounds for parameters [A, B, w, phi, theta]
     # [V, V, Hz, rad, rad]
-    parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
-    parameter_upper_bound = np.array([70, 70, 60, np.pi, np.pi])
-    bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
-
-    # '''BASE TEST 2 (GAMMA PARAM)'''
-    # # lower and upper bounds for parameters [A, gamma, w, phi, theta]
-    # # [V, V, Hz, rad, rad]
     # parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
-    # parameter_upper_bound = np.array([20, 1, 60, np.pi, np.pi])
+    # parameter_upper_bound = np.array([50, 50, 60, np.pi, np.pi])
     # bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
+
+    '''BASE TEST 2 (GAMMA PARAM)'''
+    # lower and upper bounds for parameters [A, gamma, w, phi, theta]
+    # [V, V, Hz, rad, rad]
+    parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
+    parameter_upper_bound = np.array([50, 1, 45, np.pi, np.pi])
+    bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
     
     
     # products of A and opt_params gives a constraint on variables
@@ -86,7 +86,7 @@ def top_start(iterations: int, title: str = "inits", popsize: int = 15):
     #     1.1037502606381693,
     #     1.006028981733762
     # ])
-    initial_guess = np.array([52.43710079, 34.50053156, 21.52878918,  1.64503891,  2.12169758])
+    initial_guess = np.array([30, 0, 25, 0, 0])
     sc.optimize.differential_evolution(sim_start, bounds, x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
@@ -101,9 +101,11 @@ def sim_start(opt_params):
     # Bezier wing too hard to make
     with open(json_config_path, 'r') as json_file:
         config = json.load(json_file)
-    Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params))
+    # Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params)) #BETA TEST 1
+    Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp scale ; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params)) #BETA TEST 2
     config["voltage"]["waves"][0]["amplitude"] = opt_params[0]
-    config["voltage"]["waves"][1]["amplitude"] = opt_params[1]
+    # config["voltage"]["waves"][1]["amplitude"] = opt_params[1] #BETA TEST 1
+    config["voltage"]["waves"][1]["amplitude"] = opt_params[1] * opt_params[0] #BETA TEST 2
     config["voltage"]["frequency"] = opt_params[2]
     config["voltage"]["waves"][0]["phase"] = opt_params[3]
     config["voltage"]["waves"][1]["phase"] = opt_params[4]
@@ -119,8 +121,10 @@ def sim_start(opt_params):
     if not os.path.exists(iter_path):
         os.mkdir(iter_path)
     global population_counter
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'),
-                os.path.join(iter_path, f'config_{population_counter}.json'))
+
+    #copying input config files
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'),
+    #             os.path.join(iter_path, f'config_{population_counter}.json'))
     population_counter += 1
     Message.debug("Simulation Generation Total: " + str(counter))
 
