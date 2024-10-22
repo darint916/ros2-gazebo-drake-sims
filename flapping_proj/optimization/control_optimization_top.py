@@ -33,11 +33,22 @@ mainly diff evol
 V = A * sin(wt + phi) + B * sin(2*wt + theta)
 Params = [A, B, w, phi, theta]
 '''
-def top_start(iterations: int, title: str = "beta_control_test_large_wing", popsize: int = 15):
+def write_to_json(data: dict, path: str) -> None:
+    with open(path, 'r') as file:
+        existing_data = json.load(file)
+    existing_data.append(data)
+    with open(path, 'w') as file:
+        json.dump(existing_data, file, indent=4)
+
+def top_start(iterations: int, title: str = "inits", popsize: int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
+    if not os.path.exists(os.path.join(folder_path, 'data.json')):
+        with open(os.path.join(folder_path, 'data.json'), 'w') as file:
+            json.dump([], file)
+        
     Message.debug("TESTING: " + title, True)
     Message.info("folder path: " + folder_path)
 
@@ -67,8 +78,15 @@ def top_start(iterations: int, title: str = "beta_control_test_large_wing", pops
     # linear_constraints = sc.optimize.LinearConstraint(
     #     A, linear_constraint_lower_bound, linear_constraint_upper_bound)
 
-    initial_guess = np.array([7, 7, 25, 0, 0])
-
+    # initial_guess = np.array([7, 7, 25, 0, 0])
+    # initial_guess = np.array([
+    #     48.083774977833606,
+    #     35.580658820604796,
+    #     40.368480031318434,
+    #     1.1037502606381693,
+    #     1.006028981733762
+    # ])
+    initial_guess = np.array([52.43710079, 34.50053156, 21.52878918,  1.64503891,  2.12169758])
     sc.optimize.differential_evolution(sim_start, bounds, x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
@@ -106,8 +124,14 @@ def sim_start(opt_params):
     population_counter += 1
     Message.debug("Simulation Generation Total: " + str(counter))
 
+    cost = parse_data() * 2
+    result_json = {
+        "opt_params": opt_params.tolist(),
+        "cost": cost
+    }
+    write_to_json(result_json, os.path.join(folder_path, 'data.json'))
     # Save config every iteration
-    return parse_data() * 2 #returns cost, * 2 cuz 2 wings
+    return cost #returns cost, * 2 cuz 2 wings
     # end of sim, save parameters and such
 
 # copies generated data files to a new folder for each iteration
@@ -124,11 +148,11 @@ def opt_callback(intermediate_result: OptimizeResult) -> bool:
     Message.debug("iter Path: ", iter_path)
     if not os.path.exists(iter_path):
         os.mkdir(iter_path)
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'), os.path.join(iter_path, 'input_config.json'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'aero.csv'), os.path.join(iter_path, 'aero.csv'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'data.csv'), os.path.join(iter_path, 'data.csv'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'processed.sdf'), os.path.join(iter_path, 'processed.sdf'))
-    shutil.copy(os.path.join(DIR_PATH, 'data', 'input_joint_data.csv'), os.path.join(iter_path, 'input_joint_data.csv'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'), os.path.join(iter_path, 'input_config.json'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'aero.csv'), os.path.join(iter_path, 'aero.csv'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'data.csv'), os.path.join(iter_path, 'data.csv'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'processed.sdf'), os.path.join(iter_path, 'processed.sdf'))
+    # shutil.copy(os.path.join(DIR_PATH, 'data', 'input_joint_data.csv'), os.path.join(iter_path, 'input_joint_data.csv'))
     opt_res = os.path.join(iter_path, 'opt_res.json')
     Message.info("opt_res path: ", opt_res)
 
