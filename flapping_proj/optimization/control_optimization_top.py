@@ -63,7 +63,7 @@ def top_start(iterations: int, title: str = "Beta_test_2_constraint_second_wave"
     # lower and upper bounds for parameters [A, gamma, w, phi, theta]
     # [V, V, Hz, rad, rad]
     parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
-    parameter_upper_bound = np.array([50, 1, 45, np.pi, np.pi])
+    parameter_upper_bound = np.array([25, 1, 40, np.pi, np.pi])
     bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
     
     
@@ -86,7 +86,15 @@ def top_start(iterations: int, title: str = "Beta_test_2_constraint_second_wave"
     #     1.1037502606381693,
     #     1.006028981733762
     # ])
-    initial_guess = np.array([30, 0, 25, 0, 0])
+    
+    initial_guess = np.array([
+            25.0,
+            0.0,
+            20.801912953688465,
+            -2.0819182365783595,
+            -1.3596222152725463
+        ])
+    # initial_guess = np.array([30, 0, 25, 0, 0])
     sc.optimize.differential_evolution(sim_start, bounds, x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration

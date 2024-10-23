@@ -364,7 +364,7 @@ class ControlNode : public rclcpp::Node
 				double curr_joint_vel = _jointVelocityMap[joint.first]; // joint velocity
 				//electrical time constant assumed to be large compared to mechanical. Electric fast >> mech
 				double motor_speed = curr_joint_vel * gear_ratio * 60 / (2 * M_PI); //rad/s to rpm
-				joint.second = (_motor_torque_constant * -voltage / _motor_resistance) - ((_motor_torque_constant * motor_back_emf / _motor_resistance +  motor_dynamic_friction) * motor_speed);
+				joint.second = (_motor_torque_constant * voltage / _motor_resistance) - ((_motor_torque_constant * motor_back_emf / _motor_resistance +  motor_dynamic_friction) * motor_speed);
 				// joint.second = (voltage - _motor_torque_constant * curr_joint_vel) * _motor_torque_constant / _motor_resistance;
 
 				joint.second *= gear_ratio; //test

@@ -91,26 +91,7 @@
           </material>
         </visual>
       </link>
-      <joint name='stroke_joint_1' type='revolute'>
-        <pose relative_to='base_link'>0.0165 0 -0.004 -1.5708 0 0</pose>
-        <parent>base_link</parent>
-        <child>stroke_link_1</child>
-        <axis>
-          <xyz>0 1 0</xyz>
-          <!-- <limit>
-            <lower>0</lower>
-            <upper>0</upper>
-            <effort>0</effort>
-            <velocity>0</velocity>
-          </limit> -->
-          <dynamics>
-            <!-- <spring_reference>0</spring_reference> -->
-            <!-- <spring_stiffness>0</spring_stiffness> -->
-            <damping>0.0003</damping>
-            <spring_stiffness>0.01</spring_stiffness>
-          </dynamics>
-        </axis>
-      </joint>
+
       <link name='stroke_link_1'>
         <pose relative_to='stroke_joint_1'>0 0 0 0 0 0</pose>
         <inertial>
@@ -148,24 +129,7 @@
           </material>
         </visual>
       </link>
-      <joint name='pitch_joint_1' type='revolute'>
-        <pose relative_to='stroke_link_1'>0 0 0 0 0 0</pose>
-        <parent>stroke_link_1</parent>
-        <child>wing_link_1</child>
-        <axis>
-          <xyz>-1 0 0</xyz>
-          <!-- <limit>
-            <lower>0</lower>
-            <upper>0</upper>
-            <effort>0</effort>
-            <velocity>0</velocity>
-          </limit> -->
-          <dynamics>
-            <spring_reference>0</spring_reference>
-            <spring_stiffness>0.0021</spring_stiffness>
-          </dynamics>
-        </axis>
-      </joint>
+
       <link name='wing_link_1'>
         <pose relative_to='pitch_joint_1'>0 0 0 0 0 0</pose>
         <inertial>
@@ -213,27 +177,7 @@
           </material>
         </visual>
       </link>
-      <joint name='stroke_joint_2' type='revolute'>
-        <pose relative_to='base_link'>-0.0165 0 -0.004 -1.5708 4.235164736271502e-22
-          -3.141585307179587</pose>
-        <parent>base_link</parent>
-        <child>stroke_link_2</child>
-        <axis>
-          <xyz>0 1 0</xyz>
-          <!-- <limit>
-            <lower>0</lower>
-            <upper>0</upper>
-            <effort>0</effort>
-            <velocity>0</velocity>
-          </limit> -->
-          <dynamics>
-            <spring_reference>0</spring_reference>
-            <damping>0.0003</damping>
-            <spring_stiffness>0.01</spring_stiffness>
-            <!-- <spring_stiffness>0</spring_stiffness> -->
-          </dynamics>
-        </axis>
-      </joint>
+      
       <link name='stroke_link_2'>
         <pose relative_to='stroke_joint_2'>0 0 0 0 0 0</pose>
         <inertial>
@@ -271,6 +215,65 @@
           </material>
         </visual>
       </link>
+      <joint name='stroke_joint_1' type='revolute'>
+        <pose relative_to='base_link'>0.0165 0 -0.004 -1.5708 0 0</pose>
+        <parent>base_link</parent>
+        <child>stroke_link_1</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1.5708</lower>
+            <upper>1.5708</upper>
+            <!-- <effort>0</effort>
+            <velocity>0</velocity> -->
+          </limit>
+          <dynamics>
+            <!-- <spring_reference>0</spring_reference> -->
+            <!-- <spring_stiffness>0</spring_stiffness> -->
+            <damping>0.0003</damping>
+            <spring_stiffness>0.005</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <joint name='stroke_joint_2' type='revolute'>
+        <pose relative_to='base_link'>-0.0165 0 -0.004 -1.5708 4.235164736271502e-22
+          -3.141585307179587</pose>
+        <parent>base_link</parent>
+        <child>stroke_link_2</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1.5708</lower>
+            <upper>1.5708</upper>
+            <!-- <effort>0</effort> -->
+            <!-- <velocity>0</velocity> -->
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <damping>0.0003</damping>
+            <spring_stiffness>0.005</spring_stiffness>
+            <!-- <spring_stiffness>0</spring_stiffness> -->
+          </dynamics>
+        </axis>
+      </joint>
+      <joint name='pitch_joint_1' type='revolute'>
+        <pose relative_to='stroke_link_1'>0 0 0 0 0 0</pose>
+        <parent>stroke_link_1</parent>
+        <child>wing_link_1</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <!-- <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit> -->
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.02</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
       <joint name='pitch_joint_2' type='revolute'>
         <pose relative_to='stroke_link_2'>0 0 0 0 0 0</pose>
         <parent>stroke_link_2</parent>
@@ -285,7 +288,7 @@
           </limit>
           <dynamics>
             <spring_reference>0</spring_reference>
-            <spring_stiffness>0.0021</spring_stiffness>
+            <spring_stiffness>0.02</spring_stiffness>
           </dynamics>
         </axis>
       </joint>
