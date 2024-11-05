@@ -40,7 +40,7 @@ def write_to_json(data: dict, path: str) -> None:
     with open(path, 'w') as file:
         json.dump(existing_data, file, indent=4)
 
-def top_start(iterations: int, title: str = "Beta_test_3_constraint_real_v", popsize: int = 15):
+def top_start(iterations: int, title: str = "Beta_test_4_m_motor", popsize: int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
     if not os.path.exists(folder_path):
@@ -59,11 +59,18 @@ def top_start(iterations: int, title: str = "Beta_test_3_constraint_real_v", pop
     # parameter_upper_bound = np.array([50, 50, 60, np.pi, np.pi])
     # bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
 
-    '''BASE TEST 2 (GAMMA PARAM)'''
-    # lower and upper bounds for parameters [A, gamma, w, phi, theta]
-    # [V, V, Hz, rad, rad]
-    parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
-    parameter_upper_bound = np.array([25, 1, 40, np.pi, np.pi])
+    # '''BASE TEST 2 (GAMMA PARAM)'''
+    # # lower and upper bounds for parameters [A, gamma, w, phi, theta]
+    # # [V, V, Hz, rad, rad]
+    # parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
+    # parameter_upper_bound = np.array([12, 1, 40, np.pi, np.pi])
+    # bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
+    
+    # '''BASE TEST 3 (GAMMA PARAM + constrained amp)'''
+    # # lower and upper bounds for parameters [A, gamma, w, phi, theta]
+    # # [V, V, Hz, rad, rad]
+    parameter_lower_bound = np.array([12, 0, 5, -np.pi, -np.pi])
+    parameter_upper_bound = np.array([12, 1, 40, np.pi, np.pi])
     bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
     
     
@@ -87,30 +94,30 @@ def top_start(iterations: int, title: str = "Beta_test_3_constraint_real_v", pop
     #     1.006028981733762
     # ])
     
-    initial_guess = np.array([ #30+ lift
-            24.947939758630813,
-            0.28104135524898555,
-            11.579033615698187,
-            -1.6805365429240893,
-            -1.5542870555003303
-        ])
-    initial_guess = np.array([
-            # 0,
-            15.7,
-            # 7.997129545270287,
-            0,
-            # 0.99919191174529,
-            5.886004302482046,
-            1.7701139538996538,
-            0.7302457360016489
-        ])
+    # initial_guess = np.array([ #30+ lift
+    #         24.947939758630813,
+    #         0.28104135524898555,
+    #         11.579033615698187,
+    #         -1.6805365429240893,
+    #         -1.5542870555003303
+    #     ])
     # initial_guess = np.array([
-    #     8.0,
-    #     0.0,
-    #     11.57,
-    #     1.5707,
-    #     1.5707
-    # ])
+    #         # 0,
+    #         15.7,
+    #         # 7.997129545270287,
+    #         0,
+    #         # 0.99919191174529,
+    #         5.886004302482046,
+    #         1.7701139538996538,
+    #         0.7302457360016489
+    #     ])
+    initial_guess = np.array([
+        12.0,
+        0.0,
+        15.57,
+        1.5707,
+        1.5707
+    ])
     # initial_guess = np.array([30, 0, 25, 0, 0])
     sc.optimize.differential_evolution(sim_start, bounds, x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
@@ -128,7 +135,8 @@ def sim_start(opt_params):
         config = json.load(json_file)
     # Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params)) #BETA TEST 1
     Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp scale ; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params)) #BETA TEST 2
-    config["voltage"]["waves"][0]["amplitude"] = opt_params[0]
+    # config["voltage"]["waves"][0]["amplitude"] = opt_params[0] #reg test
+    config["voltage"]["waves"][0]["amplitude"] = opt_params[0] * (1 - opt_params[1]) #amp limit
     # config["voltage"]["waves"][1]["amplitude"] = opt_params[1] #BETA TEST 1
     config["voltage"]["waves"][1]["amplitude"] = opt_params[1] * opt_params[0] #BETA TEST 2
     config["voltage"]["frequency"] = opt_params[2]
