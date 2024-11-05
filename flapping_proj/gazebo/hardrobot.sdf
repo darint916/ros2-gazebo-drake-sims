@@ -236,8 +236,7 @@
         </axis>
       </joint>
       <joint name='stroke_joint_2' type='revolute'>
-        <pose relative_to='base_link'>-0.0165 0 -0.004 -1.5708 4.235164736271502e-22
-          -3.141585307179587</pose>
+        <pose relative_to='base_link'>-0.0165 0 -0.004 -1.5708 0 -3.141585307179587</pose>
         <parent>base_link</parent>
         <child>stroke_link_2</child>
         <axis>
@@ -249,7 +248,7 @@
             <!-- <velocity>0</velocity> -->
           </limit>
           <dynamics>
-            <spring_reference>0</spring_reference>
+            <!-- <spring_reference>0</spring_reference> -->
             <damping>0.00025</damping>
             <spring_stiffness>0.003</spring_stiffness>
             <!-- <spring_stiffness>0</spring_stiffness> -->
