@@ -40,7 +40,7 @@ def write_to_json(data: dict, path: str) -> None:
     with open(path, 'w') as file:
         json.dump(existing_data, file, indent=4)
 
-def top_start(iterations: int, title: str = "Beta_test_2_constraint_second_wave", popsize: int = 15):
+def top_start(iterations: int, title: str = "Beta_test_3_constraint_real_v", popsize: int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
     if not os.path.exists(folder_path):
@@ -87,13 +87,30 @@ def top_start(iterations: int, title: str = "Beta_test_2_constraint_second_wave"
     #     1.006028981733762
     # ])
     
-    initial_guess = np.array([
-            25.0,
-            0.0,
-            20.801912953688465,
-            -2.0819182365783595,
-            -1.3596222152725463
+    initial_guess = np.array([ #30+ lift
+            24.947939758630813,
+            0.28104135524898555,
+            11.579033615698187,
+            -1.6805365429240893,
+            -1.5542870555003303
         ])
+    initial_guess = np.array([
+            # 0,
+            15.7,
+            # 7.997129545270287,
+            0,
+            # 0.99919191174529,
+            5.886004302482046,
+            1.7701139538996538,
+            0.7302457360016489
+        ])
+    # initial_guess = np.array([
+    #     8.0,
+    #     0.0,
+    #     11.57,
+    #     1.5707,
+    #     1.5707
+    # ])
     # initial_guess = np.array([30, 0, 25, 0, 0])
     sc.optimize.differential_evolution(sim_start, bounds, x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
@@ -229,6 +246,6 @@ class NumpyEncoder(json.JSONEncoder):
 
 
 if __name__ == '__main__':
-    top_start(250, popsize=5)
+    top_start(300, popsize=7)
     # generate_sdf()
     # sim_launch()

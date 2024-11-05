@@ -267,7 +267,7 @@ class ControlNode : public rclcpp::Node
 			for (auto & joint : _jointTorqueControlMap) {
 				torque_val = joint.second;
 				// RCLCPP_INFO_STREAM(this->get_logger(), "timer callback" << torque_val);
-				if (joint.first == "joint_RW_J_Flap"){ //edit to change dir later?
+				if (joint.first == "stroke_joint_2"){ //edit to change dir later?
 					joint.second *= -1;
 				}
 				message.data = joint.second;
@@ -349,6 +349,7 @@ class ControlNode : public rclcpp::Node
 			double voltage = 0;
 			if(_control_opt_en){
 				voltage = _control_a * std::cos(2.0 * M_PI * _control_frequency * _currentPoseTime + _control_a_phase) + _control_b * std::cos(4.0 * M_PI * _control_frequency * _currentPoseTime + _control_b_phase);
+				// voltage = voltage > 0 ? _control_a : -_control_a;
 			} else {
 				voltage = amplitude * std::sin(2.0 * M_PI * frequency * _currentPoseTime);
 				voltage = voltage > 0 ? amplitude : -amplitude;

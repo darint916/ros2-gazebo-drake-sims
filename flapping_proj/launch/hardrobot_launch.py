@@ -67,13 +67,13 @@ def generate_launch_description():
                 {'pid_data_enabled': False},
                 {'pid_data_file_path': pid_data_file},
                 {'motor_torque_calc_enabled': True},
-                {'max_voltage': 6.0}, #AC voltage sin wave typically 6 V
-                {'motor_resistance': 8.8},
-                {'motor_torque_constant': 0.00109},
+                {'max_voltage': 12.0}, #AC voltage sin wave typically 6 V
+                {'motor_resistance': 12.4},
+                {'motor_torque_constant': 0.00175},
                 {'sim_length': 5.0}, #duration before kill poll
                 {'gear_ratio': 20.0},
-                {'motor_back_emf': 0.000114}, #V/rpm
-                {'motor_dynamic_friction': 0.00000000102}, #Nm/rpm
+                {'motor_back_emf': 0.00018315}, #V/rpm
+                {'motor_dynamic_friction': 0.000000000864}, #Nm/rpm
                 {'kill_flag_path': kill_flag_path},
                 #controls
                 {'control_opt_en': True},
@@ -91,6 +91,14 @@ def generate_launch_description():
         )
     ])
 
+    # Faulhaber 0620
+    # {'max_voltage': 6.0}, #AC voltage sin wave typically 6 V
+    # {'motor_resistance': 8.8},
+    # {'motor_torque_constant': 0.00109},
+    # {'sim_length': 5.0}, #duration before kill poll
+    # {'gear_ratio': 20.0},
+    # {'motor_back_emf': 0.000114}, #V/rpm
+    # {'motor_dynamic_friction': 0.00000000102}, #Nm/rpm
     launch_description.add_action(ExecuteProcess(cmd=['ign', 'gazebo', '-r', sdf_file]))
 
     return launch_description

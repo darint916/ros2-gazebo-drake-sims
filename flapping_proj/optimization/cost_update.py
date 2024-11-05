@@ -104,7 +104,7 @@ def parse_data() -> float:
     Message.data("power_rms printing: " + str(power_rms))
     Message.data("lift_avg printing: " + str(lift_avg))
     Message.data("wing_mass printing: " + str(wing_mass))
-    Message.data("cost: " + str(cost))
+    Message.data("cost 1 wing: " + str(cost))
 
     return cost
 
