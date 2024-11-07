@@ -1,5 +1,6 @@
+from optimization.sdf_modify_stiffness import modify_sdf
 from optimization.sdf_generate import generate_sdf
-from optimization.cost_update import parse_data
+from optimization.cost_update_lift import parse_data
 from optimization.aero_properties import aero_properties
 from utils.message import Message
 import optimization.wing_classes as wing_classes
@@ -26,6 +27,7 @@ global folder_path
 global counter
 counter = 0
 
+global frequency_counter
 '''
 Here we are optimizing for the wing input control,
 V'' = -w * V
@@ -40,7 +42,7 @@ def write_to_json(data: dict, path: str) -> None:
     with open(path, 'w') as file:
         json.dump(existing_data, file, indent=4)
 
-def top_start(iterations: int, title: str = "Beta_test_4_m_motor", popsize: int = 15):
+def top_start(iterations: int, title: str = "alpha_sweep", popsize: int = 15):
     global folder_path
     folder_path = os.path.join(DIR_PATH, 'data', title)
     if not os.path.exists(folder_path):
@@ -48,77 +50,23 @@ def top_start(iterations: int, title: str = "Beta_test_4_m_motor", popsize: int 
     if not os.path.exists(os.path.join(folder_path, 'data.json')):
         with open(os.path.join(folder_path, 'data.json'), 'w') as file:
             json.dump([], file)
-        
     Message.debug("TESTING: " + title, True)
     Message.info("folder path: " + folder_path)
 
-    # '''BASE TEST 1'''
-    # lower and upper bounds for parameters [A, B, w, phi, theta]
-    # [V, V, Hz, rad, rad]
-    # parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
-    # parameter_upper_bound = np.array([50, 50, 60, np.pi, np.pi])
-    # bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
-
-    # '''BASE TEST 2 (GAMMA PARAM)'''
-    # # lower and upper bounds for parameters [A, gamma, w, phi, theta]
-    # # [V, V, Hz, rad, rad]
-    # parameter_lower_bound = np.array([0, 0, 5, -np.pi, -np.pi])
-    # parameter_upper_bound = np.array([12, 1, 40, np.pi, np.pi])
-    # bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
-    
-    # '''BASE TEST 3 (GAMMA PARAM + constrained amp)'''
-    # # lower and upper bounds for parameters [A, gamma, w, phi, theta]
-    # # [V, V, Hz, rad, rad]
-    parameter_lower_bound = np.array([12, 0, 5, -np.pi, -np.pi])
-    parameter_upper_bound = np.array([12, 1, 40, np.pi, np.pi])
+    # '''ALPHA TEST 1 ()'''
+    # SWEEPING FREQUENCY AND OPTIMIZING FOR STIFFNESS WITH LIFT COST.
+    # Voltage set at 15 max, sin wave, starting at 10 hz sweep to 20 hz
+    # Keep in mind gear reduction 20:1
+    # # [stroke_stiffness N/m, pitch_stiffness ]
+    parameter_lower_bound = np.array([0, 0, 0.0001])
+    parameter_upper_bound = np.array([0.1, 0.1, 0.06])
     bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
-    
-    
-    # products of A and opt_params gives a constraint on variables
-    # in order, 
-    
-    # spar_0_angle - spar_1_angle >= 0
-    # A = np.array([[0, 0, 1, 0, -1, 0, 0]  # represents linear constraints
-    #               ])
-    # linear_constraint_lower_bound = np.array([0])
-    # linear_constraint_upper_bound = np.array([np.inf])
-    # linear_constraints = sc.optimize.LinearConstraint(
-    #     A, linear_constraint_lower_bound, linear_constraint_upper_bound)
 
-    # initial_guess = np.array([7, 7, 25, 0, 0])
-    # initial_guess = np.array([
-    #     48.083774977833606,
-    #     35.580658820604796,
-    #     40.368480031318434,
-    #     1.1037502606381693,
-    #     1.006028981733762
-    # ])
-    
-    # initial_guess = np.array([ #30+ lift
-    #         24.947939758630813,
-    #         0.28104135524898555,
-    #         11.579033615698187,
-    #         -1.6805365429240893,
-    #         -1.5542870555003303
-    #     ])
-    # initial_guess = np.array([
-    #         # 0,
-    #         15.7,
-    #         # 7.997129545270287,
-    #         0,
-    #         # 0.99919191174529,
-    #         5.886004302482046,
-    #         1.7701139538996538,
-    #         0.7302457360016489
-    #     ])
     initial_guess = np.array([
-        12.0,
-        0.0,
-        15.57,
-        1.5707,
-        1.5707
+        0.0001,
+        0.0001,
+        0.0001
     ])
-    # initial_guess = np.array([30, 0, 25, 0, 0])
     sc.optimize.differential_evolution(sim_start, bounds, x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
@@ -133,15 +81,11 @@ def sim_start(opt_params):
     # Bezier wing too hard to make
     with open(json_config_path, 'r') as json_file:
         config = json.load(json_file)
-    # Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params)) #BETA TEST 1
     Message.info("\nSim iter start \n opt_params: 1. wave one amp; 2. wave two amp scale ; 3. freq; 4. phase one; 5. phase two; \n " + str(opt_params)) #BETA TEST 2
-    # config["voltage"]["waves"][0]["amplitude"] = opt_params[0] #reg test
-    config["voltage"]["waves"][0]["amplitude"] = opt_params[0] * (1 - opt_params[1]) #amp limit
-    # config["voltage"]["waves"][1]["amplitude"] = opt_params[1] #BETA TEST 1
-    config["voltage"]["waves"][1]["amplitude"] = opt_params[1] * opt_params[0] #BETA TEST 2
-    config["voltage"]["frequency"] = opt_params[2]
-    config["voltage"]["waves"][0]["phase"] = opt_params[3]
-    config["voltage"]["waves"][1]["phase"] = opt_params[4]
+    config["voltage"]["frequency"] = frequency_counter * 1.0
+    modify_sdf(["stroke_joint_1", "stroke_joint_2", 'pitch_joint_1', 'pitch_joint_2'], 
+               opt_params[0], opt_params[1], opt_params[2])
+    Message.info("sdf modifying with ", str(opt_params[0]) + ";" + str(opt_params[1]) + ";" + str(opt_params[2]))
     with open(json_config_path, 'w') as file:  # comment out to not update
         json.dump(config, file, indent=4)
     Message.info("config updated")
@@ -154,14 +98,10 @@ def sim_start(opt_params):
     if not os.path.exists(iter_path):
         os.mkdir(iter_path)
     global population_counter
-
-    #copying input config files
-    # shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'),
-    #             os.path.join(iter_path, f'config_{population_counter}.json'))
     population_counter += 1
     Message.debug("Simulation Generation Total: " + str(counter))
 
-    cost = parse_data()
+    cost = parse_data(frequency_counter, 5.5)
     result_json = {
         "opt_params": opt_params.tolist(),
         "cost": cost
@@ -185,11 +125,6 @@ def opt_callback(intermediate_result: OptimizeResult) -> bool:
     Message.debug("iter Path: ", iter_path)
     if not os.path.exists(iter_path):
         os.mkdir(iter_path)
-    # shutil.copy(os.path.join(DIR_PATH, 'data', 'input_config.json'), os.path.join(iter_path, 'input_config.json'))
-    # shutil.copy(os.path.join(DIR_PATH, 'data', 'aero.csv'), os.path.join(iter_path, 'aero.csv'))
-    # shutil.copy(os.path.join(DIR_PATH, 'data', 'data.csv'), os.path.join(iter_path, 'data.csv'))
-    # shutil.copy(os.path.join(DIR_PATH, 'data', 'processed.sdf'), os.path.join(iter_path, 'processed.sdf'))
-    # shutil.copy(os.path.join(DIR_PATH, 'data', 'input_joint_data.csv'), os.path.join(iter_path, 'input_joint_data.csv'))
     opt_res = os.path.join(iter_path, 'opt_res.json')
     Message.info("opt_res path: ", opt_res)
 
@@ -209,13 +144,13 @@ def opt_callback(intermediate_result: OptimizeResult) -> bool:
 # Launches IGN Gaz, and handles only the GRASS SIMULATION
 # Note that ign gui does not get killed by SIGTERM (or any signal), requires PID kill process
 def sim_launch(sim_time: float) -> None:
-    launch_path = os.path.join(DIR_PATH, '..', 'launch', 'hardrobot_launch.py')
+    launch_path = os.path.join(DIR_PATH, '..', 'launch', 'hardrobot_stiff_launch.py')
     ros2_process = subprocess.Popen(
         ['ros2', 'launch', launch_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Path mirrored from opt_launch.py
     kill_file_path = os.path.join(DIR_PATH, '_kill_me.txt')
     try:
-        time.sleep(sim_time)
+        time.sleep(sim_time / 2)
         while (ros2_process.poll() is None):  # most scuffed polling process
             time.sleep(.5)
             if os.path.isfile(kill_file_path):
@@ -254,6 +189,8 @@ class NumpyEncoder(json.JSONEncoder):
 
 
 if __name__ == '__main__':
-    top_start(300, popsize=7)
+    for i in range(26):
+        frequency_counter = 15 + i
+        top_start(300, popsize=2, title=f"alpha_sweep_{frequency_counter}_hz")
     # generate_sdf()
     # sim_launch()
