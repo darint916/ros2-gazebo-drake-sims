@@ -3,7 +3,7 @@
     <world name="world1">
         <physics name="1ms" type="ignored">
             <max_step_size>0.0001</max_step_size>
-            <real_time_factor>1</real_time_factor>
+            <real_time_factor>0.04</real_time_factor>
         </physics>
         <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
     </plugin>

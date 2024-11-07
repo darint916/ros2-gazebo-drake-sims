@@ -267,9 +267,10 @@ class ControlNode : public rclcpp::Node
 			for (auto & joint : _jointTorqueControlMap) {
 				torque_val = joint.second;
 				// RCLCPP_INFO_STREAM(this->get_logger(), "timer callback" << torque_val);
-				if (joint.first == "stroke_joint_2"){ //edit to change dir later?
-					joint.second *= -1;
-				}
+				// if using motor feedback, vel has to be reversed
+				// if (joint.first == "stroke_joint_2"){ //edit to change dir later?
+				// 	joint.second *= -1;
+				// }
 				message.data = joint.second;
 				_jointControlPublishersMap[joint.first]->publish(message);
 				//TODO: this is temp 1 wing data torque pub
@@ -367,7 +368,10 @@ class ControlNode : public rclcpp::Node
 				double motor_speed = curr_joint_vel * gear_ratio * 60 / (2 * M_PI); //rad/s to rpm
 				joint.second = (_motor_torque_constant * voltage / _motor_resistance) - ((_motor_torque_constant * motor_back_emf / _motor_resistance +  motor_dynamic_friction) * motor_speed);
 				// joint.second = (voltage - _motor_torque_constant * curr_joint_vel) * _motor_torque_constant / _motor_resistance;
-
+				if (joint.first == "stroke_joint_2"){ //edit to change dir later?
+					joint.second = (_motor_torque_constant * voltage / _motor_resistance) + ((_motor_torque_constant * motor_back_emf / _motor_resistance +  motor_dynamic_friction) * motor_speed);
+					joint.second *= -1;
+				}
 				joint.second *= gear_ratio; //test
 			}
 		}
