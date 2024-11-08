@@ -1,60 +1,75 @@
-import json
-import matplotlib.pyplot as plt
-from matplotlib.widgets import CheckButtons
-import numpy as np
 import os
+import json
+import numpy as np
+import matplotlib.pyplot as plt
 
-def param_to_xy(params: list):
-    a, b, c, d, e = params
-    x = np.linspace(0, 2, 1000000) # 3 seconds sim, sim runs at 0.00
+# Set the base directory where the folders are located
+base_dir = os.path.join(os.path.dirname(__file__), 'data')
 
-    #Gamma const + amp con :Betatest 4
-    y = a * ((1 - b) * np.sin(2 * np.pi * c * x + d) + (b * np.cos(4 * np.pi * c * x + e))) 
+# Prepare lists to store data for plotting
+frequencies = []
+param1 = []  # Stroke Joint Stiffness
+param2 = []  # Pitch Joint Stiffness
+param3 = []  # Stroke Joint Damping
+costs = []
 
-    return [x, y]
+for i in range(11, 20):  # 10 Hz to 20 Hz
+    if i == 15:
+        continue
+    folder_name = f"alpha_sweep_{i}_hz"
+    file_path = os.path.join(base_dir, folder_name, 'data.json')
+    
+    # Read JSON data from the file
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+        top_result = sorted(data, key=lambda x: x['cost'], reverse=False)[:4] #lowest cost
+        frequencies.append(i)
+        frequencies.append(i)
+        frequencies.append(i)
+        frequencies.append(i)
+        for i, result in enumerate(top_result):
+            best_cost = result['cost']
+            opt_params = result['opt_params']
+            print(f"Cost: {round(best_cost / 2, 3)}")
+            print(f"Optimized Parameters: {opt_params}")
+            param1.append(opt_params[0])
+            param2.append(opt_params[1])
+            param3.append(opt_params[2])
+            costs.append(best_cost)
 
-target_file = os.path.join(os.path.dirname(__file__), 'data/Beta_test__m_motor/data.json')
+# Plotting the parameters
+fig, axs = plt.subplots(2, 2, figsize=(10, 15))
 
-with open(target_file, 'r') as file:
-    json_data = json.load(file)
+# Subplots for each parameter
+axs[0, 0].scatter(frequencies, param1, marker='o', label='Stroke Joint Stiffness (N/m)')
+axs[0, 0].set_title('Stroke Joint Stiffness vs Frequency')
+axs[0, 0].set_xlabel('Frequency (Hz)')
+axs[0, 0].set_ylabel('Stiffness (N/m)')
+axs[0, 0].grid(True)
 
-top_results = sorted(json_data, key=lambda x: x['cost'], reverse=False)[:5] #lowest cost first, top 5
-x_vals = []
-y_vals = []
-labels = []
-# button_labels = []
-for i, result in enumerate(top_results):
-    x, y = param_to_xy(result['opt_params'])
-    x_vals.append(x)
-    y_vals.append(y)
-    labels.append(f"Cost: {round(result['cost'],3)}")
-    print(f"Cost: {round(result['cost'],3)}") 
-    #now print parameters
-    print(f"Optimized Parameters: {result['opt_params']}")
-    # button_labels.append(f"Cost: {round(result['cost'],3)} ")
+axs[0, 1].scatter(frequencies, param2, marker='o', color='red', label='Pitch Joint Stiffness (N/m)')
+axs[0, 1].set_title('Pitch Joint Stiffness vs Frequency')
+axs[0, 1].set_xlabel('Frequency (Hz)')
+axs[0, 1].set_ylabel('Stiffness (N/m)')
+axs[0, 1].grid(True)
 
-fig, ax = plt.subplots()
-lines = []
-for x, y, label in zip(x_vals, y_vals, labels):
-    line, = ax.plot(x, y, label=label)
-    lines.append(line)
+axs[1, 0].scatter(frequencies, param3, marker='o', color='green', label='Stroke Joint Damping (Ns/m)')
+axs[1, 0].set_title('Stroke Joint Damping vs Frequency')
+axs[1, 0].set_xlabel('Frequency (Hz)')
+axs[1, 0].set_ylabel('Damping (Ns/m)')
+axs[1, 0].grid(True)
 
-ax.legend()
-rax = plt.axes([0, 0.85, 0.1, 0.15])
-check = CheckButtons(rax, labels, [True] * len(labels))
+lifts = [cost * -100 for cost in costs]
+axs[1, 1].scatter(frequencies, lifts, marker='o', color='purple', label='Lift')
+axs[1, 1].set_title('Cost vs Frequency')
+axs[1, 1].set_xlabel('Frequency (Hz)')
+axs[1, 1].set_ylabel('Lift (g)')
+axs[1, 1].grid(True)
 
-def toggle_visibility(label):
-    index = labels.index(label)
-    lines[index].set_visible(not lines[index].get_visible())
-    plt.draw()
+# Heatmap or another creative plot (optional)
+# axs[3].imshow(...)  # You can fill this in with a heatmap or other plot based on more analysis
 
-check.on_clicked(toggle_visibility)
-
+# Display the plots
+# plt.tight_layout()
 plt.show()
-
-    # plt.figure(figsize=(10,6))
-    # plt.plot(x, y, label='Optimized Paramters')
-    # plt.title('Optimized Parameters')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Voltage')
-    # plt.grid(True)
+plt.grid(True)
