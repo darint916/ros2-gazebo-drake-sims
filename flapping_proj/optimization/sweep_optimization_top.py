@@ -57,7 +57,7 @@ def top_start(iterations: int, title: str = "alpha_sweep", popsize: int = 15):
     # SWEEPING FREQUENCY AND OPTIMIZING FOR STIFFNESS WITH LIFT COST.
     # Voltage set at 15 max, sin wave, starting at 10 hz sweep to 20 hz
     # Keep in mind gear reduction 20:1
-    # # [stroke_stiffness N/m, pitch_stiffness ]
+    # # [stroke_stiffness N/m, pitch_stiffness,damping ]
     parameter_lower_bound = np.array([0, 0, 0.0001])
     parameter_upper_bound = np.array([0.1, 0.1, 0.06])
     bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
@@ -171,7 +171,7 @@ def sim_launch(sim_time: float) -> None:
                               text=True, capture_output=True)
         processes = proc.stdout.splitlines()
         targeted_processes = [p.split()[0]
-                              for p in processes if 'signal' not in p]
+                              for p in processes if 'signal' not in p and 'code' not in p]
         for pid in targeted_processes:
             subprocess.run(['kill', '-9', pid])
         Message.success("ignition kill success")
@@ -190,7 +190,7 @@ class NumpyEncoder(json.JSONEncoder):
 
 if __name__ == '__main__':
     for i in range(26):
-        frequency_counter = 15 + i
+        frequency_counter = 14 + i
         top_start(300, popsize=2, title=f"alpha_sweep_{frequency_counter}_hz")
     # generate_sdf()
     # sim_launch()

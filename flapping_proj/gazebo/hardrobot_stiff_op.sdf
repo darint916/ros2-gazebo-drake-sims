@@ -3,7 +3,7 @@
     <world name="world1">
         <physics name="1ms" type="ignored">
             <max_step_size>0.0001</max_step_size>
-            <real_time_factor>0.04</real_time_factor>
+            <real_time_factor>1</real_time_factor>
         </physics>
         <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics">
     </plugin>
@@ -210,8 +210,8 @@
                         <upper>1.5708</upper>
                     </limit>
                     <dynamics>
-                        <damping>0.00010000000000000286</damping>
-                        <spring_stiffness>0.00010000000000000286</spring_stiffness>
+                        <damping>0.00015046419738264094</damping>
+                        <spring_stiffness>0.044661619818132624</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>
@@ -226,8 +226,8 @@
                         <upper>1.5708</upper>
                     </limit>
                     <dynamics>
-                        <damping>0.00010000000000000286</damping>
-                        <spring_stiffness>0.00010000000000000286</spring_stiffness>
+                        <damping>0.00015046419738264094</damping>
+                        <spring_stiffness>0.044661619818132624</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>
@@ -239,7 +239,7 @@
                     <xyz>-1 0 0</xyz>
                     <dynamics>
                         <spring_reference>0</spring_reference>
-                        <spring_stiffness>0.00010000000000000286</spring_stiffness>
+                        <spring_stiffness>0.017105586851827823</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>
@@ -255,7 +255,7 @@
                     </limit>
                     <dynamics>
                         <spring_reference>0</spring_reference>
-                        <spring_stiffness>0.00010000000000000286</spring_stiffness>
+                        <spring_stiffness>0.017105586851827823</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>

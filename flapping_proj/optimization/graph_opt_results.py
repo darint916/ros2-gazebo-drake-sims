@@ -13,12 +13,12 @@ def param_to_xy(params: list):
 
     return [x, y]
 
-target_file = os.path.join(os.path.dirname(__file__), 'data/Beta_test__m_motor/data.json')
+target_file = os.path.join(os.path.dirname(__file__), 'data/Beta_test_4_m_motor/data.json')
 
 with open(target_file, 'r') as file:
     json_data = json.load(file)
 
-top_results = sorted(json_data, key=lambda x: x['cost'], reverse=False)[:5] #lowest cost first, top 5
+top_results = sorted(json_data, key=lambda x: x['cost'], reverse=False)[:1] #lowest cost first, top 5
 x_vals = []
 y_vals = []
 labels = []
@@ -27,8 +27,8 @@ for i, result in enumerate(top_results):
     x, y = param_to_xy(result['opt_params'])
     x_vals.append(x)
     y_vals.append(y)
-    labels.append(f"Cost: {round(result['cost'],3)}")
-    print(f"Cost: {round(result['cost'],3)}") 
+    labels.append(f"Cost: {round(result['cost'] / 2,3)}")
+    print(f"Cost: {round(result['cost'] / 2,3)}") 
     #now print parameters
     print(f"Optimized Parameters: {result['opt_params']}")
     # button_labels.append(f"Cost: {round(result['cost'],3)} ")
@@ -39,17 +39,23 @@ for x, y, label in zip(x_vals, y_vals, labels):
     line, = ax.plot(x, y, label=label)
     lines.append(line)
 
+plt.title('Optimized Input Voltage')
+plt.xlabel('Time (s)')
+plt.ylabel('Voltage')
+
 ax.legend()
-rax = plt.axes([0, 0.85, 0.1, 0.15])
-check = CheckButtons(rax, labels, [True] * len(labels))
 
-def toggle_visibility(label):
-    index = labels.index(label)
-    lines[index].set_visible(not lines[index].get_visible())
-    plt.draw()
+#BUTTON
+# rax = plt.axes([0, 0.85, 0.1, 0.15])
+# check = CheckButtons(rax, labels, [True] * len(labels))
 
-check.on_clicked(toggle_visibility)
+# def toggle_visibility(label):
+#     index = labels.index(label)
+#     lines[index].set_visible(not lines[index].get_visible())
+#     plt.draw()
 
+# check.on_clicked(toggle_visibility)
+plt.grid(True)
 plt.show()
 
     # plt.figure(figsize=(10,6))
