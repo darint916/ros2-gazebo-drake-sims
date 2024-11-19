@@ -14,6 +14,7 @@ import subprocess
 import time
 import signal
 import numpy as np
+import psutil
 from unit_tests.test_wing_classes import check_triangle_inequalities
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 json_config_path = os.path.join(DIR_PATH, 'data', 'input_config.json')
@@ -141,6 +142,17 @@ def opt_callback(intermediate_result: OptimizeResult) -> bool:
         json.dump(result_data, file, cls=NumpyEncoder, indent=4)
     return False
 
+def kill_process_tree(pid: int) -> None:
+    try:
+        parent = psutil.Process(pid)
+        for child in parent.children(recursive=True):
+            print("killing child, PID:", child.pid)
+            child.kill()
+        parent.kill()
+        print("Process killed by psutil")
+    except psutil.NoSuchProcess:
+        print("Process already killed, psutil exit")
+
 # Launches IGN Gaz, and handles only the GRASS SIMULATION
 # Note that ign gui does not get killed by SIGTERM (or any signal), requires PID kill process
 def sim_launch(sim_time: float) -> None:
@@ -158,13 +170,20 @@ def sim_launch(sim_time: float) -> None:
                 break
     # check processes with `ps aux | grep 'ign|gz', '^(?!.*signal).*ign.*|.*gz.*'
     finally:
-        if os.path.isfile(kill_file_path):
-            os.remove(kill_file_path)
-        ros2_process.send_signal(signal.SIGINT)
-        ros2_process.wait()
-        for line in ros2_process.stdout:  # terminal output for sim
-            print(line.decode(), end='')
-        ros2_process.terminate()
+        try:
+            if os.path.isfile(kill_file_path):
+                os.remove(kill_file_path)
+            ros2_process.send_signal(signal.SIGINT)
+            ros2_process.wait(25)
+            for line in ros2_process.stdout:  # terminal output for sim
+                print(line.decode(), end='')
+            ros2_process.terminate()
+            kill_process_tree(ros2_process.pid)
+        except Exception as e:
+            Message.error("termination fail/timeout:", e)
+            kill_process_tree(ros2_process.pid)
+            ros2_process.kill()
+        
     try:  # Neg lookahead does ot work for pkill, manual pid filter
         # subprocess.run("pkill -f '^(?!.*signal).*ign.*|.*gz.*'", shell=True, check=True)
         proc = subprocess.run(['pgrep', '-af', 'ign|gz'],
@@ -190,7 +209,7 @@ class NumpyEncoder(json.JSONEncoder):
 
 if __name__ == '__main__':
     for i in range(26):
-        frequency_counter = 14 + i
-        top_start(300, popsize=2, title=f"alpha_sweep_{frequency_counter}_hz")
+        frequency_counter = 11 + i
+        top_start(300, popsize=2, title=f"gamma_sweep_{frequency_counter}_hz")
     # generate_sdf()
     # sim_launch()
