@@ -18,6 +18,7 @@ class Wing():
     # leading_edge(y) >= trailing_edge(y).
     # sweeps is an array of Sweep instances
     # sweeps must include the sweep forming the leading edge
+    # inertia given as  ixx iyy izz ixy ixz iyz
     def __init__(self, leading_edge: Curve, trailing_edge: Curve, sweeps=[]):
         self.components = [Film(leading_edge, trailing_edge, 12e-6, RHO_PET)]
         self.leading_edge = leading_edge

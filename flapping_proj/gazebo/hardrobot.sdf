@@ -1,0 +1,533 @@
+<?xml version="1.0"?>
+<sdf version='1.9'>
+  <world name="world1">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.0001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+    <plugin filename="libignition-gazebo-physics-system.so"
+      name="ignition::gazebo::systems::Physics">
+    </plugin>
+    <plugin filename="libignition-gazebo-user-commands-system.so"
+      name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+    <plugin filename="libignition-gazebo-scene-broadcaster-system.so"
+      name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <model name="ground_plane">
+      <pose relative_to="world">0 0 0 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="link">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="link">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name='hardrobot'>
+      <pose relative_to="world">0 0 0.5 3.145 0 1.57</pose>
+      <link name='base_link'>
+        <inertial>
+          <pose>-8.3564e-06 -4.8616e-05 0.028244 0 0 0</pose>
+          <mass>0.0094893000000000009</mass>
+          <inertia>
+            <ixx>1.0833000000000001e-06</ixx>
+            <ixy>-2.4791999999999999e-09</ixy>
+            <ixz>-2.8749000000000001e-16</ixz>
+            <iyy>1.2964e-06</iyy>
+            <iyz>-2.8980999999999999e-15</iyz>
+            <izz>7.5880000000000004e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>0 0.941175 0 1</diffuse>
+            <ambient>0 0.941175 0 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <link name='stroke_link_1'>
+        <pose relative_to='stroke_joint_1'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>-0.0028729 0.0019735 0.0011937 0 0 0</pose>
+          <mass>0.0010774000000000001</mass>
+          <inertia>
+            <ixx>2.8171999999999999e-08</ixx>
+            <ixy>-2.9826000000000001e-10</ixy>
+            <ixz>-6.2879999999999998e-09</ixz>
+            <iyy>4.2497e-08</iyy>
+            <iyz>1.2433e-10</iyz>
+            <izz>1.6038999999999999e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='stroke_link_1_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_1.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='stroke_link_1_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_1.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>0.87255 0.87255 0.87255 1</diffuse>
+            <ambient>0.87255 0.87255 0.87255 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <link name='wing_link_1'>
+        <pose relative_to='pitch_joint_1'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.10716044 -0.0262 0 0 0 0</pose>
+          <!-- <pose>0.05343132 -0.0015011 0 0 0 0</pose> OG POSE -->
+          <mass>0.00045176542225101337</mass>
+          <!-- <mass>0.00019505718293280825</mass> OG MASS -->
+          <inertia> <!-- BIGGER WING DOUBLE SIZE-->
+            <ixx>3.466440e-07</ixx>
+            <ixy>5.898330e-07</ixy>
+            <ixz>0.0</ixz>
+            <iyy>1.315983e-06</iyy>
+            <iyz>0.0</iyz>
+            <izz>1.574747e-06</izz>
+          </inertia>
+          <!-- <inertia> ORIGINAL CONTROL TEST
+            <ixx>2.40850e-08</ixx>
+            <ixy>3.68900e-08</ixy>
+            <ixz>0.0</ixz>
+            <iyy>1.43228e-07</iyy>
+            <iyz>0.0</iyz>
+            <izz>1.59545e-07</izz>
+          </inertia> -->
+        </inertial>
+        <collision name='wing_link_1_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_1.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='wing_link_1_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_1.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>0.87255 0.87255 0.87255 1</diffuse>
+            <ambient>0.87255 0.87255 0.87255 1</ambient>
+          </material>
+        </visual>
+      </link>
+      
+      <link name='stroke_link_2'>
+        <pose relative_to='stroke_joint_2'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>-0.0028729 0.0019735 0.0011937 0 0 0</pose>
+          <mass>0.0010774000000000001</mass>
+          <inertia>
+            <ixx>2.8171999999999999e-08</ixx>
+            <ixy>-2.9826000000000001e-10</ixy>
+            <ixz>-6.2879999999999998e-09</ixz>
+            <iyy>4.2497e-08</iyy>
+            <iyz>1.2433e-10</iyz>
+            <izz>1.6038999999999999e-08</izz>
+          </inertia>
+        </inertial>
+        <collision name='stroke_link_2_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_2.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='stroke_link_2_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/stroke_link_2.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 0.553925 0.0392163 1</diffuse>
+            <ambient>1 0.553925 0.0392163 1</ambient>
+          </material>
+        </visual>
+      </link>
+      <joint name='stroke_joint_1' type='revolute'>
+        <pose relative_to='base_link'>0.0165 0 -0.004 -1.5708 0 0</pose>
+        <parent>base_link</parent>
+        <child>stroke_link_1</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1.5708</lower>
+            <upper>1.5708</upper>
+            <!-- <effort>0</effort>
+            <velocity>0</velocity> -->
+          </limit>
+          <dynamics>
+            <!-- <spring_reference>0</spring_reference> -->
+            <!-- <spring_stiffness>0</spring_stiffness> -->
+            <damping>0.00025</damping>
+            <spring_stiffness>0.003</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <joint name='stroke_joint_2' type='revolute'>
+        <pose relative_to='base_link'>-0.0165 0 -0.004 -1.5708 0 -3.141585307179587</pose>
+        <parent>base_link</parent>
+        <child>stroke_link_2</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-1.5708</lower>
+            <upper>1.5708</upper>
+            <!-- <effort>0</effort> -->
+            <!-- <velocity>0</velocity> -->
+          </limit>
+          <dynamics>
+            <!-- <spring_reference>0</spring_reference> -->
+            <damping>0.00025</damping>
+            <spring_stiffness>0.003</spring_stiffness>
+            <!-- <spring_stiffness>0</spring_stiffness> -->
+          </dynamics>
+        </axis>
+      </joint>
+      <joint name='pitch_joint_1' type='revolute'>
+        <pose relative_to='stroke_link_1'>0 0 0 0 0 0</pose>
+        <parent>stroke_link_1</parent>
+        <child>wing_link_1</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <!-- <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit> -->
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.01</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <joint name='pitch_joint_2' type='revolute'>
+        <pose relative_to='stroke_link_2'>0 0 0 0 0 0</pose>
+        <parent>stroke_link_2</parent>
+        <child>wing_link_2</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-1.79769e+308</lower>
+            <upper>1.79769e+308</upper>
+            <!-- <lower>0</lower>
+            <upper>0</upper> -->
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.01</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='wing_link_2'>
+        <pose relative_to='pitch_joint_2'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.10716044 -0.0262009 0 0 0 0</pose>
+          <!-- <pose>0.05343132 -0.0015011 0 0 0 0</pose> OG POSE -->
+          <mass>0.00045176542225101337</mass>
+          <!-- <mass>0.00019505718293280825</mass> OG MASS -->
+          <inertia> <!-- BIGGER WING DOUBLE SIZE-->
+            <ixx>3.466440e-07</ixx>
+            <ixy>5.898330e-07</ixy>
+            <ixz>0.0</ixz>
+            <iyy>1.315983e-06</iyy>
+            <iyz>0.0</iyz>
+            <izz>1.574747e-06</izz>
+          </inertia>
+          <!-- <inertia> ORIGINAL CONTROL TEST
+            <ixx>2.40850e-08</ixx>
+            <ixy>3.68900e-08</ixy>
+            <ixz>0.0</ixz>
+            <iyy>1.43228e-07</iyy>
+            <iyz>0.0</iyz>
+            <izz>1.59545e-07</izz>
+          </inertia> -->
+        </inertial>
+        <collision name='wing_link_2_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_2.STL</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='wing_link_2_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>model://hardrobot/meshes/wing_link_2.STL</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 0.553925 0.0392163 1</diffuse>
+            <ambient>1 0.553925 0.0392163 1</ambient>
+          </material>
+        </visual>
+      </link>
+      <!-- <joint name="pole" type="prismatic">
+        <pose relative_to="base_link">0 0 0 0 0 0</pose>
+        <parent>world</parent>
+        <child>base_link</child>
+        <axis>
+           <xyz>0 0 1</xyz>
+           <limit>
+              <lower>-1.79769e+308</lower>
+              <upper>1.79769e+308</upper>
+           </limit>
+        </axis>
+     </joint> -->
+
+      <joint name="anchor" type="revolute">
+        <pose relative_to="base_link">0 0 0 0 0 0</pose>
+        <parent>world</parent>
+        <child>base_link</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+          </limit>
+        </axis>
+      </joint>
+      <plugin
+        filename="aero_state_plugins"
+        name="odometry_state">
+        <world_name>world1</world_name>
+        <odometry_topic>/odom</odometry_topic>
+        <odom_publish_frequency>30000.0</odom_publish_frequency>
+        <joint>stroke_joint_1</joint>
+        <joint>pitch_joint_1</joint>
+        <joint>pitch_joint_2</joint>
+        <joint>stroke_joint_2</joint>
+      </plugin>
+      <plugin
+        filename="libignition-gazebo-apply-joint-force-system.so"
+        name="ignition::gazebo::systems::ApplyJointForce">
+        <joint_name>stroke_joint_1</joint_name>
+      </plugin>
+      <plugin
+        filename="libignition-gazebo-apply-joint-force-system.so"
+        name="ignition::gazebo::systems::ApplyJointForce">
+        <joint_name>stroke_joint_2</joint_name>
+      </plugin>
+
+
+      <plugin filename="aero_state_plugins" name="aerodynamics">
+        <data_file_path>
+          /home/darin/Github/ros2-gazebo-drake-sims/flapping_proj/optimization/data/aero.csv</data_file_path>
+        <only_data>false</only_data>
+
+        <link>
+          <link_name>wing_link_1</link_name>
+          <link_type>wing</link_type>
+          <stall_angle>15</stall_angle>
+          <fluid_density>1.293</fluid_density>
+          <drag_coefficient>1.28</drag_coefficient>
+          <lift_coefficient>1</lift_coefficient>
+          <control_joint>stroke_joint_1</control_joint>
+          <wing_pitch_joint>pitch_joint_1</wing_pitch_joint>
+          <blades>20</blades>
+          <center_pressure_list>0.01475, -0.006729472746176798, 0, 0.02425, -0.020225191313646113,
+            0, 0.03375, -0.033658135195863866, 0, 0.043250000000000004, -0.04708460442700082, 0,
+            0.05275, -0.06063880086582263, 0, 0.06225, -0.07412146712531768, 0, 0.07175,
+            -0.08750407466489328, 0, 0.08124999999999999, -0.1009744055875916, 0,
+            0.09074999999999998, -0.11458479905477152, 0, 0.10024999999999999, -0.1280322776675807,
+            0, 0.10974999999999997, -0.14143773751704541, 0, 0.11924999999999998,
+            -0.15218624611771853, 0, 0.12875, -0.143421304943054, 0, 0.13824999999999998,
+            -0.1345441941628465, 0, 0.14775, -0.125667083382639, 0, 0.15725, -0.11678997260243146,
+            0, 0.16674999999999998, -0.10791286182222395, 0, 0.17625000000000002,
+            -0.09937717837971674, 0, 0.18574999999999997, -0.06666184128512709, 0, 0.19525,
+            -0.02260705921843443, 0</center_pressure_list>
+          <upward_vector_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1 </upward_vector_list>
+          <chord_direction_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1</chord_direction_list>
+          <blade_area_list>2.557199643547183e-05, 7.685572699185523e-05, 0.00012790091374428268,
+            0.0001789214968226031, 0.000230427443290126, 0.0002816615750762072,
+            0.00033251548372659445, 0.0003837027412328481, 0.00043542223640813177,
+            0.00048652265513680665, 0.0005374634025647725, 0.0005783077352473304,
+            0.0005450009587836052, 0.0005112679378188167, 0.00047753491685402814,
+            0.00044380189588923955, 0.000410068874924451, 0.0003776332778429236,
+            0.00025331499688348297, 8.590682503005082e-05</blade_area_list>
+        </link>
+        <link>
+          <link_name>wing_link_2</link_name>
+          <link_type>wing</link_type>
+          <stall_angle>15</stall_angle>
+          <fluid_density>1.293</fluid_density>
+          <drag_coefficient>1.28</drag_coefficient>
+          <lift_coefficient>1</lift_coefficient>
+          <control_joint>stroke_joint_2</control_joint>
+          <wing_pitch_joint>pitch_joint_2</wing_pitch_joint>
+          <blades>20</blades>
+          <center_pressure_list>0.01475, -0.006729472746176798, 0, 0.02425, -0.020225191313646113,
+            0, 0.03375, -0.033658135195863866, 0, 0.043250000000000004, -0.04708460442700082, 0,
+            0.05275, -0.06063880086582263, 0, 0.06225, -0.07412146712531768, 0, 0.07175,
+            -0.08750407466489328, 0, 0.08124999999999999, -0.1009744055875916, 0,
+            0.09074999999999998, -0.11458479905477152, 0, 0.10024999999999999, -0.1280322776675807,
+            0, 0.10974999999999997, -0.14143773751704541, 0, 0.11924999999999998,
+            -0.15218624611771853, 0, 0.12875, -0.143421304943054, 0, 0.13824999999999998,
+            -0.1345441941628465, 0, 0.14775, -0.125667083382639, 0, 0.15725, -0.11678997260243146,
+            0, 0.16674999999999998, -0.10791286182222395, 0, 0.17625000000000002,
+            -0.09937717837971674, 0, 0.18574999999999997, -0.06666184128512709, 0, 0.19525,
+            -0.02260705921843443, 0</center_pressure_list>
+          <upward_vector_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1 </upward_vector_list>
+          <chord_direction_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1</chord_direction_list>
+          <blade_area_list>2.557199643547183e-05, 7.685572699185523e-05, 0.00012790091374428268,
+            0.0001789214968226031, 0.000230427443290126, 0.0002816615750762072,
+            0.00033251548372659445, 0.0003837027412328481, 0.00043542223640813177,
+            0.00048652265513680665, 0.0005374634025647725, 0.0005783077352473304,
+            0.0005450009587836052, 0.0005112679378188167, 0.00047753491685402814,
+            0.00044380189588923955, 0.000410068874924451, 0.0003776332778429236,
+            0.00025331499688348297, 8.590682503005082e-05</blade_area_list>
+        </link>
+        <!-- <link> TEST CONTROL 1, WITH ORIGINAL DESIGN WINGS
+          <link_name>wing_link_1</link_name>
+          <link_type>wing</link_type>
+          <stall_angle>15</stall_angle>
+          <fluid_density>1.293</fluid_density>
+          <drag_coefficient>1.28</drag_coefficient>
+          <lift_coefficient>1</lift_coefficient>
+          <control_joint>stroke_joint_1</control_joint>
+          <wing_pitch_joint>pitch_joint_1</wing_pitch_joint>
+          <blades>20</blades>
+          <center_pressure_list>0.01225, -0.0035302152111091395, 0, 0.01675, -0.010553872558211698,
+            0, 0.02125, -0.01756476454210382, 0, 0.025750000000000002, -0.024637960327532536, 0,
+            0.03025, -0.031634968599391175, 0, 0.03475, -0.038624089569024106, 0,
+            0.03925000000000001, -0.045705172656678526, 0, 0.043750000000000004,
+            -0.052694293626311464, 0, 0.04825000000000001, -0.059775376713965885, 0,
+            0.052750000000000005, -0.0667794254021554, 0, 0.05725, -0.07384558077125322, 0, 0.06175,
+            -0.07410064383542903, 0, 0.06625, -0.06995726802239668, 0, 0.07075000000000001,
+            -0.06573567406177194, 0, 0.07525, -0.061605687556100394, 0, 0.07975,
+            -0.05737070428811486, 0, 0.08424999999999999, -0.053273576235711405, 0, 0.08875,
+            -0.049005734514457784, 0, 0.09325, -0.031591916087299346, 0, 0.09775000000000002,
+            -0.010723861424129143, 0</center_pressure_list>
+          <upward_vector_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1 </upward_vector_list>
+          <chord_direction_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+        1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+        0, 0, 1</chord_direction_list>
+          <blade_area_list>6.35438738e-06, 1.89969706e-05, 3.16165762e-05, 4.43483286e-05,
+            5.69429435e-05, 6.95233612e-05, 8.22693108e-05, 9.48497285e-05,
+            1.07595678e-04, 1.20202966e-04, 1.32922045e-04, 1.33381159e-04,
+            1.25923082e-04, 1.18324213e-04, 1.10890238e-04, 1.03267268e-04,
+            9.58924372e-05, 8.82103221e-05, 5.68654490e-05, 1.93029506e-05</blade_area_list>
+        </link>
+        <link>
+          <link_name>wing_link_2</link_name>
+          <link_type>wing</link_type>
+          <stall_angle>15</stall_angle>
+          <fluid_density>1.293</fluid_density>
+          <drag_coefficient>1.28</drag_coefficient>
+          <lift_coefficient>1</lift_coefficient>
+          <control_joint>stroke_joint_2</control_joint>
+          <wing_pitch_joint>pitch_joint_2</wing_pitch_joint>
+          <blades>20</blades>
+          <center_pressure_list>0.01225, -0.0035302152111091395, 0, 0.01675, -0.010553872558211698,
+            0, 0.02125, -0.01756476454210382, 0, 0.025750000000000002, -0.024637960327532536, 0,
+            0.03025, -0.031634968599391175, 0, 0.03475, -0.038624089569024106, 0,
+            0.03925000000000001, -0.045705172656678526, 0, 0.043750000000000004,
+            -0.052694293626311464, 0, 0.04825000000000001, -0.059775376713965885, 0,
+            0.052750000000000005, -0.0667794254021554, 0, 0.05725, -0.07384558077125322, 0, 0.06175,
+            -0.07410064383542903, 0, 0.06625, -0.06995726802239668, 0, 0.07075000000000001,
+            -0.06573567406177194, 0, 0.07525, -0.061605687556100394, 0, 0.07975,
+            -0.05737070428811486, 0, 0.08424999999999999, -0.053273576235711405, 0, 0.08875,
+            -0.049005734514457784, 0, 0.09325, -0.031591916087299346, 0, 0.09775000000000002,
+            -0.010723861424129143, 0</center_pressure_list>
+          <upward_vector_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            0, 1, 0, 0, 1, 0, 0, 1 </upward_vector_list>
+          <chord_direction_list>0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+        1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
+        0, 0, 1</chord_direction_list>
+          <blade_area_list>6.35438738e-06, 1.89969706e-05, 3.16165762e-05, 4.43483286e-05,
+            5.69429435e-05, 6.95233612e-05, 8.22693108e-05, 9.48497285e-05,
+            1.07595678e-04, 1.20202966e-04, 1.32922045e-04, 1.33381159e-04,
+            1.25923082e-04, 1.18324213e-04, 1.10890238e-04, 1.03267268e-04,
+            9.58924372e-05, 8.82103221e-05, 5.68654490e-05, 1.93029506e-05</blade_area_list>
+        </link> -->
+      </plugin>
+    </model>
+  </world>
+</sdf>

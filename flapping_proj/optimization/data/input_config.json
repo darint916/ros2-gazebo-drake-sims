@@ -1,0 +1,18 @@
+{
+    "voltage": {
+        "frequency": 36.0,
+        "waves": [
+            {
+                "type": "cos",
+                "amplitude": 15.0,
+                "phase": 0.0
+            },
+            {
+                "type": "cos",
+                "amplitude": 0.0,
+                "phase": 0.0
+            }
+        ]
+    },
+    "sim_length": 5.5
+}

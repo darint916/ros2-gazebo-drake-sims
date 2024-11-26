@@ -8,3 +8,4 @@ pid_data.csv
 input_joint_data.csv
 venv
 *.code-workspace
+_kill_me.txt

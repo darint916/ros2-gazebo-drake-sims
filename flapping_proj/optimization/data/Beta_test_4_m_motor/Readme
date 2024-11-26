@@ -1,0 +1,3 @@
+11/6, optimized for a max 12 V, constrained on both cos waves, 
+optimization results in around 11hz, with a pure cos wave.
+Note bad data, lift is all doubled in cost, need to *0.5 to get correct lift.

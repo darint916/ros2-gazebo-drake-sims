@@ -61,6 +61,12 @@ def generate_launch_description():
                 {'static_altitude': 10.0},
                 {'pid_data_enabled': True},
                 {'pid_data_file_path': pid_data_file},
+                {'motor_torque_calc_enabled': False},
+                # {'max_voltage': max_voltage}, #AC voltage sin wave typically 6 V
+                # {'motor_resistance': motor_resistance},
+                # {'motor_torque_constant': motor_torque_constant},
+                {'sim_length': 10}, #duration before kill poll
+                # {'kill_flag_path': kill_flag_path}
             ]
         ),
         Node(
