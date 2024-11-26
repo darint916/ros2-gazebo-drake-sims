@@ -13,10 +13,8 @@ param2 = []  # Pitch Joint Stiffness
 param3 = []  # Stroke Joint Damping
 costs = []
 
-for i in range(11, 20):  # 10 Hz to 20 Hz
-    if i == 15:
-        continue
-    folder_name = f"alpha_sweep_{i}_hz"
+for i in range(11, 34):  # 10 Hz to 20 Hz
+    folder_name = f"gamma_sweep_{i}_hz"
     file_path = os.path.join(base_dir, folder_name, 'data.json')
     
     # Read JSON data from the file

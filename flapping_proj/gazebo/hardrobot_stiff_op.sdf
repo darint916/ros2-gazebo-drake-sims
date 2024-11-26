@@ -210,8 +210,8 @@
                         <upper>1.5708</upper>
                     </limit>
                     <dynamics>
-                        <damping>0.00015046419738264094</damping>
-                        <spring_stiffness>0.044661619818132624</spring_stiffness>
+                        <damping>0.013563059910255467</damping>
+                        <spring_stiffness>0.09194731777448185</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>
@@ -226,8 +226,8 @@
                         <upper>1.5708</upper>
                     </limit>
                     <dynamics>
-                        <damping>0.00015046419738264094</damping>
-                        <spring_stiffness>0.044661619818132624</spring_stiffness>
+                        <damping>0.013563059910255467</damping>
+                        <spring_stiffness>0.09194731777448185</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>
@@ -239,7 +239,7 @@
                     <xyz>-1 0 0</xyz>
                     <dynamics>
                         <spring_reference>0</spring_reference>
-                        <spring_stiffness>0.017105586851827823</spring_stiffness>
+                        <spring_stiffness>0.014124612832433318</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>
@@ -255,7 +255,7 @@
                     </limit>
                     <dynamics>
                         <spring_reference>0</spring_reference>
-                        <spring_stiffness>0.017105586851827823</spring_stiffness>
+                        <spring_stiffness>0.014124612832433318</spring_stiffness>
                     </dynamics>
                 </axis>
             </joint>
