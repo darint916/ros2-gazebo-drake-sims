@@ -1,6 +1,6 @@
 from optimization.sdf_modify_stiffness import modify_sdf
 from optimization.sdf_generate import generate_sdf
-from optimization.cost_update_lift import parse_data
+from optimization.cost_update_lift import parse_data, get_min_max_joint_angles
 from optimization.aero_properties import aero_properties
 from utils.message import Message
 import optimization.wing_classes as wing_classes
@@ -63,11 +63,18 @@ def top_start(iterations: int, title: str = "alpha_sweep", popsize: int = 15):
     parameter_upper_bound = np.array([0.1, 0.1, 0.06])
     bounds = sc.optimize.Bounds(parameter_lower_bound, parameter_upper_bound)
 
-    initial_guess = np.array([
-        0.0001,
-        0.0001,
-        0.0001
-    ])
+    # initial_guess = np.array([
+    #     0.0001,
+    #     0.0001,
+    #     0.0001
+    # ])
+    initial_guess = np.array(
+        [
+            0.020595037825713414,
+            0.018139317614887816,
+            0.00010791988904416266
+        ]
+    )
     sc.optimize.differential_evolution(sim_start, bounds, x0 = initial_guess,
                                        strategy='best1bin', maxiter=iterations, popsize=popsize, polish=False, callback=opt_callback)
     # This function will start the simulation for the given iteration
@@ -103,11 +110,18 @@ def sim_start(opt_params):
     Message.debug("Simulation Generation Total: " + str(counter))
 
     cost = parse_data(frequency_counter, 5.5)
+    joint_angles = get_min_max_joint_angles()
     result_json = {
         "opt_params": opt_params.tolist(),
-        "cost": cost
+        "cost": cost,
+        "stroke_1": [joint_angles[0], joint_angles[1]],
+        "stroke_2": [joint_angles[2], joint_angles[3]],
+        "pitch_1": [joint_angles[4], joint_angles[5]],
+        "pitch_2": [joint_angles[6], joint_angles[7]]
     }
+
     write_to_json(result_json, os.path.join(folder_path, 'data.json'))
+
     # Save config every iteration
     return cost #returns cost, * 2 cuz 2 wings
     # end of sim, save parameters and such
@@ -208,8 +222,8 @@ class NumpyEncoder(json.JSONEncoder):
 
 
 if __name__ == '__main__':
-    for i in range(26):
-        frequency_counter = 11 + i
-        top_start(300, popsize=2, title=f"gamma_sweep_{frequency_counter}_hz")
+    for i in range(30):
+        frequency_counter = 6 + i
+        top_start(300, popsize=10, title=f"zeta_sweep_{frequency_counter}_hz")
     # generate_sdf()
     # sim_launch()

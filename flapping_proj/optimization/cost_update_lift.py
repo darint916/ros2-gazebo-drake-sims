@@ -19,6 +19,7 @@ import os
 from utils.message import Message
 import numpy as np
 import pandas as pd
+import json
 curr_dir = os.path.dirname(os.path.abspath(__file__))
 #NOTE THIS USES INPUT CONFIG for freq
 json_config_path = os.path.join(curr_dir, 'data', 'input_config.json')
@@ -63,6 +64,28 @@ def parse_data(flap_freq: float, sim_time: float) -> float:
     Message.data("cost total: " + str(cost))
 
     return cost
+
+def get_min_max_joint_angles():
+    with open(json_config_path, 'r') as json_file:
+        config = json.load(json_file)
+
+    curr_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(curr_dir, 'data', 'data.csv')
+    data = pd.read_csv(data_path)
+
+    flap_freq = config["voltage"]["frequency"]  # float Hz
+    interest_duration = 4 / flap_freq  # duration of time steps to evaluate for
+    t_start = config["sim_length"] / 2
+    t_end = t_start + interest_duration
+
+    data_interval = data[(data.time >= t_start) & (data.time <= t_end)]
+
+    stroke_joint_1 = np.degrees(data_interval['stroke_joint_1'].to_numpy())
+    stroke_joint_2 = np.degrees(data_interval['stroke_joint_2'].to_numpy())
+    pitch_joint_1 =  np.degrees(data_interval['pitch_joint_1'].to_numpy())
+    pitch_joint_2 =  np.degrees(data_interval['pitch_joint_2'].to_numpy())
+    return [min(stroke_joint_1), max(stroke_joint_1), min(stroke_joint_2), max(stroke_joint_2), min(pitch_joint_1), max(pitch_joint_1), min(pitch_joint_2), max(pitch_joint_2)]
+    
 
 if __name__ == "__main__":
     parse_data(1, 1)
