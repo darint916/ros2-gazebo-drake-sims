@@ -70,6 +70,7 @@ def update_dynamic(frame):
 # script entry point
 # Read the data from the CSV file
 csv_name = sys.argv[2] if len(sys.argv) == 3 else 'data.csv'
+print("csv_name: ", csv_name)
 data = pd.read_csv(csv_name)
 
 if len(sys.argv) < 2:

@@ -14,6 +14,7 @@ param3 = []  # Stroke Joint Damping
 costs = []
 
 for i in range(11, 34):  # 10 Hz to 20 Hz
+    if i == 15 or i == 16: continue
     folder_name = f"gamma_sweep_{i}_hz"
     file_path = os.path.join(base_dir, folder_name, 'data.json')
     
