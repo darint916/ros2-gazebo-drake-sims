@@ -48,10 +48,10 @@ class Wing():
             np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2,
                       com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
         
-        cop_numerator_leading = sc.integrate.quad(lambda t: leading_edge.y(t)**3 * (leading_edge.z(t)) * leading_edge.dy(t))
-        cop_numerator_trailing = sc.integrate.quad(lambda t: trailing_edge.y(t)**3 * (trailing_edge.z(t)) * trailing_edge.dy(t))
-        cop_denominator_leading = sc.integrate.quad(lambda t: leading_edge.y(t)**2 * (leading_edge.z(t)) * leading_edge.dy(t))
-        cop_denominator_trailing = sc.integrate.quad(lambda t: trailing_edge.y(t)**2 * (trailing_edge.z(t)) * trailing_edge.dy(t))
+        cop_numerator_leading = sc.integrate.quad(lambda t: leading_edge.y(t)**3 * (leading_edge.z(t)) * leading_edge.dy(t), 0, 1)[0]
+        cop_numerator_trailing = sc.integrate.quad(lambda t: trailing_edge.y(t)**3 * (trailing_edge.z(t)) * trailing_edge.dy(t), 0, 1)[0]
+        cop_denominator_leading = sc.integrate.quad(lambda t: leading_edge.y(t)**2 * (leading_edge.z(t)) * leading_edge.dy(t), 0, 1)[0]
+        cop_denominator_trailing = sc.integrate.quad(lambda t: trailing_edge.y(t)**2 * (trailing_edge.z(t)) * trailing_edge.dy(t), 0, 1)[0]
         self.rot_cop = (cop_numerator_leading - cop_numerator_trailing) / (cop_denominator_leading - cop_denominator_trailing)
             
     def display_wing(self):

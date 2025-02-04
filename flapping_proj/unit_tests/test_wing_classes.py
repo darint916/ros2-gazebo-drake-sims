@@ -17,6 +17,7 @@ class TestTriangleInequalities(unittest.TestCase):
         self.assertFalse(check_triangle_inequalities(10, 1, 1))
         self.assertFalse(check_triangle_inequalities(0, 0, 1))
 
+class TestTriWing(unittest.TestCase):
     def test_tri_wing(self):
         tri_wing = TriWing(0.001, -0.001, .05, -.025, .1, -.00025)
         #.i = [Ixx, Iyy, Izz, Ixy, Ixz, Iyz]
@@ -70,8 +71,11 @@ class TestTriangleInequalities(unittest.TestCase):
         
         self.assertTrue(many_wings, failed)
         
-        
-
+class TestThreeSegmentWing(unittest.TestCase):
+    #workaround for Kyle to actually run things on Kyle's PCs
+    def test_three_seg_wing(self):
+        seg_wing = ThreeSegmentWing(.2, .01, 0, 50 * np.pi/180, 80/200, 40 * np.pi/ 180, 60/200)
+        print(f"Wing COP: {seg_wing.rot_cop}")
         
 if __name__ == "__main__":
     unittest.main()
