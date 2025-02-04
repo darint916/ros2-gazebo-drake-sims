@@ -18,6 +18,7 @@ class Wing():
     # leading_edge(y) >= trailing_edge(y).
     # sweeps is an array of Sweep instances
     # sweeps must include the sweep forming the leading edge
+    # inertia given as  ixx iyy izz ixy ixz iyz
     def __init__(self, leading_edge: Curve, trailing_edge: Curve, sweeps=[]):
         self.components = [Film(leading_edge, trailing_edge, 12e-6, RHO_PET)]
         self.leading_edge = leading_edge
@@ -46,6 +47,12 @@ class Wing():
         self.I_origin = self.I + self.mass * \
             np.array([com_magnitude_sqr, com_magnitude_sqr - self.com[0]**2,
                       com_magnitude_sqr - self.com[1], 0, 0, -self.com[0]*self.com[1]])
+        
+        cop_numerator_leading = sc.integrate.quad(lambda t: leading_edge.y(t)**3 * (leading_edge.z(t)) * leading_edge.dy(t))
+        cop_numerator_trailing = sc.integrate.quad(lambda t: trailing_edge.y(t)**3 * (trailing_edge.z(t)) * trailing_edge.dy(t))
+        cop_denominator_leading = sc.integrate.quad(lambda t: leading_edge.y(t)**2 * (leading_edge.z(t)) * leading_edge.dy(t))
+        cop_denominator_trailing = sc.integrate.quad(lambda t: trailing_edge.y(t)**2 * (trailing_edge.z(t)) * trailing_edge.dy(t))
+        self.rot_cop = (cop_numerator_leading - cop_numerator_trailing) / (cop_denominator_leading - cop_denominator_trailing)
             
     def display_wing(self):
         t = np.linspace(0, 1, 1000)
@@ -169,11 +176,14 @@ class ThreeSegmentWing(Wing):
     spaced along the leading edge that support the structure of the wing. 
     '''
 
-    def __init__(self, wing_length: float, root_edge: float, gap_size: float, spar_angle_0: float, spar_length_0: float, spar_angle_1: float, spar_length_1: float):
+    def __init__(self, wing_length: float, root_edge: float, gap_size: float, spar_angle_0: float, spar_ratio_0: float, spar_angle_1: float, spar_ratio_1: float):
         leading_edge_diameter = 0.001  # m
         spar_diameter = 0.0005  # m
         leading_edge_bar = Rod(0.002, 0, wing_length, 0,
                                leading_edge_diameter, RHO_CF)
+        
+        spar_length_0 = wing_length * spar_ratio_0
+        spar_length_1 = wing_length * spar_ratio_1
 
         spar_0_pts = [wing_length / 3,
                       -gap_size,
@@ -210,18 +220,21 @@ class ThreeSegmentWing(Wing):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    tri_wing = TriWing(0.03, 0, .1485, -.2, .15, 0)
+    # tri_wing = TriWing(0.03, 0, .1485, -.2, .15, 0)
     # mass1 = film_m(tri_wing)
     # print(film_com(tri_wing) / mass1)
 
-    t = np.linspace(0, 1)
+    # t = np.linspace(0, 1)
     # plt.plot(tri_wing.y(t), tri_wing.z(t))
     # plt.plot(tri_wing.y(t), tri_wing.dz(t) / tri_wing.dy(t), marker = "o")
 
-    print(tri_wing.mass)
-    print(tri_wing.com)
-    print(tri_wing.I)
-    print(tri_wing.I_origin)
-    print(tri_wing.I[0] + tri_wing.I[1] - tri_wing.I[2])
-    print(tri_wing.I[0] + tri_wing.I[2] - tri_wing.I[1])
-    print(tri_wing.I[2] + tri_wing.I[1] - tri_wing.I[0])
+    # print(tri_wing.mass)
+    # print(tri_wing.com)
+    # print(tri_wing.I)
+    # print(tri_wing.I_origin)
+    # print(tri_wing.I[0] + tri_wing.I[1] - tri_wing.I[2])
+    # print(tri_wing.I[0] + tri_wing.I[2] - tri_wing.I[1])
+    # print(tri_wing.I[2] + tri_wing.I[1] - tri_wing.I[0])
+    
+    seg_wing = ThreeSegmentWing(.2, .01, 0, 50 * np.pi/180, 80/200, 40 * np.pi/ 180, 60/200)
+    print(seg_wing.rot_cop)
