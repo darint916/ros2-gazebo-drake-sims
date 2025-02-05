@@ -1,6 +1,6 @@
 {
     "voltage": {
-        "frequency": 35.0,
+        "frequency": 6.0,
         "waves": [
             {
                 "type": "cos",

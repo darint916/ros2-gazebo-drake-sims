@@ -224,6 +224,6 @@ class NumpyEncoder(json.JSONEncoder):
 if __name__ == '__main__':
     for i in range(30):
         frequency_counter = 6 + i
-        top_start(300, popsize=10, title=f"zeta_sweep_{frequency_counter}_hz")
+        top_start(300, popsize=10, title=f"zeta_sweep2_{frequency_counter}_hz")
     # generate_sdf()
     # sim_launch()
