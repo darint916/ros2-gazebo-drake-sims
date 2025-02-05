@@ -1,0 +1,4 @@
+INSTALLING BAZEL IS A PAIN
+https://bazel.build/install/ubuntu
+
+get the right version drake wants, then link drake repository using @drake, after you set up your own workspace referencing that repository

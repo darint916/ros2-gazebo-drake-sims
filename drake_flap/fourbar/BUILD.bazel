@@ -1,0 +1,36 @@
+load("@drake//tools/lint:lint.bzl", "add_lint_tests")
+load("@drake//tools/skylark:drake_cc.bzl", "drake_cc_binary")
+
+# package(default_visibility = ["//visibility:private"])
+
+filegroup(
+    name = "models",
+    srcs = glob([
+        "models/*.sdf",
+    ]),
+    visibility = [
+        "@drake//:__pkg__",
+        "@drake//bindings/pydrake/multibody:__pkg__",
+    ],
+)
+
+drake_cc_binary(
+    name = "sdf_sim",
+    srcs = ["sdf_sim.cc"],
+    # add_test_rule = 1,
+    data = [":models"],
+    test_rule_args = ["--simulation_time=0.1"],
+    deps = [
+        "@drake//multibody/parsing",
+        "@drake//multibody/plant",
+        "@drake//multibody/tree",
+        "@drake//systems/analysis:simulator",
+        "@drake//systems/analysis:simulator_gflags",
+        "@drake//systems/analysis:simulator_print_stats",
+        "@drake//systems/framework:diagram",
+        "@drake//visualization:visualization_config_functions",
+        "@gflags",
+    ],
+)
+
+add_lint_tests()

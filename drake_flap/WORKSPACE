@@ -1,0 +1,4 @@
+local_repository(
+    name = "drake",
+    path = "/home/darin/Github/drake",
+)
