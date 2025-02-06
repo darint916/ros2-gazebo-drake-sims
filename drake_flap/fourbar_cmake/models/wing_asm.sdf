@@ -1,0 +1,420 @@
+<?xml version="1.0"?>
+<sdf version='1.9'>
+  <world name="world1">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.0001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <gravity>0 0 -9.81</gravity>
+    </physics>
+    <plugin filename="libignition-gazebo-physics-system.so"
+      name="ignition::gazebo::systems::Physics">
+</plugin>
+    <plugin filename="libignition-gazebo-user-commands-system.so"
+      name="ignition::gazebo::systems::UserCommands">
+</plugin>
+    <plugin filename="libignition-gazebo-scene-broadcaster-system.so"
+      name="ignition::gazebo::systems::SceneBroadcaster">
+</plugin>
+    <!-- <plugin filename="libign-sim-detachable-joint-system.so" name="ignition::gazebo::systems::DetachableJoint">
+        <child_model>wing_asm</child_model> -->
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <model name="ground_plane">
+      <pose relative_to="world">0 0 0 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="link">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="link">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name='wing_asm'>
+                <joint name="anchor" type="fixed">
+                <pose relative_to="base_link">0 0 0 0 0 0</pose>
+                <parent>world</parent>
+                <child>base_link</child>
+            </joint>
+        <!-- <plugin filename="libattach-links.so" name="gz::sim::systems::AttachLinks">
+        <parent>base_link</parent>
+        <child>radius</child>
+    </plugin> -->
+      <link name='base_link'>
+        <pose>0 0 .2 0 0 0</pose>
+        <inertial>
+          <mass>10</mass>
+          <inertia>
+            <ixx>7.3803000000000005e-07</ixx>
+            <ixy>-9.4344999999999995e-25</ixy>
+            <ixz>-1.0385000000000001e-09</ixz>
+            <iyy>2.5405000000000001e-06</iyy>
+            <iyz>9.0889999999999994e-24</iyz>
+            <izz>1.8072e-06</izz>
+          </inertia>
+        </inertial>`
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.001</radius>
+              <length>0.001</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <diffuse>0.86765 0.122549 0.122549 1</diffuse>
+            <ambient>0.86765 0.122549 0.122549 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <joint name='driving_joint' type='revolute'>
+        <pose relative_to='base_link'>0 0 0 0 1.57 0</pose>
+        <parent>base_link</parent>
+        <child>driving_link</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+        <limit>
+          <lower>10000</lower>
+          <upper>10000</upper>
+        </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.00001</spring_stiffness>
+          </dynamics>
+        </axis>
+        <physics>
+    <ode>
+      <implicit_spring_damper>false</implicit_spring_damper>
+      <cfm>0</cfm>
+      <erp>0.2</erp>
+      <max_force>10.0</max_force> <!-- Max force applied to the joint -->
+      <velocity>1</velocity>
+    </ode>
+  </physics>
+      </joint>
+
+      <link name='driving_link'>
+        <pose relative_to='driving_joint'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.00016893</mass>
+          <inertia>
+            <ixx>9.7215e-10</ixx>
+            <ixy>-4.8913999999999998e-26</ixy>
+            <ixz>1.0304e-25</ixz>
+            <iyy>9.0105999999999999e-10</iyy>
+            <iyz>1.3852e-17</iyz>
+            <izz>2.5573999999999999e-10</izz>
+          </inertia>
+        </inertial>
+        <visual name='driving_link_visual'>
+          <pose>0 0 -0.01915 0 0 0</pose>
+          <geometry>
+              <cylinder>
+                <radius>0.00075</radius>
+                <length>0.0383</length>
+              </cylinder>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <joint name='humerus_joint' type='revolute'>
+        <pose relative_to='driving_joint'>0 0.0 -0.03830 0 1.57 0</pose>
+        <parent>driving_link</parent>
+        <child>humerus</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+              <lower>-1.79769e+308</lower>
+              <upper>1.79769e+308</upper>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.00001</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+
+      <link name='humerus'>
+        <pose relative_to='humerus_joint'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.001375 0.00175 0.013055 0 0 0</pose>
+          <mass>0.0030354999999999998</mass>
+          <inertia>
+            <ixx>3.0067e-09</ixx>
+            <ixy>-1.1299e-25</ixy>
+            <ixz>-2.3232e-24</ixz>
+            <iyy>2.9301e-09</iyy>
+            <iyz>8.4040999999999998e-16</iyz>
+            <izz>3.8589e-10</izz>
+          </inertia>
+        </inertial>
+        <visual name='humerus_visual'>
+          <pose>0 0 -0.02 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.00075</radius>
+              <length>0.04</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <joint name='ulna_joint' type='revolute'>
+          <pose relative_to='humerus_joint'>0 0 -0.02 0 -1.57 0 </pose>
+        <parent>humerus</parent>
+        <child>ulna</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+                        <lower>-1.79769e+308</lower>
+                        <upper>1.79769e+308</upper>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.00001</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+
+      <link name='ulna'>
+        <pose relative_to='ulna_joint'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.0015 0.00175 -0.037 0 0 0</pose>
+          <mass>0.0065141000000000005</mass>
+          <inertia>
+            <ixx>1.2522000000000001e-07</ixx>
+            <ixy>-7.7445999999999999e-25</ixy>
+            <ixz>-2.3424000000000001e-23</ixz>
+            <iyy>1.2601e-07</iyy>
+            <iyz>8.6889999999999998e-16</iyz>
+            <izz>1.7161999999999999e-09</izz>
+          </inertia>
+        </inertial>
+        <visual name='ulna_visual'>
+          <pose>0 0 .05 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.00075</radius>
+              <length>0.1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <joint name='radial_joint' type='revolute'>
+        <pose relative_to='humerus_joint'>0 0 -0.04 0 -1.57 0 </pose>
+        <parent>humerus</parent>
+        <child>radius</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-1.79769e+308</lower>
+            <upper>1.79769e+308</upper>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0.00001</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+
+      <link name='radius'>
+        <pose relative_to='radial_joint'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.0015 0.00175 -0.03576 0 0 0</pose>
+          <mass>0.00071232000000000001</mass>
+          <inertia>
+            <ixx>4.3980000000000001e-08</ixx>
+            <ixy>-9.9168000000000003e-19</ixy>
+            <ixz>4.8890000000000004e-15</ixz>
+            <iyy>4.4758000000000003e-08</iyy>
+            <iyz>-8.2275000000000001e-16</iyz>
+            <izz>1.8231e-09</izz>
+          </inertia>
+        </inertial>
+        <visual name='radius_visual'>
+          <pose>0 0 0.05 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.00075</radius>
+              <length>0.1</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link>
+
+      <!-- <joint name='phalanges_joint' type='revolute'>
+        <pose relative_to='radial_joint'>0 0 -0.088785 -3.141585307179587 -0.9328100000000004
+          -1.5708</pose>
+        <parent>radius</parent>
+        <child>metacarpals</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint> -->
+
+      <!-- <joint name='metacarpals_joint' type='revolute'>
+        <pose relative_to='ulna_joint'>0 0 -0.088785 -3.141585307179587 -0.9328100000000004
+          -1.5708</pose>
+        <parent>ulna</parent>
+        <child>metacarpals</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint> -->
+
+      <!-- <link name='metacarpals'>
+        <pose relative_to='phalanges_joint'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.002332 0.0015 0.052065 0 0 0</pose>
+          <mass>0.00083471000000000001</mass>
+          <inertia>
+            <ixx>2.5002000000000001e-07</ixx>
+            <ixy>-1.0193e-14</ixy>
+            <ixz>-3.4863000000000002e-10</ixz>
+            <iyy>2.5050000000000003e-07</iyy>
+            <iyz>2.2462999999999998e-15</iyz>
+            <izz>1.0361e-09</izz>
+          </inertia>
+        </inertial>
+        <visual name='metacarpals_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.01</radius>
+              <length>0.1</length>
+            </cylinder> -->
+            <!-- <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://URDF_Wing_Assembly/meshes/elbow_link.STL</uri>
+          </mesh> -->
+          <!-- </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link> -->
+
+      <!-- <link name='phalanges'>
+        <pose relative_to='phalanges_joint'>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0.002332 0.0015 0.052065 0 0 0</pose>
+          <mass>0.00083471000000000001</mass>
+          <inertia>
+            <ixx>2.5002000000000001e-07</ixx>
+            <ixy>-1.0193e-14</ixy>
+            <ixz>-3.4863000000000002e-10</ixz>
+            <iyy>2.5050000000000003e-07</iyy>
+            <iyz>2.2462999999999998e-15</iyz>
+            <izz>1.0361e-09</izz>
+          </inertia>
+        </inertial>
+        <visual name='metacarpals_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.01</radius>
+              <length>0.1</length>
+            </cylinder> -->
+            <!-- <mesh>
+          <scale>1 1 1</scale>
+          <uri>model://URDF_Wing_Assembly/meshes/elbow_link.STL</uri>
+        </mesh> -->
+          <!-- </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+      </link> -->
+
+      <!-- <joint name='mid_radial_joint' type='revolute'>
+        <pose relative_to='base_link'>0.005972 0 0.01403177573 -3.141585307179587 -0.9328100000000004 -1.5708</pose> -->
+        <!-- ^ 23.0568891999986754 deg from vertical,  15.25mm length -->
+        <!-- 0.01525*sin(0.40241863180650000453) = 0.005972 (horizontal -->
+        <!-- cos^ = 0.01403177573 (vert) -->
+        <!-- <parent>base_link</parent>
+        <child>radius</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint> -->
+    </model>
+  </world>
+</sdf>

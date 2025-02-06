@@ -4,3 +4,9 @@
 #
 # For more details, please check https://github.com/bazelbuild/bazel/issues/18958
 ###############################################################################
+
+bazel_dep(name = "drake")
+local_path_override(
+    module_name = "drake",
+    path = "/home/darin/Github/drake",
+)
