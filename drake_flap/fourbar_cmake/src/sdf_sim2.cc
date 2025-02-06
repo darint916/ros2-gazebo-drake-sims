@@ -15,7 +15,7 @@ a way to model a kinematic loop. It shows:
 #include "drake/multibody/tree/linear_bushing_roll_pitch_yaw.h"
 #include "drake/multibody/tree/revolute_joint.h"
 #include "drake/systems/analysis/simulator.h"
-#include "drake/systems/analysis/simulator_gflags.h"
+// #include "drake/systems/analysis/simulator_gflags.h"
 #include "drake/systems/analysis/simulator_print_stats.h"
 #include "drake/systems/framework/diagram_builder.h"
 #include "drake/visualization/visualization_config_functions.h"
